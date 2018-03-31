@@ -1,0 +1,19 @@
+body {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+#root {
+  padding-bottom: 30rem;
+}
+
+.navbar {
+  margin-bottom: 0;
+}
+
+.input-group-addon {
+  min-width: 120px;
+  text-align: left;
+}
