@@ -11,9 +11,15 @@ body {
 
 .navbar {
   margin-bottom: 0;
+  border-radius: 0;
 }
 
-.input-group-addon {
-  min-width: 120px;
-  text-align: left;
+.navbar .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navbar .container::before, .navbar .container::after {
+  display: none;
 }
