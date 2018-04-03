@@ -4,19 +4,17 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { addTransfer, compileTransfers, clearTransfers } from '../actions/UserActions';
+import { addTransfer, clearTransfers } from '../actions/UserActions';
 
-const ActionButtons = ({ addTransfer, compile, clearTransfers }) => (
+const ActionButtons = ({ addTransfer, compileTransfers, clearTransfers }) => (
   <ButtonToolbar>
     <Button color="info" onClick={() => addTransfer(1)}>Add Transfer</Button>
-    <Button color="success" onClick={compile}>Compile</Button>
     <Button color="warning" className="pull-right" onClick={clearTransfers}>Clear</Button>
   </ButtonToolbar>
 );
 
 ActionButtons.propTypes = {
   addTransfer: PropTypes.func.isRequired,
-  compile: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -25,7 +23,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   addTransfer,
-  compileTransfers,
   clearTransfers,
 }, dispatch);
 

@@ -11,17 +11,10 @@ const initialState = {
   transfers: [
     {
       id: 1,
-      inputs: {
-        host_1: '',
-        user_1: '',
-        password_1: '',
-        host_2: '',
-        user_2: '',
-        password_2: '',
-      },
     },
   ],
   transfersCount: 2,
+  inputs: [],
 };
 
 export default function (state = initialState, action) {
@@ -49,11 +42,15 @@ export default function (state = initialState, action) {
         inputs: initialState.inputs,
       };
     case UPDATE_TRANSFER_DATA:
-      const entry = `${data.id}_${data.name}`;
-
       return {
         ...state,
-        
+        inputs: Object.assign([...state.inputs], {
+          [data.id]: {
+            ...state.inputs[data.id],
+            id: data.id,
+            [data.name]: data.content,
+          },
+        }),
       };
 
     default:

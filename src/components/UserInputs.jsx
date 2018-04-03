@@ -10,20 +10,22 @@ import { connect } from 'react-redux';
 import { FormGroup, Input, Label } from 'reactstrap';
 import PropTypes from 'prop-types';
 
-import { updateTransferData } from '../actions/UserActions';
+import { updateTransferData, compileTransfers } from '../actions/UserActions';
 
 class UserInputs extends PureComponent {
   static propTypes = {
     number: PropTypes.number.isRequired,
     user: PropTypes.number.isRequired,
     updateTransferData: PropTypes.func.isRequired,
+    compileTransfers: PropTypes.func.isRequired,
   }
 
   handleInput(number, event) {
-    const { updateTransferData } = this.props;
+    const { updateTransferData, compileTransfers } = this.props;
     const { name, value } = event.target;
 
     updateTransferData(number, name, value);
+    compileTransfers();
   }
 
   render() {
@@ -69,6 +71,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   updateTransferData,
+  compileTransfers,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserInputs);

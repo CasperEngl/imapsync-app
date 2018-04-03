@@ -15,7 +15,7 @@ import rootReducer from './reducers/rootReducer';
 
 const middleware = [thunk];
 
-const store = createStore(
+export const store = createStore(
   rootReducer,
   {},
   composeWithDevTools(applyMiddleware(...middleware)),

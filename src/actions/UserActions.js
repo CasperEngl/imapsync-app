@@ -1,3 +1,13 @@
+/*
+eslint
+
+no-restricted-syntax: 0,
+no-multi-spaces: 0,
+camelcase: 0
+*/
+
+import { store } from '../App';
+
 export const ADD_TRANSFER = 'ADD_TRANSFER';
 export const REMOVE_TRANSFER = 'REMOVE_TRANSFER';
 export const COMPILE_TRANSFERS = 'COMPILE_TRANSFERS';
@@ -11,9 +21,25 @@ export function addTransfer() {
 }
 
 export function compileTransfers() {
+  const state = store.getState();
+  let command = '';
+
+  for (const input of state.transfer.inputs) {
+    if (typeof input !== 'undefined') {
+      const host_1      = input.host_1      || 'HOST_1';
+      const user_1      = input.user_1      || 'USER_1';
+      const password_1  = input.password_1  || 'PASSWORD_1';
+      const host_2      = input.host_2      || 'HOST_2';
+      const user_2      = input.user_2      || 'USER_2';
+      const password_2  = input.password_2  || 'PASSWORD_2';
+
+      command += `/Applications/imapsync/imapsync_bin_Darwin --host1 ${host_1} --user1 ${user_1} --password1 ${password_1} --ssl1 --host2 ${host_2} --user2 ${user_2} --password2 ${password_2} --ssl2; `;
+    }
+  }
+
   return {
     type: COMPILE_TRANSFERS,
-    data: 'yay',
+    data: command,
   };
 }
 

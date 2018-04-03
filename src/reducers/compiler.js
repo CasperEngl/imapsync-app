@@ -1,7 +1,7 @@
 import { COMPILE_TRANSFERS } from '../actions/UserActions';
 
 const initialState = {
-  compile: '',
+  command: '',
 };
 
 export default function (state = initialState, action) {
@@ -11,7 +11,7 @@ export default function (state = initialState, action) {
     case COMPILE_TRANSFERS:
       return {
         ...state,
-        compile: data,
+        command: data,
       };
 
     default:
