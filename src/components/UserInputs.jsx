@@ -18,6 +18,7 @@ class UserInputs extends PureComponent {
     user: PropTypes.number.isRequired,
     updateTransferData: PropTypes.func.isRequired,
     compileTransfers: PropTypes.func.isRequired,
+    inputs: PropTypes.arrayOf(PropTypes.object).isRequired,
   }
 
   handleInput(number, event) {
@@ -66,7 +67,7 @@ class UserInputs extends PureComponent {
 }
 
 const mapStateToProps = state => ({
-
+  inputs: state.transfer.inputs,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
