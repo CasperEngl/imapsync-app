@@ -31,7 +31,6 @@ class Transfer extends PureComponent {
           </Row>
           <ButtonToolbar>
             <Button color="danger" onClick={() => removeTransfer(number)}>Remove</Button>
-            <Button color="default">Duplicate</Button>
           </ButtonToolbar>
         </Col>
       </Fragment>
