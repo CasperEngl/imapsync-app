@@ -36,7 +36,7 @@ class UserInputs extends PureComponent {
       <Fragment>
         <FormGroup>
           <Input
-            type="text"
+            type="url"
             placeholder="192.168.1.1 / mail.example.com"
             name={`host_${user}`}
             onChange={event => this.handleInput(number, event)}
@@ -45,7 +45,7 @@ class UserInputs extends PureComponent {
         </FormGroup>
         <FormGroup>
           <Input
-            type="text"
+            type="email"
             placeholder="example@example.com"
             name={`user_${user}`}
             onChange={event => this.handleInput(number, event)}
