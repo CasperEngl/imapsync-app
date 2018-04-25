@@ -25,7 +25,6 @@ export function addTransfer() {
 export function compileTransfers() {
   const state = store.getState();
   let command = '';
-  let shouldReturn = false;
 
   for (const input of state.transfer.inputs) {
     if (typeof input !== 'undefined') {
@@ -44,18 +43,15 @@ export function compileTransfers() {
           isEmail(user_2) &&
           isEmpty(password_1) !== true &&
           !isEmpty(password_2) !== true) {
-        shouldReturn = true;
         command += `/Applications/imapsync/imapsync_bin_Darwin --host1 ${host_1} --user1 ${user_1} --password1 ${password_1}${ssl_1} --host2 ${host_2} --user2 ${user_2} --password2 ${password_2}${ssl_2}; `;
       }
     }
   }
 
-  if (shouldReturn) {
-    return {
-      type: COMPILE_TRANSFERS,
-      data: command,
-    };
-  }
+  return {
+    type: COMPILE_TRANSFERS,
+    data: command,
+  };
 }
 
 export function removeTransfer(number) {
