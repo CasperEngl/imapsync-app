@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { applyMiddleware, createStore } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
-// import { save, load } from 'redux-localstorage-simple';
+import { save, load } from 'redux-localstorage-simple';
 
 import Navigation from './components/Navigation';
 import Hero from './components/Hero';
@@ -17,8 +17,8 @@ const middleware = [thunk];
 
 export const store = createStore(
   rootReducer,
-  {},
-  composeWithDevTools(applyMiddleware(...middleware)),
+  load(),
+  composeWithDevTools(applyMiddleware(...middleware, save())),
 );
 
 const App = () => (
