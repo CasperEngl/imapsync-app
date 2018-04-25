@@ -7,7 +7,7 @@ class-methods-use-this: 0
 import React, { PureComponent, Fragment } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { FormGroup, Input, Label } from 'reactstrap';
+import { FormGroup, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
 
 import { updateTransferData, compileTransfers } from '../actions/UserActions';
@@ -30,35 +30,35 @@ class UserInputs extends PureComponent {
   }
 
   render() {
-    const { number, user } = this.props;
+    const { number, user, inputs } = this.props;
 
     return (
       <Fragment>
         <FormGroup>
-          <Label>Host</Label>
           <Input
             type="text"
             placeholder="192.168.1.1 / mail.example.com"
             name={`host_${user}`}
             onChange={event => this.handleInput(number, event)}
+            value={inputs[number][`host_${user}`]}
           />
         </FormGroup>
         <FormGroup>
-          <Label>User</Label>
           <Input
             type="text"
             placeholder="example@example.com"
             name={`user_${user}`}
             onChange={event => this.handleInput(number, event)}
+            value={inputs[number][`user_${user}`]}
           />
         </FormGroup>
         <FormGroup>
-          <Label>Password</Label>
           <Input
             type="text"
             placeholder="example123"
             name={`password_${user}`}
             onChange={event => this.handleInput(number, event)}
+            value={inputs[number][`password_${user}`]}
           />
         </FormGroup>
       </Fragment>
