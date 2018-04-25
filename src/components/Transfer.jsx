@@ -19,15 +19,13 @@ class Transfer extends PureComponent {
 
     return (
       <Fragment>
-        <section className={`transfer-${number}`}>
-          <h2>Transfer {number}</h2>
+        <Col xs="12" sm="6" className={`transfer-${number}`}>
+          <h2>Transfer <span>{number}</span></h2>
           <Row>
             <Col xs="12" sm="6">
-              <h3>Origin</h3>
               <UserInputs number={number} user={1} />
             </Col>
             <Col xs="12" sm="6">
-              <h3>Destination</h3>
               <UserInputs number={number} user={2} />
             </Col>
           </Row>
@@ -35,7 +33,7 @@ class Transfer extends PureComponent {
             <Button color="danger" onClick={() => removeTransfer(number)}>Remove</Button>
             <Button color="default">Duplicate</Button>
           </ButtonToolbar>
-        </section>
+        </Col>
       </Fragment>
     );
   }
