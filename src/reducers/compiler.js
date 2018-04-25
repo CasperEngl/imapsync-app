@@ -1,7 +1,8 @@
-import { COMPILE_TRANSFERS } from '../actions/UserActions';
+import { COMPILE_TRANSFERS, TOGGLE_SSL } from '../actions/UserActions';
 
 const initialState = {
   command: '',
+  ssl: true,
 };
 
 export default function (state = initialState, action) {
@@ -12,6 +13,11 @@ export default function (state = initialState, action) {
       return {
         ...state,
         command: data,
+      };
+    case TOGGLE_SSL:
+      return {
+        ...state,
+        ssl: !state.ssl,
       };
 
     default:
