@@ -6,6 +6,7 @@ no-multi-spaces: 0,
 camelcase: 0
 */
 
+import { isEmail, isURL, isEmpty } from 'validator';
 import { store } from '../App';
 
 export const ADD_TRANSFER = 'ADD_TRANSFER';
@@ -13,6 +14,7 @@ export const REMOVE_TRANSFER = 'REMOVE_TRANSFER';
 export const COMPILE_TRANSFERS = 'COMPILE_TRANSFERS';
 export const UPDATE_TRANSFER_DATA = 'UPDATE_TRANSFER_DATA';
 export const CLEAR_TRANSFERS = 'CLEAR_TRANSFERS';
+export const TOGGLE_SSL = 'TOGGLE_SSL';
 
 export function addTransfer() {
   return {
@@ -23,6 +25,7 @@ export function addTransfer() {
 export function compileTransfers() {
   const state = store.getState();
   let command = '';
+  let shouldReturn = false;
 
   for (const input of state.transfer.inputs) {
     if (typeof input !== 'undefined') {
@@ -32,15 +35,27 @@ export function compileTransfers() {
       const host_2      = input.host_2      || 'HOST_2';
       const user_2      = input.user_2      || 'USER_2';
       const password_2  = input.password_2  || 'PASSWORD_2';
+      const ssl_1       = state.compiler.ssl ? ' --ssl1' : '';
+      const ssl_2       = state.compiler.ssl ? ' --ssl2' : '';
 
-      command += `/Applications/imapsync/imapsync_bin_Darwin --host1 ${host_1} --user1 ${user_1} --password1 ${password_1} --ssl1 --host2 ${host_2} --user2 ${user_2} --password2 ${password_2} --ssl2; `;
+      if (isURL(host_1) &&
+          isURL(host_2) &&
+          isEmail(user_1) &&
+          isEmail(user_2) &&
+          isEmpty(password_1) !== true &&
+          !isEmpty(password_2) !== true) {
+        shouldReturn = true;
+        command += `/Applications/imapsync/imapsync_bin_Darwin --host1 ${host_1} --user1 ${user_1} --password1 ${password_1}${ssl_1} --host2 ${host_2} --user2 ${user_2} --password2 ${password_2}${ssl_2}; `;
+      }
     }
   }
 
-  return {
-    type: COMPILE_TRANSFERS,
-    data: command,
-  };
+  if (shouldReturn) {
+    return {
+      type: COMPILE_TRANSFERS,
+      data: command,
+    };
+  }
 }
 
 export function removeTransfer(number) {
@@ -64,5 +79,11 @@ export function updateTransferData(number, name, content) {
       name,
       content,
     },
+  };
+}
+
+export function toggleSSL() {
+  return {
+    type: TOGGLE_SSL,
   };
 }
