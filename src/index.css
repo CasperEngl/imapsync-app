@@ -23,3 +23,17 @@ body {
 .navbar .container::before, .navbar .container::after {
   display: none;
 }
+
+.btn-toolbar > label.checkbox-inline {
+  margin-left: 5px;
+}
+
+label.checkbox-inline {
+  display: inline-flex;
+  align-items: center;
+  height: 45px;
+}
+
+label.checkbox-inline input[type=checkbox] {
+  margin-top: 0;
+}
