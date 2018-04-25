@@ -14,7 +14,17 @@ const initialState = {
     },
   ],
   transfersCount: 2,
-  inputs: [],
+  inputs: [
+    {},
+    {
+      host_1: '',
+      user_1: '',
+      password_1: '',
+      host_2: '',
+      user_2: '',
+      password_2: '',
+    },
+  ],
 };
 
 export default function (state = initialState, action) {
@@ -27,6 +37,15 @@ export default function (state = initialState, action) {
         transfersCount: state.transfersCount + 1,
         transfers: [...state.transfers, {
           id: state.transfersCount,
+        }],
+        inputs: [...state.inputs, {
+          id: state.transfersCount,
+          host_1: '',
+          user_1: '',
+          password_1: '',
+          host_2: '',
+          user_2: '',
+          password_2: '',
         }],
       };
     case REMOVE_TRANSFER:
@@ -46,6 +65,12 @@ export default function (state = initialState, action) {
         ...state,
         inputs: Object.assign([...state.inputs], {
           [data.id]: {
+            host_1: '',
+            user_1: '',
+            password_1: '',
+            host_2: '',
+            user_2: '',
+            password_2: '',
             ...state.inputs[data.id],
             id: data.id,
             [data.name]: data.content,
