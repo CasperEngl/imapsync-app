@@ -1,6 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { Row } from 'reactstrap';
 
 import Transfer from './Transfer';
 
@@ -14,10 +15,12 @@ class Transfers extends PureComponent {
 
     return (
       <Fragment>
-        {transfers &&
-        transfers.map(transfer =>
-          <Transfer key={transfer.id} number={transfer.id} />,
-        )}
+        <Row>
+          {transfers &&
+          transfers.map(transfer =>
+            <Transfer key={transfer.id} number={transfer.id} />,
+          )}
+        </Row>
       </Fragment>
     );
   }
