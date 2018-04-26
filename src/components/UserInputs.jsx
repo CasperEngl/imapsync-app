@@ -9,6 +9,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { FormGroup, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
+import { isEmail, isURL, isEmpty } from 'validator';
 
 import { updateTransferData, compileTransfers } from '../actions/UserActions';
 
@@ -21,11 +22,16 @@ class UserInputs extends PureComponent {
     inputs: PropTypes.arrayOf(PropTypes.object).isRequired,
   }
 
-  handleInput(number, event) {
+  handleInput(number, target, event) {
     const { updateTransferData, compileTransfers } = this.props;
     const { name, value } = event.target;
 
+    if (target !== undefined || target !== null) {
+      updateTransferData(number, target, value);
+    }
+
     updateTransferData(number, name, value);
+
     compileTransfers();
   }
 
@@ -34,12 +40,26 @@ class UserInputs extends PureComponent {
 
     return (
       <Fragment>
+        <ul>
+          {
+            !isURL(inputs[number][`host_${user}`]) &&
+            <li>Forkert URL ffs</li>
+          }
+          {
+            !isEmail(inputs[number][`user_${user}`]) &&
+            <li>Brugeren er forhelvede ikke en korrekt email</li>
+          }
+          {
+            isEmpty(inputs[number][`password_${user}`]) &&
+            <li>Du mangler et password GG!</li>
+          }
+        </ul>
         <FormGroup>
           <Input
             type="url"
             placeholder="192.168.1.1 / mail.example.com"
             name={`host_${user}`}
-            onChange={event => this.handleInput(number, event)}
+            onChange={event => this.handleInput(number, null, event)}
             value={inputs[number][`host_${user}`]}
           />
         </FormGroup>
@@ -48,7 +68,7 @@ class UserInputs extends PureComponent {
             type="email"
             placeholder="example@example.com"
             name={`user_${user}`}
-            onChange={event => this.handleInput(number, event)}
+            onChange={event => this.handleInput(number, 'user_2', event)}
             value={inputs[number][`user_${user}`]}
           />
         </FormGroup>
@@ -57,7 +77,7 @@ class UserInputs extends PureComponent {
             type="text"
             placeholder="example123"
             name={`password_${user}`}
-            onChange={event => this.handleInput(number, event)}
+            onChange={event => this.handleInput(number, null, event)}
             value={inputs[number][`password_${user}`]}
           />
         </FormGroup>
