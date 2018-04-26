@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { Container, Jumbotron, FormGroup, Input, Label } from 'reactstrap';
 
 const Hero = ({ command }) => (
@@ -13,6 +14,10 @@ const Hero = ({ command }) => (
     </Container>
   </Jumbotron>
 );
+
+Hero.propTypes = {
+  command: PropTypes.string.isRequired,
+};
 
 const mapStateToProps = state => ({
   command: state.compiler.command,
