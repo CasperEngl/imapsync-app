@@ -8,7 +8,7 @@ no-shadow: 0,
 import React, { PureComponent, Fragment } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { FormGroup, Input } from 'reactstrap';
+import { FormGroup, Input, ButtonGroup, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { isEmail, isURL, isEmpty } from 'validator';
 
@@ -41,20 +41,26 @@ class UserInputs extends PureComponent {
 
     return (
       <Fragment>
-        <ul>
+        {
+          (!isURL(inputs[number][`host_${user}`]) ||
+          !isEmail(inputs[number][`user_${user}`]) ||
+          isEmpty(inputs[number][`password_${user}`])) &&
+          <h4>Missing fields:</h4>
+        }
+        <ButtonGroup>
           {
             !isURL(inputs[number][`host_${user}`]) &&
-            <li>Forkert URL ffs</li>
+            <Button color="danger" size="sm">HOST</Button>
           }
           {
             !isEmail(inputs[number][`user_${user}`]) &&
-            <li>Brugeren er forhelvede ikke en korrekt email</li>
+            <Button color="danger" size="sm">USER</Button>
           }
           {
             isEmpty(inputs[number][`password_${user}`]) &&
-            <li>Du mangler et password GG!</li>
+            <Button color="danger" size="sm">PASSWORD</Button>
           }
-        </ul>
+        </ButtonGroup>
         <FormGroup>
           <Input
             type="url"
