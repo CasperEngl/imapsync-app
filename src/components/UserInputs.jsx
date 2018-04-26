@@ -9,7 +9,7 @@ import React, { PureComponent, Fragment } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { FormGroup, Input, ButtonGroup, Button } from 'reactstrap';
-import { Dropdown, MenuItem, Col } from 'react-bootstrap';
+import { Dropdown, MenuItem } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import { isEmail, isURL, isEmpty } from 'validator';
 import styled from 'styled-components';
