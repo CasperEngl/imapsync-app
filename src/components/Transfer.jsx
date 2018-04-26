@@ -25,13 +25,13 @@ class Transfer extends PureComponent {
 
     return (
       <Fragment>
-        <Col xs="12" sm="6" className={`transfer-${number}`}>
-          <h2>Transfer <span>{number}</span></h2>
+        <Col xs="12" md="6" className={`transfer-${number} col-xs-12`}>
+          <h2>Transfer {number}</h2>
           <Row>
-            <Col xs="12" sm="6">
+            <Col xs="12" md="6" className="col-xs-12">
               <UserInputs number={number} user={1} />
             </Col>
-            <Col xs="12" sm="6">
+            <Col xs="12" md="6" className="col-xs-12">
               <UserInputs number={number} user={2} />
             </Col>
           </Row>
