@@ -33,6 +33,10 @@ ul {
   display: none;
 }
 
+.btn-group {
+  margin: 1rem 0;
+}
+
 .btn-toolbar > label.checkbox-inline {
   margin-left: 5px;
 }
@@ -45,4 +49,8 @@ label.checkbox-inline {
 
 label.checkbox-inline input[type=checkbox] {
   margin-top: 0;
+}
+
+.alert.show {
+  opacity: 1;
 }
