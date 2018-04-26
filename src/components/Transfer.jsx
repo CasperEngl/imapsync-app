@@ -1,3 +1,9 @@
+/*
+eslint
+
+no-shadow: 0,
+*/
+
 import React, { PureComponent, Fragment } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
