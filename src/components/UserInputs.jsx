@@ -9,8 +9,10 @@ import React, { PureComponent, Fragment } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { FormGroup, Input, ButtonGroup, Button } from 'reactstrap';
+import { Dropdown, MenuItem, Col } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import { isEmail, isURL, isEmpty } from 'validator';
+import styled from 'styled-components';
 
 import { updateTransferData, compileTransfers } from '../actions/UserActions';
 
@@ -36,8 +38,30 @@ class UserInputs extends PureComponent {
     compileTransfers();
   }
 
+  handleDropdown(number, target, event) {
+    const { updateTransferData, compileTransfers } = this.props;
+    const value = event;
+
+    updateTransferData(number, target, value);
+    compileTransfers();
+  }
+
   render() {
     const { number, user, inputs } = this.props;
+
+    const MissingFields = styled.h4`
+      margin: 0;
+    `;
+
+    const StyledDropdown = styled(Dropdown)`
+      display: block;
+      margin: 0;
+      padding: 0;
+
+      > button {
+        margin: 0 0 1rem;
+      }
+    `;
 
     return (
       <Fragment>
@@ -45,7 +69,7 @@ class UserInputs extends PureComponent {
           (!isURL(inputs[number][`host_${user}`]) ||
           !isEmail(inputs[number][`user_${user}`]) ||
           isEmpty(inputs[number][`password_${user}`])) &&
-          <h4>Missing fields:</h4>
+          <MissingFields>Missing fields:</MissingFields>
         }
         <ButtonGroup>
           {
@@ -61,6 +85,21 @@ class UserInputs extends PureComponent {
             <Button color="danger" size="sm">PASSWORD</Button>
           }
         </ButtonGroup>
+        <StyledDropdown
+          id={`host_${user}_${number}`}
+          bsStyle="primary"
+          className="btn-sm"
+          onSelect={event => this.handleDropdown(number, `host_${user}`, event)}
+        >
+          <Dropdown.Toggle bsStyle="info">Servers</Dropdown.Toggle>
+          <Dropdown.Menu>
+            <MenuItem eventKey="he1.danaweb.org">he1.danaweb.org</MenuItem>
+            <MenuItem eventKey="mail.danaweb.org">mail.danaweb.org</MenuItem>
+            <MenuItem eventKey="imap.gigahost.dk">imap.gigahost.dk</MenuItem>
+            <MenuItem eventKey="mail.office365.com">mail.office365.com</MenuItem>
+            <MenuItem eventKey="mail.surftown.com">mail.surftown.com</MenuItem>
+          </Dropdown.Menu>
+        </StyledDropdown>
         <FormGroup>
           <Input
             type="url"
