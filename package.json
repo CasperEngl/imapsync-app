@@ -1,6 +1,7 @@
 {
   "name": "react-imapsync",
   "version": "0.1.0",
+  "homepage": "https://support.wkt.dk/imapsync/",
   "private": true,
   "dependencies": {
     "prop-types": "^15.6.1",
