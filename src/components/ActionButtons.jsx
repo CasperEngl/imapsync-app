@@ -1,3 +1,9 @@
+/*
+eslint
+
+no-shadow: 0,
+*/
+
 import React from 'react';
 import { ButtonToolbar, Button } from 'reactstrap';
 import { Checkbox } from 'react-bootstrap';
@@ -39,6 +45,7 @@ ActionButtons.propTypes = {
   compileTransfers: PropTypes.func.isRequired,
   clearTransfers: PropTypes.func.isRequired,
   toggleSSL: PropTypes.func.isRequired,
+  ssl: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = state => ({
