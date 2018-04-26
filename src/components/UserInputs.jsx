@@ -1,7 +1,8 @@
 /*
 eslint
 
-class-methods-use-this: 0
+class-methods-use-this: 0,
+no-shadow: 0,
 */
 
 import React, { PureComponent, Fragment } from 'react';
