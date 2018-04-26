@@ -17,10 +17,10 @@ const initialState = {
   inputs: [
     {},
     {
-      host_1: '',
+      host_1: 'he1.danaweb.org',
       user_1: '',
       password_1: '',
-      host_2: '',
+      host_2: 'mail.surftown.com',
       user_2: '',
       password_2: '',
     },
@@ -40,12 +40,12 @@ export default function (state = initialState, action) {
         }],
         inputs: [...state.inputs, {
           id: state.transfersCount,
-          host_1: '',
-          user_1: '',
-          password_1: '',
-          host_2: '',
-          user_2: '',
-          password_2: '',
+          host_1: initialState.inputs[1].host_1,
+          user_1: initialState.inputs[1].user_1,
+          password_1: initialState.inputs[1].password_1,
+          host_2: initialState.inputs[1].host_2,
+          user_2: initialState.inputs[1].user_2,
+          password_2: initialState.inputs[1].password_2,
         }],
       };
     case REMOVE_TRANSFER:
