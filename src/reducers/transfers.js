@@ -17,7 +17,7 @@ const initialState = {
   inputs: [
     {},
     {
-      host_1: 'he1.danaweb.org',
+      host_1: '',
       user_1: '',
       password_1: '',
       host_2: 'mail.surftown.com',
