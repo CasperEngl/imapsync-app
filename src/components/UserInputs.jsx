@@ -8,10 +8,9 @@ no-shadow: 0,
 import React, { PureComponent, Fragment } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { FormGroup, Input, ButtonGroup, Button } from 'reactstrap';
+import { FormGroup, Input } from 'reactstrap';
 import { Dropdown, MenuItem } from 'react-bootstrap';
 import PropTypes from 'prop-types';
-import { isEmail, isURL, isEmpty } from 'validator';
 import styled from 'styled-components';
 
 import { updateTransferData, compileTransfers } from '../actions/UserActions';
@@ -49,10 +48,6 @@ class UserInputs extends PureComponent {
   render() {
     const { number, user, inputs } = this.props;
 
-    const MissingFields = styled.h4`
-      margin: 0;
-    `;
-
     const StyledDropdown = styled(Dropdown)`
       display: block;
       margin: 0;
@@ -65,26 +60,6 @@ class UserInputs extends PureComponent {
 
     return (
       <Fragment>
-        {
-          (!isURL(inputs[number][`host_${user}`]) ||
-          !isEmail(inputs[number][`user_${user}`]) ||
-          isEmpty(inputs[number][`password_${user}`])) &&
-          <MissingFields>Missing fields:</MissingFields>
-        }
-        <ButtonGroup>
-          {
-            !isURL(inputs[number][`host_${user}`]) &&
-            <Button color="danger" size="sm">HOST</Button>
-          }
-          {
-            !isEmail(inputs[number][`user_${user}`]) &&
-            <Button color="danger" size="sm">USER</Button>
-          }
-          {
-            isEmpty(inputs[number][`password_${user}`]) &&
-            <Button color="danger" size="sm">PASSWORD</Button>
-          }
-        </ButtonGroup>
         <StyledDropdown
           id={`host_${user}_${number}`}
           bsStyle="primary"
