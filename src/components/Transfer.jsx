@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import { Row, Col, ButtonToolbar, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 
-import { removeTransfer } from '../actions/UserActions';
+import { removeTransfer, duplicateTransfer } from '../actions/UserActions';
 
 import UserInputs from './UserInputs';
 
@@ -18,10 +18,11 @@ class Transfer extends PureComponent {
   static propTypes = {
     number: PropTypes.number.isRequired,
     removeTransfer: PropTypes.func.isRequired,
+    duplicateTransfer: PropTypes.func.isRequired,
   }
 
   render() {
-    const { number, removeTransfer } = this.props;
+    const { number, removeTransfer, duplicateTransfer } = this.props;
 
     return (
       <Fragment>
@@ -37,6 +38,7 @@ class Transfer extends PureComponent {
           </Row>
           <ButtonToolbar>
             <Button color="danger" onClick={() => removeTransfer(number)}>Remove</Button>
+            <Button color="default" onClick={() => duplicateTransfer(number)}>Duplicate</Button>
           </ButtonToolbar>
         </Col>
       </Fragment>
@@ -50,6 +52,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   removeTransfer,
+  duplicateTransfer,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Transfer);
