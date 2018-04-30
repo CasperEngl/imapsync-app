@@ -17,7 +17,7 @@ const ActionButtons = ({
   addTransfer, compileTransfers, clearTransfers, toggleSSL, ssl,
 }) => (
   <ButtonToolbar>
-    <Button color="info" onClick={() => addTransfer(1)}>Add Transfer</Button>
+    <Button color="info" onClick={addTransfer}>Add Transfer</Button>
     <Button
       color="warning"
       className="pull-right"
