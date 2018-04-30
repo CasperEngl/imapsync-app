@@ -11,6 +11,7 @@ import { isEmail, isURL, isEmpty } from 'validator';
 import { store } from '../App';
 
 export const ADD_TRANSFER = 'ADD_TRANSFER';
+export const DUPLICATE_TRANSFER = 'DUPLICATE_TRANSFER';
 export const REMOVE_TRANSFER = 'REMOVE_TRANSFER';
 export const COMPILE_TRANSFERS = 'COMPILE_TRANSFERS';
 export const UPDATE_TRANSFER_DATA = 'UPDATE_TRANSFER_DATA';
@@ -20,6 +21,13 @@ export const TOGGLE_SSL = 'TOGGLE_SSL';
 export function addTransfer() {
   return {
     type: ADD_TRANSFER,
+  };
+}
+
+export function duplicateTransfer(number) {
+  return {
+    type: DUPLICATE_TRANSFER,
+    data: number,
   };
 }
 
