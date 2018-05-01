@@ -12,7 +12,7 @@ import 'bootswatch/dist/darkly/bootstrap.min.css';
 import 'jquery/dist/jquery.min';
 import 'bootstrap/dist/js/bootstrap.min';
 import 'font-awesome/css/font-awesome.min.css';
-import './index.css';
+import './style/index.css';
 import App from './App.jsx';
 import registerServiceWorker from './registerServiceWorker';
 
