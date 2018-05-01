@@ -33,7 +33,6 @@ class UserInputs extends PureComponent {
     }
 
     updateTransferData(number, name, value);
-
     compileTransfers();
   }
 
@@ -66,7 +65,7 @@ class UserInputs extends PureComponent {
           className="btn-sm"
           onSelect={event => this.handleDropdown(number, `host_${user}`, event)}
         >
-          <Dropdown.Toggle bsStyle="info">Servers</Dropdown.Toggle>
+          <Dropdown.Toggle bsStyle="primary">Servers</Dropdown.Toggle>
           <Dropdown.Menu>
             <MenuItem eventKey="he1.danaweb.org">he1.danaweb.org</MenuItem>
             <MenuItem eventKey="mail.danaweb.org">mail.danaweb.org</MenuItem>
