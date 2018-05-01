@@ -3,6 +3,7 @@ eslint
 
 class-methods-use-this: 0,
 no-shadow: 0,
+jsx-a11y/tabindex-no-positive: 0,
 */
 
 import React, { PureComponent, Fragment } from 'react';
@@ -81,6 +82,7 @@ class UserInputs extends PureComponent {
             name={`host_${user}`}
             onChange={event => this.handleInput(number, null, event)}
             value={inputs[number][`host_${user}`]}
+            tabIndex="1"
           />
         </FormGroup>
         <FormGroup>
@@ -90,6 +92,7 @@ class UserInputs extends PureComponent {
             name={`user_${user}`}
             onChange={event => this.handleInput(number, 'user_2', event)}
             value={inputs[number][`user_${user}`]}
+            tabIndex="1"
           />
         </FormGroup>
         <FormGroup>
@@ -99,6 +102,7 @@ class UserInputs extends PureComponent {
             name={`password_${user}`}
             onChange={event => this.handleInput(number, null, event)}
             value={inputs[number][`password_${user}`]}
+            tabIndex="1"
           />
         </FormGroup>
       </Fragment>
