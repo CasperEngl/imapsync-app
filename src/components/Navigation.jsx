@@ -5,21 +5,19 @@ react/jsx-no-target-blank: 0,
 */
 
 import React from 'react';
-import { Navbar, Nav, NavItem } from 'react-bootstrap';
+import { Navbar, NavbarBrand, Nav, NavItem, Container, NavLink } from 'reactstrap';
 import FontAwesome from 'react-fontawesome';
 
 const Navigation = () => (
-  <Navbar inverse>
-    <Navbar.Header>
-      <Navbar.Brand>
-        <a href="https://web-koncept.dk/" target="_blank">Web-Koncept</a>
-      </Navbar.Brand>
-    </Navbar.Header>
-    <Nav>
-      <NavItem href="../">
-        <FontAwesome name="arrow-circle-left" size="2x" />
-      </NavItem>
-    </Nav>
+  <Navbar color="primary" dark>
+    <Container>
+      <NavbarBrand href="https://web-koncept.dk/" target="_blank">Web-Koncept</NavbarBrand>
+      <Nav navbar>
+        <NavItem>
+          <NavLink href="../"><FontAwesome name="arrow-circle-left" size="2x" /></NavLink>
+        </NavItem>
+      </Nav>
+    </Container>
   </Navbar>
 );
 
