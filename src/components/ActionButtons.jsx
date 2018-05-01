@@ -5,38 +5,47 @@ no-shadow: 0,
 */
 
 import React from 'react';
-import { ButtonToolbar, Button } from 'reactstrap';
-import { Checkbox } from 'react-bootstrap';
+import { ButtonToolbar, ButtonGroup, Button, FormGroup, Label, Input } from 'reactstrap';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
 import { addTransfer, compileTransfers, clearTransfers, toggleSSL } from '../actions/UserActions';
+
+const StyledFormGroup = styled(FormGroup)`
+  display: flex;
+  align-items: center;
+  margin-left: .5rem;
+`;
 
 const ActionButtons = ({
   addTransfer, compileTransfers, clearTransfers, toggleSSL, ssl,
 }) => (
   <ButtonToolbar>
-    <Button color="info" onClick={addTransfer}>Add Transfer</Button>
-    <Button
-      color="warning"
-      className="pull-right"
-      onClick={() => {
+    <ButtonGroup>
+      <Button color="primary" onClick={addTransfer}>Add Transfer</Button>
+      <Button
+        color="warning"
+        onClick={() => {
         clearTransfers();
         compileTransfers();
       }}
-    >Clear
-    </Button>
-    <Checkbox
-      className="pull-right"
-      inline
-      onChange={() => {
-        toggleSSL();
-        compileTransfers();
-      }}
-      checked={ssl}
-    >Toggle SSL
-    </Checkbox>
+      >Clear
+      </Button>
+    </ButtonGroup>
+    <StyledFormGroup check>
+      <Label>
+        <Input
+          type="checkbox"
+          onChange={() => {
+            toggleSSL();
+            compileTransfers();
+          }}
+          checked={ssl}
+        />Toggle SSL
+      </Label>
+    </StyledFormGroup>
   </ButtonToolbar>
 );
 
