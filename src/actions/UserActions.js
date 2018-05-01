@@ -54,7 +54,7 @@ export function compileTransfers() {
           !isEmpty(password_1) &&
           password_2 !== 'PASSWORD_2' &&
           !isEmpty(password_2)) {
-        command += `/Applications/imapsync/imapsync_bin_Darwin --host1 ${host_1} --user1 ${user_1} --password1 ${password_1}${ssl_1} --host2 ${host_2} --user2 ${user_2} --password2 ${password_2}${ssl_2}; `;
+        command += `/Applications/imapsync/imapsync_bin_Darwin --host1 '${host_1}' --user1 '${user_1}' --password1 '${password_1}'${ssl_1} --host2 '${host_2}' --user2 '${user_2}' --password2 '${password_2}'${ssl_2}; `;
       }
     }
   }
