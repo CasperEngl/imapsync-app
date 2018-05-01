@@ -16,10 +16,10 @@ class Transfers extends PureComponent {
     return (
       <Fragment>
         <Row>
-          {transfers &&
-          transfers.map(transfer =>
-            <Transfer key={transfer.id} number={transfer.id} />,
-          )}
+          {
+            transfers &&
+            transfers.map(transfer => <Transfer key={transfer.id} number={transfer.id} />)
+          }
         </Row>
       </Fragment>
     );
