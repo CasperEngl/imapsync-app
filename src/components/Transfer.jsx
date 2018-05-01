@@ -25,13 +25,17 @@ class Transfer extends PureComponent {
   render() {
     const { number, removeTransfer, duplicateTransfer } = this.props;
 
+    const StyledCol = styled(Col)`
+      margin: 1.5rem 0 0;
+    `;
+
     const StyledButtonGroup = styled(ButtonGroup)`
       margin: 0;
     `;
 
     return (
       <Fragment>
-        <Col xs="12" md="6" className={`transfer-${number}`}>
+        <StyledCol xs="12" md="6" className={`transfer-${number}`}>
           <h2>Transfer {number}</h2>
           <Row>
             <Col xs="12" md="6">
@@ -47,7 +51,7 @@ class Transfer extends PureComponent {
               <Button color="default" onClick={() => duplicateTransfer(number)}>Duplicate</Button>
             </StyledButtonGroup>
           </ButtonToolbar>
-        </Col>
+        </StyledCol>
       </Fragment>
     );
   }
