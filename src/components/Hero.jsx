@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Container, Jumbotron, FormGroup, Input, Label, Button } from 'reactstrap';
+import { Container, Jumbotron, FormGroup, Input, Button } from 'reactstrap';
 import styled from 'styled-components';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
@@ -33,7 +33,6 @@ const Hero = ({ command }) => (
     <Container>
       <h1>IMAP SYNC</h1>
       <FormGroup>
-        <Label>Script</Label>
         <CopyGroup>
           <Input type="text" placeholder="Script will appear here" value={command} readOnly />
           <CopyToClipboard text={command}>
