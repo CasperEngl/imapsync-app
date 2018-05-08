@@ -9,7 +9,7 @@ import { Navbar, NavbarBrand, Nav, NavItem, Container, NavLink } from 'reactstra
 import FontAwesome from 'react-fontawesome';
 
 const Navigation = () => (
-  <Navbar color="primary" dark>
+  <Navbar color="wkt" dark>
     <Container>
       <NavbarBrand href="https://web-koncept.dk/" target="_blank">Web-Koncept</NavbarBrand>
       <Nav navbar>
