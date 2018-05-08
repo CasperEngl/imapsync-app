@@ -5,12 +5,34 @@
 @import '../node_modules/bootstrap/scss/buttons';
 @import '../node_modules/bootstrap/scss/navbar';
 
+:root {
+  --wkt-primary: #507894;
+}
+
+$colors: (
+  primary: $blue,
+  secondary: $secondary,
+  success: $success,
+  info: $info,
+  warning: $warning,
+  danger: $danger
+);
+
+@each $name, $color in $colors {
+  .bg-#{$name} {
+    background: $color !important;
+  }
+}
+
+.bg-wkt {
+  background: var(--wkt-primary) !important;
+}
 
 body {
   position: relative;
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  font-family: var(--font-family-sans-serif);
 }
 
 ul {
@@ -22,7 +44,7 @@ label {
 }
 
 h1 {
-  font-weight: 900;
+  font-weight: 700;
 }
 
 input.form-control {
@@ -31,6 +53,10 @@ input.form-control {
 
 #root {
   padding-bottom: 30rem;
+}
+
+.hide {
+  visibility: hidden;
 }
 
 .navbar-brand {
@@ -68,20 +94,5 @@ input.form-control {
     text-decoration: none;
     color: #ffffff;
     background-color: var(--primary);
-  }
-}
-
-$colors: (
-  primary: $blue,
-  secondary: $secondary,
-  success: $success,
-  info: $info,
-  warning: $warning,
-  danger: $danger
-);
-
-@each $name, $color in $colors {
-  .bg-#{$name} {
-    background: $color !important;
   }
 }
