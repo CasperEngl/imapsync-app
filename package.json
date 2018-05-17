@@ -1,7 +1,6 @@
 {
   "name": "react-imapsync",
-  "version": "0.1.0",
-  "homepage": "https://support.wkt.dk/imapsync/",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "bootstrap": "^4.1.0",
