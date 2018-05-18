@@ -14,7 +14,7 @@ const Navigation = () => (
       <NavbarBrand href="https://web-koncept.dk/" target="_blank">Web-Koncept</NavbarBrand>
       <Nav navbar>
         <NavItem>
-          <NavLink href="../"><FontAwesome name="arrow-circle-left" size="2x" /></NavLink>
+          <NavLink href="https://support.wkt.dk"><FontAwesome name="arrow-circle-left" size="2x" /></NavLink>
         </NavItem>
       </Nav>
     </Container>
