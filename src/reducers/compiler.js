@@ -1,8 +1,9 @@
-import { COMPILE_TRANSFERS, TOGGLE_SSL } from '../actions/UserActions';
+import { COMPILE_TRANSFERS, TOGGLE_SSL, EXTRA_ARGUMENTS } from '../actions/UserActions';
 
 const initialState = {
   command: '',
   ssl: true,
+  extraArgs: '',
 };
 
 export default function (state = initialState, action) {
@@ -18,6 +19,11 @@ export default function (state = initialState, action) {
       return {
         ...state,
         ssl: !state.ssl,
+      };
+    case EXTRA_ARGUMENTS:
+      return {
+        ...state,
+        extraArgs: data,
       };
 
     default:
