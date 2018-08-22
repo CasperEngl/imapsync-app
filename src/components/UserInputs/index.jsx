@@ -14,7 +14,7 @@ import { Dropdown, MenuItem } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import { updateTransferData, compileTransfers } from '../actions/UserActions';
+import { updateTransferData, compileTransfers } from '../../actions/UserActions';
 
 class UserInputs extends PureComponent {
   static propTypes = {

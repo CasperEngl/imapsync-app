@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import { addTransfer, compileTransfers, clearTransfers, toggleSSL, addExtraArgs } from '../actions/UserActions';
+import { addTransfer, compileTransfers, clearTransfers, toggleSSL, addExtraArgs } from '../../actions/UserActions';
 
 const StyledFormGroup = styled(FormGroup)`
   display: flex;
