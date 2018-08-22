@@ -1,6 +1,7 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Container } from 'reactstrap';
 import { Provider } from 'react-redux';
+import HttpsRedirect from 'react-https-redirect';
 import { applyMiddleware, createStore } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
@@ -9,7 +10,7 @@ import { save, load } from 'redux-localstorage-simple';
 import Navigation from './components/Navigation';
 import Hero from './components/Hero';
 import Transfers from './components/Transfers';
-import ActionButtons from './components/ActionButtons';
+import ActionBar from './components/ActionBar';
 
 import rootReducer from './reducers/rootReducer';
 
@@ -23,14 +24,14 @@ export const store = createStore(
 
 const App = () => (
   <Provider store={store}>
-    <Fragment>
+    <HttpsRedirect>
       <Navigation />
       <Hero />
       <Container>
-        <ActionButtons />
+        <ActionBar />
         <Transfers />
       </Container>
-    </Fragment>
+    </HttpsRedirect>
   </Provider>
 );
 
