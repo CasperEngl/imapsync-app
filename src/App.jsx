@@ -1,11 +1,11 @@
 import React from 'react';
-import { Container } from 'reactstrap';
 import { Provider } from 'react-redux';
 import HttpsRedirect from 'react-https-redirect';
 import { applyMiddleware, createStore } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 import { save, load } from 'redux-localstorage-simple';
+import { Container } from 'reactstrap';
 
 import Navigation from './components/Navigation';
 import Hero from './components/Hero';
