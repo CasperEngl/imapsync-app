@@ -1,12 +1,14 @@
 {
   "name": "react-imapsync",
   "version": "1.0.0",
+  "homepage": "https://imapsync.wkt.dk/",
   "private": true,
   "dependencies": {
     "babel-eslint": "^8.2.3",
     "bootstrap": "^4.1.0",
     "bootswatch": "^4.1.0",
     "font-awesome": "^4.7.0",
+    "gsap": "^2.0.1",
     "jquery": "^3.3.1",
     "node-sass-chokidar": "^1.2.2",
     "prop-types": "^15.6.1",
@@ -15,6 +17,7 @@
     "react-copy-to-clipboard": "^5.0.1",
     "react-dom": "^16.2.0",
     "react-fontawesome": "^1.6.1",
+    "react-https-redirect": "^1.0.10",
     "react-redux": "^5.0.7",
     "react-scripts": "1.1.1",
     "reactstrap": "^5.0.0-beta.3",
