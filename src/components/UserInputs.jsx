@@ -105,6 +105,15 @@ class UserInputs extends PureComponent {
             tabIndex="1"
           />
         </FormGroup>
+        <FormGroup>
+          <Input
+            type="text"
+            placeholder={`--gmail${user} --office${user} --exchange${user}`}
+            name={`args_${user}`}
+            onChange={event => this.handleInput(number, null, event)}
+            value={inputs[number][`args_${user}`]}
+          />
+        </FormGroup>
       </Fragment>
     );
   }

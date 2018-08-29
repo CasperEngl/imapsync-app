@@ -5,7 +5,13 @@ no-plusplus: 0,
 no-case-declarations: 0
 */
 
-import { ADD_TRANSFER, REMOVE_TRANSFER, UPDATE_TRANSFER_DATA, CLEAR_TRANSFERS, DUPLICATE_TRANSFER } from '../actions/UserActions';
+import {
+  ADD_TRANSFER,
+  REMOVE_TRANSFER,
+  UPDATE_TRANSFER_DATA,
+  CLEAR_TRANSFERS,
+  DUPLICATE_TRANSFER,
+} from '../actions/UserActions';
 
 const initialState = {
   transfers: [
@@ -21,9 +27,11 @@ const initialState = {
       host_1: '',
       user_1: '',
       password_1: '',
+      args_1: '',
       host_2: 'mail.surftown.com',
       user_2: '',
       password_2: '',
+      args_2: '',
     },
   ],
 };
@@ -44,9 +52,11 @@ export default function (state = initialState, action) {
           host_1: initialState.inputs[1].host_1,
           user_1: initialState.inputs[1].user_1,
           password_1: initialState.inputs[1].password_1,
+          args_1: initialState.inputs[1].args_1,
           host_2: initialState.inputs[1].host_2,
           user_2: initialState.inputs[1].user_2,
           password_2: initialState.inputs[1].password_2,
+          args_2: initialState.inputs[1].args_2,
         }],
       };
     case DUPLICATE_TRANSFER:
@@ -63,9 +73,11 @@ export default function (state = initialState, action) {
           host_1: duplicate.host_1,
           user_1: duplicate.user_1,
           password_1: duplicate.password_1,
+          args_1: duplicate.args_1,
           host_2: duplicate.host_2,
           user_2: duplicate.user_2,
           password_2: duplicate.password_2,
+          args_2: duplicate.args_2,
         }],
       };
     case REMOVE_TRANSFER:
@@ -88,11 +100,12 @@ export default function (state = initialState, action) {
             host_1: '',
             user_1: '',
             password_1: '',
+            args_1: '',
             host_2: '',
             user_2: '',
             password_2: '',
+            args_2: '',
             ...state.inputs[data.id],
-            id: data.id,
             [data.name]: data.content,
           },
         }),
