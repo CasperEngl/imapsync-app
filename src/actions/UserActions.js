@@ -5,12 +5,12 @@ no-restricted-syntax: 0,
 no-multi-spaces: 0,
 camelcase: 0,
 quotes: 0,
-no-extend-native: 0,
 no-regex-spaces: 0,
 */
 
 import { isEmail, isURL, isEmpty } from 'validator';
 import { store } from '../App';
+import '../components/trimLiteral';
 
 export const ADD_TRANSFER = 'ADD_TRANSFER';
 export const DUPLICATE_TRANSFER = 'DUPLICATE_TRANSFER';
@@ -25,11 +25,11 @@ String.prototype.trimLiteral = function () {
   if (this.length === 0) {
     return this;
   }
-  
+
   return this
     .replace(/\n/gm, '') // Replace newlines
     .replace(/  /gm, ''); // Replace double spaces
-}
+};
 
 export function addTransfer() {
   return {
