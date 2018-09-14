@@ -7,10 +7,10 @@ import thunk from 'redux-thunk';
 import { save, load } from 'redux-localstorage-simple';
 import { Container } from 'reactstrap';
 
-import Navigation from './components/Navigation';
-import Hero from './components/Hero';
-import Transfers from './components/Transfers';
-import ActionBar from './components/ActionBar';
+import Navigation from './components/Navigation/index';
+import Hero from './components/Hero/index';
+import Transfers from './components/Transfers/index';
+import ActionBar from './components/ActionBar/index';
 
 import rootReducer from './reducers/rootReducer';
 

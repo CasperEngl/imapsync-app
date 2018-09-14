@@ -21,6 +21,16 @@ export const CLEAR_TRANSFERS = 'CLEAR_TRANSFERS';
 export const TOGGLE_SSL = 'TOGGLE_SSL';
 export const EXTRA_ARGUMENTS = 'EXTRA_ARGUMENTS';
 
+String.prototype.trimLiteral = function () {
+  if (this.length === 0) {
+    return this;
+  }
+
+  return this
+    .replace(/\n/gm, '') // Replace newlines
+    .replace(/  /gm, ''); // Replace double spaces
+};
+
 export function addTransfer() {
   return {
     type: ADD_TRANSFER,
@@ -53,8 +63,8 @@ export function compileTransfers() {
       const ssl_1       = state.compiler.ssl        ? ` --ssl1 --sslargs1 'SSL_cipher_list=DEFAULT'` : '';
       const ssl_2       = state.compiler.ssl        ? ` --ssl2 --sslargs2 'SSL_cipher_list=DEFAULT'` : '';
 
-      const allExtraArgs_1 = `${args_1}${ssl_1}${extraArgs}1`;
-      const allExtraArgs_2 = `${args_2}${ssl_2}${extraArgs}2`;
+      const allExtraArgs_1 = `${args_1}${ssl_1}${extraArgs}`;
+      const allExtraArgs_2 = `${args_2}${ssl_2}${extraArgs}`;
 
       if (isURL(host_1) &&
           isURL(host_2) &&
