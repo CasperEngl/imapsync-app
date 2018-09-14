@@ -55,20 +55,12 @@ class Transfer extends PureComponent {
   }
 }
 
-const mapStateToProps = state => ({
-  transfers: state.transfer.transfers,
-});
-
 const mapDispatchToProps = dispatch => bindActionCreators({
   removeTransfer,
   duplicateTransfer,
 }, dispatch);
 
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
   null,
-  {
-    withRef: true,
-  },
+  mapDispatchToProps,
 )(Transfer);
