@@ -6,6 +6,7 @@ no-multi-spaces: 0,
 camelcase: 0,
 quotes: 0,
 no-regex-spaces: 0,
+no-extend-native: 0,
 */
 
 import { isEmail, isURL, isEmpty } from 'validator';
@@ -93,12 +94,18 @@ export function removeTransfer(number) {
   return {
     type: REMOVE_TRANSFER,
     data: number,
+    meta: {
+      throttle: 3000,
+    },
   };
 }
 
 export function clearTransfers() {
   return {
     type: CLEAR_TRANSFERS,
+    meta: {
+      throttle: true,
+    },
   };
 }
 

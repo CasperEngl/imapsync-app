@@ -7,23 +7,63 @@ no-return-assign: 0,
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { tween } from 'popmotion';
+import posed, { PoseGroup } from 'react-pose';
 import { Row } from 'reactstrap';
-
-import { TransitionGroup, Transition } from 'react-transition-group';
+import styled from 'styled-components';
 
 import Transfer from '../Transfer';
+
+const PosedDiv = posed.div({
+  enter: {
+    opacity: 1,
+    y: '0rem',
+    transition: {
+      delay: 500,
+      duration: 700,
+    },
+  },
+  exit: {
+    opacity: 0,
+    y: '1rem',
+    transition: {
+      duration: 300,
+    },
+  },
+  flip: {
+    transition: tween,
+  },
+});
+
+const StyledCol = styled(PosedDiv)`
+  margin: 1.5rem 0 0;
+  padding: 0 15px;
+  flex: 0 0 100%;
+  width: 100%;
+
+  @media (min-width: 576px) {
+    flex: 0 0 calc(100% / 2);
+    width: calc(100% / 2);
+  }
+
+  @media (min-width: 768px) {
+    
+  }
+
+  @media (min-width: 992px) {
+
+  }
+`;
 
 class Transfers extends PureComponent {
   static propTypes = {
     transfers: PropTypes.arrayOf(PropTypes.object).isRequired,
   }
 
-  Enter() {
-    console.log('Enter');
-  }
+  constructor(props) {
+    super(props);
 
-  Exit() {
-    console.log('Exit');
+    this.transferRef = React.createRef();
   }
 
   render() {
@@ -31,21 +71,15 @@ class Transfers extends PureComponent {
 
     return (
       <Row>
-        <TransitionGroup component={null}>
+        <PoseGroup animateOnMount enterPose="enter" preEnterPose="exit">
           {
             transfers.map(transfer => (
-              <Transition
-                key={transfer.id}
-                timeout={500}
-                onEntered={this.Enter()}
-                onExiting={this.Exit()}
-                mountOnEnter
-              >
+              <StyledCol key={transfer.id}>
                 <Transfer number={transfer.id} />
-              </Transition>
+              </StyledCol>
             ))
           }
-        </TransitionGroup>
+        </PoseGroup>
       </Row>
     );
   }

@@ -4,16 +4,20 @@ eslint
 no-shadow: 0,
 */
 
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { Row, Col, ButtonToolbar, ButtonGroup, Button } from 'reactstrap';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
+
+import UserInputs from '../UserInputs';
 
 import { removeTransfer, duplicateTransfer } from '../../actions/UserActions';
 
-import UserInputs from '../UserInputs';
+const StyledButtonGroup = styled(ButtonGroup)`
+  margin: 0;
+`;
 
 class Transfer extends PureComponent {
   static propTypes = {
@@ -23,18 +27,14 @@ class Transfer extends PureComponent {
   }
 
   render() {
-    const { number, removeTransfer, duplicateTransfer } = this.props;
-
-    const StyledCol = styled(Col)`
-      margin: 1.5rem 0 0;
-    `;
-
-    const StyledButtonGroup = styled(ButtonGroup)`
-      margin: 0;
-    `;
+    const {
+      number,
+      removeTransfer,
+      duplicateTransfer,
+    } = this.props;
 
     return (
-      <StyledCol xs="12" md="6">
+      <Fragment>
         <h2>Transfer {number}</h2>
         <Row>
           <Col xs="12" md="6">
@@ -50,7 +50,7 @@ class Transfer extends PureComponent {
             <Button color="default" onClick={() => duplicateTransfer(number)}>Duplicate</Button>
           </StyledButtonGroup>
         </ButtonToolbar>
-      </StyledCol>
+      </Fragment>
     );
   }
 }

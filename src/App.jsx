@@ -5,6 +5,7 @@ import { applyMiddleware, createStore } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 import { save, load } from 'redux-localstorage-simple';
+import throttle from 'redux-throttle';
 import { Container } from 'reactstrap';
 
 import Navigation from './components/Navigation/index';
@@ -14,7 +15,12 @@ import ActionBar from './components/ActionBar/index';
 
 import rootReducer from './reducers/rootReducer';
 
-const middleware = [thunk];
+const defaultWait = 300;
+const defaultThrottleOption = {
+
+};
+
+const middleware = [thunk, throttle(defaultWait, defaultThrottleOption)];
 
 export const store = createStore(
   rootReducer,

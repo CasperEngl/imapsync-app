@@ -58,6 +58,10 @@ class UserInputs extends PureComponent {
       }
     `;
 
+    if (!inputs[number]) {
+      return null;
+    }
+
     return (
       <Fragment>
         <StyledDropdown

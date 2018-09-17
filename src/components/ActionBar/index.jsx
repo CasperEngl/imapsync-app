@@ -5,24 +5,14 @@ no-shadow: 0,
 */
 
 import React, { Component, Fragment } from 'react';
-import { ButtonToolbar, ButtonGroup, Button, FormGroup, Label, Input } from 'reactstrap';
+import { ButtonToolbar, ButtonGroup, Button, Input } from 'reactstrap';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+
+import { StyledFormGroup, StyledLabel } from '../Styled';
 
 import { addTransfer, compileTransfers, clearTransfers, toggleSSL, addExtraArgs } from '../../actions/UserActions';
-
-const StyledFormGroup = styled(FormGroup)`
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-`;
-
-const StyledLabel = styled(Label)`
-  margin: 1rem 0 .25rem;
-  display: block;
-`;
 
 class ActionBar extends Component {
   static propTypes = {
