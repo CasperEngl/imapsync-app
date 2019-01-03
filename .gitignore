@@ -21,3 +21,6 @@ yarn-debug.log*
 yarn-error.log*
 
 src/style/index.css
+dist
+react-imapsync*.tgz
+LOG_imapsync

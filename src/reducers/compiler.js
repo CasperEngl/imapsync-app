@@ -1,7 +1,19 @@
 import { COMPILE_TRANSFERS, TOGGLE_SSL, EXTRA_ARGUMENTS } from '../actions/UserActions';
 
 const initialState = {
-  command: '',
+  command: {
+    text: '',
+    json: [
+      {
+        host_1: '',
+        user_1: '',
+        password_1: '',
+        host_2: '',
+        user_2: '',
+        password_2: '',
+      },
+    ],
+  },
   ssl: true,
   extraArgs: '',
 };
