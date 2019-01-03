@@ -47,16 +47,19 @@ export function duplicateTransfer(number) {
 
 export function compileTransfers() {
   const state = store.getState();
-  let command = '';
+  let text = '';
+  const json = [];
 
   for (const input of state.transfer.inputs) {
-    if (typeof input !== 'undefined') {
-      const host_1      = input.host_1      || 'HOST_1';
-      const user_1      = input.user_1      || 'USER_1';
-      const password_1  = input.password_1  || 'PASSWORD_1';
-      const host_2      = input.host_2      || 'HOST_2';
-      const user_2      = input.user_2      || 'USER_2';
-      const password_2  = input.password_2  || 'PASSWORD_2';
+    if (input) {
+      const {
+        host_1 = 'HOST_1',
+        user_1 = 'USER_1',
+        password_1 = 'PASSWORD_1',
+        host_2 = 'HOST_2',
+        user_2 = 'USER_2',
+        password_2 = 'PASSWORD_2',
+      } = input;
 
       const args_1      = input.args_1              ? ` ${input.args_1}` : '';
       const args_2      = input.args_2              ? ` ${input.args_2}` : '';
@@ -67,15 +70,26 @@ export function compileTransfers() {
       const allExtraArgs_1 = `${args_1}${ssl_1}${extraArgs}`;
       const allExtraArgs_2 = `${args_2}${ssl_2}${extraArgs}`;
 
-      if (isURL(host_1) &&
-          isURL(host_2) &&
-          isEmail(user_1) &&
-          isEmail(user_2) &&
-          password_1 !== 'PASSWORD_1' &&
-          !isEmpty(password_1) &&
-          password_2 !== 'PASSWORD_2' &&
-          !isEmpty(password_2)) {
-        command += `
+      if (isURL(host_1)
+          && isURL(host_2)
+          && isEmail(user_1)
+          && isEmail(user_2)
+          && password_1 !== 'PASSWORD_1'
+          && !isEmpty(password_1)
+          && password_2 !== 'PASSWORD_2'
+          && !isEmpty(password_2)) {
+        json.push({
+          host_1,
+          user_1,
+          password_1,
+          host_2,
+          user_2,
+          password_2,
+        });
+
+        console.log(json);
+
+        text += `
           /Applications/imapsync/imapsync_bin_Darwin 
           --host1 '${host_1}' --user1 '${user_1}' --password1 '${password_1}'${allExtraArgs_1} 
           --host2 '${host_2}' --user2 '${user_2}' --password2 '${password_2}'${allExtraArgs_2}; 
@@ -86,7 +100,10 @@ export function compileTransfers() {
 
   return {
     type: COMPILE_TRANSFERS,
-    data: command,
+    data: {
+      text,
+      json,
+    },
   };
 }
 

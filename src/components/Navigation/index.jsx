@@ -5,18 +5,20 @@ react/jsx-no-target-blank: 0,
 */
 
 import React from 'react';
-import { Navbar, NavbarBrand, Nav, NavItem, Container, NavLink } from 'reactstrap';
-import FontAwesome from 'react-fontawesome';
+import { Navbar, NavbarBrand, Container } from 'reactstrap';
 
 const Navigation = () => (
-  <Navbar color="wkt" dark>
+  <Navbar
+    color="wkt"
+    dark
+    style={{
+      WebkitAppRegion: 'drag',
+    }}
+  >
     <Container>
-      <NavbarBrand href="https://web-koncept.dk/" target="_blank">Web-Koncept</NavbarBrand>
-      <Nav navbar>
-        <NavItem>
-          <NavLink href="https://support.wkt.dk"><FontAwesome name="arrow-circle-left" size="2x" /></NavLink>
-        </NavItem>
-      </Nav>
+      <NavbarBrand className="mx-auto">
+          Web-Koncept
+      </NavbarBrand>
     </Container>
   </Navbar>
 );

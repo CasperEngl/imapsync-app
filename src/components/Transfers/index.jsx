@@ -19,7 +19,7 @@ const PosedDiv = posed.div({
     opacity: 1,
     y: '0rem',
     transition: {
-      delay: 500,
+      delay: 250,
       duration: 700,
     },
   },

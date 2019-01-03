@@ -8,7 +8,9 @@ import React, { PureComponent, Fragment } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Row, Col, ButtonToolbar, ButtonGroup, Button } from 'reactstrap';
+import {
+  Row, Col, ButtonToolbar, ButtonGroup, Button,
+} from 'reactstrap';
 import styled from 'styled-components';
 
 import UserInputs from '../UserInputs';
@@ -35,7 +37,11 @@ class Transfer extends PureComponent {
 
     return (
       <Fragment>
-        <h2>Transfer {number}</h2>
+        <h2>
+          Transfer
+          {' '}
+          {number}
+        </h2>
         <Row>
           <Col xs="12" md="6">
             <UserInputs number={number} user={1} />
@@ -47,7 +53,7 @@ class Transfer extends PureComponent {
         <ButtonToolbar>
           <StyledButtonGroup>
             <Button color="danger" onClick={() => removeTransfer(number)}>Remove</Button>
-            <Button color="default" onClick={() => duplicateTransfer(number)}>Duplicate</Button>
+            <Button color="secondary" onClick={() => duplicateTransfer(number)}>Duplicate</Button>
           </StyledButtonGroup>
         </ButtonToolbar>
       </Fragment>

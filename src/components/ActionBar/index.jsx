@@ -5,14 +5,18 @@ no-shadow: 0,
 */
 
 import React, { Component, Fragment } from 'react';
-import { ButtonToolbar, ButtonGroup, Button, Input } from 'reactstrap';
+import {
+  ButtonToolbar, ButtonGroup, Button, Input,
+} from 'reactstrap';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { StyledFormGroup, StyledLabel } from '../Styled';
 
-import { addTransfer, compileTransfers, clearTransfers, toggleSSL, addExtraArgs } from '../../actions/UserActions';
+import {
+  addTransfer, compileTransfers, clearTransfers, toggleSSL, addExtraArgs,
+} from '../../actions/UserActions';
 
 class ActionBar extends Component {
   static propTypes = {
@@ -43,16 +47,27 @@ class ActionBar extends Component {
 
     return (
       <Fragment>
+        <StyledFormGroup check inline style={{ marginBottom: '1rem' }}>
+          <StyledLabel check>
+            <Input type="radio" name="os" defaultChecked />
+            macOS
+          </StyledLabel>
+          <StyledLabel check>
+            <Input type="radio" name="os" style={{ marginLeft: '.5rem' }} />
+            Windows
+          </StyledLabel>
+        </StyledFormGroup>
         <ButtonToolbar>
           <ButtonGroup>
             <Button color="primary" onClick={addTransfer}>Add Transfer</Button>
             <Button
               color="warning"
               onClick={() => {
-                  clearTransfers();
-                  compileTransfers();
-                }}
-            >Clear
+                clearTransfers();
+                compileTransfers();
+              }}
+            >
+            Clear
             </Button>
           </ButtonGroup>
         </ButtonToolbar>
@@ -61,15 +76,20 @@ class ActionBar extends Component {
             <Input
               type="checkbox"
               onChange={() => {
-                        toggleSSL();
-                        compileTransfers();
-                      }}
+                toggleSSL();
+                compileTransfers();
+              }}
               checked={ssl}
-            />Toggle SSL
+            />
+            Toggle SSL
           </StyledLabel>
         </StyledFormGroup>
         <StyledFormGroup>
-          <StyledLabel for="extra-args">Extra arguments <small>(for all transfers)</small></StyledLabel>
+          <StyledLabel for="extra-args">
+            Extra arguments
+            {' '}
+            <small>(for all transfers)</small>
+          </StyledLabel>
           <Input
             id="extra-args"
             type="text"
