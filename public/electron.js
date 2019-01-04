@@ -42,8 +42,8 @@ const preferences = new ElectronPreferences({
   },
   /**
    * If the `onLoad` method is specified, this function will be called immediately after
-   * preferences are loaded for the first time. The return value of this method will be stored as the
-   * preferences object.
+   * preferences are loaded for the first time.
+   * The return value of this method will be stored as the preferences object.
    */
   onLoad: preferences => preferences, // eslint-disable-line
   /**
