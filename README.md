@@ -1,4 +1,4 @@
-# React IMAP SYNC App
+# Imapsync
 
 Used to easily make the command to sync imap email accounts.
 
