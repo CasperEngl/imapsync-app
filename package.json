@@ -1,6 +1,6 @@
 {
   "name": "imapsync",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "homepage": "./",
   "private": true,
   "author": "Casper Engelmann",
@@ -48,7 +48,6 @@
     "bootstrap": "^4.1.0",
     "bootswatch": "^4.1.0",
     "debug": "^4.1.1",
-    "electron": "^4.0.0",
     "electron-is-dev": "^1.0.1",
     "eslint": "5.6.0",
     "font-awesome": "^4.7.0",
@@ -88,11 +87,12 @@
     "electron:dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
     "electron:pack": "run-s electron:prepack electron:build",
     "electron:prepack": "yarn build",
-    "electron:build": "electron-builder -c.extraMetadata.main=build/electron.js -mwl",
+    "electron:build": "electron-builder -c.extraMetadata.main=build/electron.js",
     "electron:start": "electron ."
   },
   "devDependencies": {
     "concurrently": "^4.1.0",
+    "electron": "^4.0.0",
     "electron-builder": "^20.38.4",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.9.0",

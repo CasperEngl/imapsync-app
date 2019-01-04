@@ -87,10 +87,8 @@ export function compileTransfers() {
           password_2,
         });
 
-        console.log(json);
-
         text += `
-          /Applications/imapsync/imapsync_bin_Darwin 
+          ./imapsync_bin 
           --host1 '${host_1}' --user1 '${user_1}' --password1 '${password_1}'${allExtraArgs_1} 
           --host2 '${host_2}' --user2 '${user_2}' --password2 '${password_2}'${allExtraArgs_2}; 
         `.trimLiteral();
