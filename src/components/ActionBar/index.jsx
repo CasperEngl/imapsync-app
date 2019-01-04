@@ -47,7 +47,7 @@ class ActionBar extends Component {
 
     return (
       <Fragment>
-        <ButtonToolbar>
+        <ButtonToolbar className="actionbar--mobile-fixed">
           <ButtonGroup>
             <Button color="primary" onClick={addTransfer}>Add Transfer</Button>
             <Button
