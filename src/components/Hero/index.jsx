@@ -102,7 +102,7 @@ class Hero extends PureComponent {
     const { output } = this.state;
 
     return (
-      <Jumbotron className="mt-5">
+      <Jumbotron className="mt-4">
         <Container>
           <h1>IMAP SYNC</h1>
           <FormGroup>
