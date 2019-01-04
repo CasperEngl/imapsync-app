@@ -1,9 +1,18 @@
-@import '../node_modules/bootstrap/scss/functions';
-@import '../node_modules/bootstrap/scss/variables';
-@import '../node_modules/bootstrap/scss/mixins';
-@import '../node_modules/bootstrap/scss/root';
-@import '../node_modules/bootstrap/scss/buttons';
-@import '../node_modules/bootstrap/scss/navbar';
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/mixins';
+@import '~bootstrap/scss/root';
+@import '~bootstrap/scss/buttons';
+@import '~bootstrap/scss/navbar';
+
+@media only screen and (max-width: 768px) and (max-height: 768px) {
+  .actionbar--mobile-fixed {
+    position: fixed;
+    z-index: 9999;
+    left: 1rem;
+    bottom: 1rem;
+  }
+}
 
 :root {
   --wkt-primary: #507894;
