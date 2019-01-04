@@ -78,14 +78,20 @@ export function compileTransfers() {
           && !isEmpty(password_1)
           && password_2 !== 'PASSWORD_2'
           && !isEmpty(password_2)) {
-        json.push({
+        json.push([
+          '--host1',
           host_1,
+          '--user1',
           user_1,
+          '--password1',
           password_1,
+          '--host2',
           host_2,
+          '--user2',
           user_2,
+          '--password2',
           password_2,
-        });
+        ]);
 
         text += `
           ./imapsync_bin 
