@@ -244,6 +244,7 @@ app.on('activate', () => {
 
 ipcMain.on('command', (event, commands) => {
   commands.forEach((command) => {
+    console.log(command);
     const args = [
       '--host1',
       command.host_1,
