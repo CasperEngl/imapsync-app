@@ -16,6 +16,7 @@ const Navigation = () => (
       WebkitAppRegion: 'drag',
       position: 'fixed',
     }}
+    className="py-0"
   >
     <Container>
       <NavbarBrand className="mx-auto">
