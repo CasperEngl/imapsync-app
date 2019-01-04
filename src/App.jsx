@@ -15,6 +15,8 @@ import ActionBar from './components/ActionBar/index';
 
 import rootReducer from './reducers/rootReducer';
 
+import './index.scss';
+
 const defaultWait = 300;
 const defaultThrottleOption = {
 
