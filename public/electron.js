@@ -8,11 +8,9 @@ const { spawn } = require('child_process');
 
 const getPlatform = require('./get-platform');
 
-const execPath = (!isDev)
-  ? path.join(path.dirname(appRootDir.get()), 'bin')
-  : path.join(appRootDir.get(), 'resources', getPlatform());
-
-require('../src/components/trimLiteral');
+const execPath = isDev
+  ? path.join(appRootDir.get(), 'resources', getPlatform())
+  : path.join(path.dirname(appRootDir.get()), 'bin');
 
 shell.config.execPath = shell.which('node');
 
@@ -21,9 +19,10 @@ let mainWindow;
 function createWindow() {
   mainWindow = new BrowserWindow({
     titleBarStyle: 'hiddenInset',
-    resizable: false,
-    width: 1024,
-    height: 1400,
+    width: 600,
+    height: 645,
+    minWidth: 320,
+    minHeight: 645,
     webPreferences: {
       nodeIntegration: true,
     },
@@ -48,45 +47,41 @@ app.on('activate', () => {
 
 ipcMain.on('command', (event, commands) => {
   commands.forEach((command) => {
-    const args = `
-      --host1 '${command.host_1}' --user1 '${command.user_1}' --password1 '${command.password_1}' 
-      --host2 '${command.host_2}' --user2 '${command.user_2}' --password2 '${command.password_2}';
-    `.trimLiteral();
+    const args = [
+      '--host1',
+      command.host_1,
+      '--user1',
+      command.user_1,
+      '--password1',
+      command.password_1,
+      '--ssl1',
+      '--sslargs1',
+      'SSL_cipher_list=DEFAULT',
 
-    const cmd = spawn(`${path.join(execPath, 'sync_bin')}`, ['--testslive']);
+      '--host2',
+      command.host_2,
+      '--user2',
+      command.user_2,
+      '--password2',
+      command.password_2,
+      '--ssl2',
+      '--sslargs2',
+      'SSL_cipher_list=DEFAULT',
+
+      '--nolog',
+    ];
+
+    const cmd = spawn(`${path.join(execPath, 'sync_bin')}`, args);
 
     cmd.stdout.on('data', (data) => {
-      console.log(data.toString());
+      event.sender.send('command-stdout', data.toString());
     });
 
-    // exec(`${cmd} --testslive`, (err, stdout, stderr) => {
-    //   if (err) {
-    //     console.error(err);
-    //     event.sender.send('command-error', err);
-    //     return;
-    //   }
+    cmd.stderr.on('data', () => {
+      // console.log(data.toString());
+    });
 
-    //   event.sender.send('command-stdout', stdout);
-    //   console.log(`stdout: ${stdout}`);
-    //   event.sender.send('command-stderr', stderr);
-    //   console.log(`stderr: ${stderr}`);
-
-    //   notifier.notify({
-    //     title: 'Imapsync',
-    //     message: `Finished ${commands[0].user_1}`,
-    //     icon: path.join(__dirname, '../assets/icon.png'),
-    //   });
-    // });
-
-    // exec(`${cmd} ${args}`, (error, stdout, stderr) => {
-    //   if (error) {
-    //     console.error(error);
-    //     return;
-    //   }
-
-    //   console.log(`stdout: ${stdout}`);
-    //   console.log(`stderr: ${stderr}`);
-    // });
+    // 7z7R1!77q
   });
 });
 

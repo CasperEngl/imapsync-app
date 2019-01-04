@@ -10,9 +10,11 @@ import { Navbar, NavbarBrand, Container } from 'reactstrap';
 const Navigation = () => (
   <Navbar
     color="wkt"
+    fixed="top"
     dark
     style={{
       WebkitAppRegion: 'drag',
+      position: 'fixed',
     }}
   >
     <Container>

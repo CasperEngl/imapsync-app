@@ -47,16 +47,6 @@ class ActionBar extends Component {
 
     return (
       <Fragment>
-        <StyledFormGroup check inline style={{ marginBottom: '1rem' }}>
-          <StyledLabel check>
-            <Input type="radio" name="os" defaultChecked />
-            macOS
-          </StyledLabel>
-          <StyledLabel check>
-            <Input type="radio" name="os" style={{ marginLeft: '.5rem' }} />
-            Windows
-          </StyledLabel>
-        </StyledFormGroup>
         <ButtonToolbar>
           <ButtonGroup>
             <Button color="primary" onClick={addTransfer}>Add Transfer</Button>
