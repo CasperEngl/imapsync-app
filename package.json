@@ -7,8 +7,9 @@
   "description": "Application to make commands for imapsync by Gilles LAMIRAL",
   "main": "public/electron.js",
   "build": {
-    "appId": "dk.web-koncept.imapsync",
+    "appId": "dk.web-koncept.${name}",
     "productName": "Imapsync",
+    "copyright": "Copyright © 2019 ${author}",
     "files": [
       "build/**/*",
       "node_modules/**/*"
@@ -39,7 +40,7 @@
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "shortcutName": "Imapsync",
-      "artifactName": "dk.web-koncept.imapsync.${version}.${ext}"
+      "artifactName": "${name}.${version}.${ext}"
     }
   },
   "dependencies": {
