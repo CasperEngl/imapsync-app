@@ -84,7 +84,21 @@ export function compileTransfers() {
             --host2 '${host_2}' --user2 '${user_2}' --password2 '${password_2}'${allExtraArgs_2}; 
           `.trimLiteral();
 
-        json.push(newCommand.split(' ').filter(arg => (!arg.includes('./imapsync_bin') ? arg : false)));
+        const commands = newCommand
+          .split(' ')
+          .filter((arg) => {
+            if (!arg || arg.includes('./imapsync_bin')) {
+              return false;
+            }
+
+            return arg;
+          })
+          .map(arg => arg
+            .replace(/;$/, '')
+            .replace(/^'(.*)'$/, '$1'),
+          );
+
+        json.push(commands);
         text += newCommand;
       }
     }
