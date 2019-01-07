@@ -216,6 +216,70 @@ const menu = Menu.buildFromTemplate([
       },
     ],
   },
+  {
+    label: 'Edit',
+    submenu: [
+      {
+        role: 'undo',
+      },
+      {
+        role: 'redo',
+      },
+      {
+        type: 'separator',
+      },
+      {
+        role: 'cut',
+      },
+      {
+        role: 'copy',
+      },
+      {
+        role: 'paste',
+      },
+      {
+        role: 'pasteandmatchstyle',
+      },
+      {
+        role: 'delete',
+      },
+      {
+        role: 'selectall',
+      },
+    ],
+  },
+  {
+    label: 'View',
+    submenu: [
+      {
+        role: 'reload',
+      },
+      {
+        role: 'forcereload',
+      },
+      {
+        role: 'toggledevtools',
+      },
+      {
+        type: 'separator',
+      },
+      {
+        role: 'resetzoom',
+      },
+      {
+        role: 'zoomin',
+      },
+      {
+        role: 'zoomout',
+      },
+      {
+        type: 'separator',
+      },
+      {
+        role: 'togglefullscreen',
+      },
+    ],
+  },
 ]);
 
 function createWindow() {
@@ -251,32 +315,9 @@ app.on('activate', () => {
 
 ipcMain.on('command', (event, commands) => {
   commands.forEach((command) => {
-    console.log(command);
-    const args = [
-      '--host1',
-      command.host_1,
-      '--user1',
-      command.user_1,
-      '--password1',
-      command.password_1,
-      '--ssl1',
-      '--sslargs1',
-      'SSL_cipher_list=DEFAULT',
-
-      '--host2',
-      command.host_2,
-      '--user2',
-      command.user_2,
-      '--password2',
-      command.password_2,
-      '--ssl2',
-      '--sslargs2',
-      'SSL_cipher_list=DEFAULT',
-
-      '--nolog',
-    ];
-
-    const cmd = spawn(`${path.join(execPath, 'sync_bin')}`, args);
+    const cmd = spawn(`${path.join(execPath, 'sync_bin')}`, [...command, '--nolog'], {
+      detached: true,
+    });
 
     cmd.stdout.on('data', (data) => {
       event.sender.send('command-stdout', data.toString());
