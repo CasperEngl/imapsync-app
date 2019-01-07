@@ -78,26 +78,14 @@ export function compileTransfers() {
           && !isEmpty(password_1)
           && password_2 !== 'PASSWORD_2'
           && !isEmpty(password_2)) {
-        json.push([
-          '--host1',
-          host_1,
-          '--user1',
-          user_1,
-          '--password1',
-          password_1,
-          '--host2',
-          host_2,
-          '--user2',
-          user_2,
-          '--password2',
-          password_2,
-        ]);
+        const newCommand = `
+            ./imapsync_bin 
+            --host1 '${host_1}' --user1 '${user_1}' --password1 '${password_1}'${allExtraArgs_1} 
+            --host2 '${host_2}' --user2 '${user_2}' --password2 '${password_2}'${allExtraArgs_2}; 
+          `.trimLiteral();
 
-        text += `
-          ./imapsync_bin 
-          --host1 '${host_1}' --user1 '${user_1}' --password1 '${password_1}'${allExtraArgs_1} 
-          --host2 '${host_2}' --user2 '${user_2}' --password2 '${password_2}'${allExtraArgs_2}; 
-        `.trimLiteral();
+        json.push(newCommand.split(' ').filter(arg => (!arg.includes('./imapsync_bin') ? arg : false)));
+        text += newCommand;
       }
     }
   }
@@ -115,18 +103,12 @@ export function removeTransfer(number) {
   return {
     type: REMOVE_TRANSFER,
     data: number,
-    meta: {
-      throttle: 3000,
-    },
   };
 }
 
 export function clearTransfers() {
   return {
     type: CLEAR_TRANSFERS,
-    meta: {
-      throttle: true,
-    },
   };
 }
 
