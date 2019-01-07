@@ -21,21 +21,21 @@ class Transfers extends PureComponent {
 
     const transition = {
       from: {
+        transform: 'translate3d(0, 40px, 0)',
         opacity: 0,
         height: 0,
       },
-      enter: {
-        opacity: 1,
-        height: 'auto',
-      },
+      enter: [
+        {
+          transform: 'translate3d(0, 0, 0)',
+          opacity: 1,
+          height: 'auto',
+        },
+      ],
       leave: [
         {
-          opacity: 0.5,
-        },
-        {
+          transform: 'translate3d(0, 40px, 0)',
           opacity: 0,
-        },
-        {
           height: 0,
         },
       ],
