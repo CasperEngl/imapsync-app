@@ -201,6 +201,13 @@ const menu = Menu.buildFromTemplate([
         accelerator: 'CmdOrCtrl+E',
       },
       {
+        label: 'Toggle Developer Tools',
+        click() {
+          mainWindow.webContents.toggleDevTools();
+        },
+        accelerator: 'CmdOrCtrl+Alt+I',
+      },
+      {
         label: 'Quit',
         click() {
           app.quit();
