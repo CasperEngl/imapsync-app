@@ -9,7 +9,12 @@ no-regex-spaces: 0,
 no-extend-native: 0,
 */
 
-import { isEmail, isURL, isEmpty } from 'validator';
+import {
+  isEmail,
+  isURL,
+  isIP,
+  isEmpty,
+} from 'validator';
 import { store } from '../App';
 import '../components/trimLiteral';
 
@@ -70,8 +75,8 @@ export function compileTransfers() {
       const allExtraArgs_1 = `${args_1}${ssl_1}${extraArgs}`;
       const allExtraArgs_2 = `${args_2}${ssl_2}${extraArgs}`;
 
-      if (isURL(host_1)
-          && isURL(host_2)
+      if ((isURL(host_1) || isIP(host_1))
+          && (isURL(host_2) || isIP(host_2))
           && isEmail(user_1)
           && isEmail(user_2)
           && password_1 !== 'PASSWORD_1'
