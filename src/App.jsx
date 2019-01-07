@@ -1,11 +1,9 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import HttpsRedirect from 'react-https-redirect';
 import { applyMiddleware, createStore } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 import { save, load } from 'redux-localstorage-simple';
-import throttle from 'redux-throttle';
 import { Container } from 'reactstrap';
 
 import Navigation from './components/Navigation/index';
@@ -17,12 +15,7 @@ import rootReducer from './reducers/rootReducer';
 
 import './index.scss';
 
-const defaultWait = 300;
-const defaultThrottleOption = {
-
-};
-
-const middleware = [thunk, throttle(defaultWait, defaultThrottleOption)];
+const middleware = [thunk];
 
 export const store = createStore(
   rootReducer,
@@ -32,14 +25,12 @@ export const store = createStore(
 
 const App = () => (
   <Provider store={store}>
-    <HttpsRedirect>
-      <Navigation />
-      <Hero />
-      <Container>
-        <ActionBar />
-        <Transfers />
-      </Container>
-    </HttpsRedirect>
+    <Navigation />
+    <Hero />
+    <Container>
+      <ActionBar />
+      <Transfers />
+    </Container>
   </Provider>
 );
 
