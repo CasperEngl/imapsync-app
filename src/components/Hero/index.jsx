@@ -32,14 +32,7 @@ const OutputWindow = styled.textarea`
 class Hero extends PureComponent {
   static propTypes = {
     command: PropTypes.string.isRequired,
-    commandJson: PropTypes.arrayOf(PropTypes.shape({
-      host_1: PropTypes.string.isRequired,
-      user_1: PropTypes.string.isRequired,
-      password_1: PropTypes.string.isRequired,
-      host_2: PropTypes.string.isRequired,
-      user_2: PropTypes.string.isRequired,
-      password_2: PropTypes.string.isRequired,
-    })).isRequired,
+    commandJson: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string.isRequired)).isRequired,
   }
 
   constructor(props) {
