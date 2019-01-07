@@ -9,7 +9,11 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
-  Row, Col, ButtonToolbar, ButtonGroup, Button,
+  Row,
+  Col,
+  ButtonToolbar,
+  ButtonGroup,
+  Button,
 } from 'reactstrap';
 import styled from 'styled-components';
 
