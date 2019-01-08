@@ -2,6 +2,9 @@
 
 Used to easily make the command to sync imap email accounts.
 
+## Downloads
+[Link](https://github.com/CasperEngl/imapsync-app/blob/master/DOWNLOADS.md)
+
 ## Running the app
 
 ### To run the app in development mode
