@@ -3,7 +3,7 @@
 Used to easily make the command to sync imap email accounts.
 
 ## Downloads
-[Link](https://github.com/CasperEngl/imapsync-app/blob/master/DOWNLOADS.md)
+[Link](https://github.com/CasperEngl/imapsync-app/releases/)
 
 ## Running the app
 
