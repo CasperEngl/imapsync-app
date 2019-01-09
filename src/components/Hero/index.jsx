@@ -41,12 +41,14 @@ class Hero extends PureComponent {
     this.execute = this.execute.bind(this);
     this.stdoutListener = this.stdoutListener.bind(this);
     this.stderrListener = this.stderrListener.bind(this);
+    this.logListener = this.logListener.bind(this);
     this.scrollToBottom = this.scrollToBottom.bind(this);
-    this.resetOutput = this.resetOutput.bind(this);
+    this.reset = this.reset.bind(this);
     this.outputLog = React.createRef();
 
     this.state = {
       output: '',
+      logs: [],
     };
   }
 
@@ -54,6 +56,7 @@ class Hero extends PureComponent {
     // ipcRenderer.on('command-stdout', this.stdoutListener);
     ipcRenderer.on('command-stdout', this.stdoutListener);
     ipcRenderer.on('command-stderr', this.stderrListener);
+    ipcRenderer.on('command-log', this.logListener);
 
     this.scrollToBottom(this.outputLog.current);
   }
@@ -74,15 +77,25 @@ class Hero extends PureComponent {
     this.scrollToBottom(this.outputLog.current);
   }
 
+  logListener(event, log) {
+    this.setState(prevState => ({
+      logs: [
+        ...prevState.logs,
+        log,
+      ],
+    }));
+  }
+
   execute() {
     const { commandJson } = this.props;
 
     ipcRenderer.send('command', commandJson);
   }
 
-  resetOutput() {
+  reset() {
     this.setState({
       output: '',
+      logs: [],
     });
   }
 
@@ -92,7 +105,7 @@ class Hero extends PureComponent {
 
   render() {
     const { command } = this.props;
-    const { output } = this.state;
+    const { output, logs } = this.state;
 
     return (
       <Jumbotron className="mt-4">
@@ -105,8 +118,17 @@ class Hero extends PureComponent {
             <OutputWindow value={output} ref={this.outputLog} readOnly />
             <ButtonGroup>
               <Button color="primary" onClick={this.execute}>Execute</Button>
-              <Button color="warning" onClick={this.resetOutput}>Reset</Button>
+              <Button color="warning" onClick={this.reset}>Reset</Button>
             </ButtonGroup>
+            {
+              logs.map(log => (
+                <a href={`data:application/octet-stream;charset=utf-16le;base64,${log.encoded}`} download={`imapsync_log-${log.date}.txt`}>
+                  Download
+                  {' '}
+                  {log.date}
+                </a>
+              ))
+            }
           </FormGroup>
         </Container>
       </Jumbotron>
