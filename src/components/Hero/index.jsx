@@ -89,7 +89,21 @@ class Hero extends PureComponent {
   execute() {
     const { commandJson } = this.props;
 
-    ipcRenderer.send('command', commandJson);
+    if (commandJson.length) {
+      const confirmed = confirm('Run synchronization'); // eslint-disable-line
+
+      if (confirmed) {
+        ipcRenderer.send('command', commandJson);
+      }
+    } else {
+      alert(`
+Fill in all the fields.
+
+Host fields must be a valid URL or IP address.
+Email fields must be valid email addresses.
+Passwords must contain at least one character.
+      `);
+    }
   }
 
   reset() {
@@ -120,16 +134,17 @@ class Hero extends PureComponent {
               <Button color="primary" onClick={this.execute}>Execute</Button>
               <Button color="warning" onClick={this.reset}>Reset</Button>
             </ButtonGroup>
-            {
-              logs.map(log => (
-                <a href={`data:application/octet-stream;charset=utf-16le;base64,${log.encoded}`} download={`imapsync_log-${log.date}.txt`}>
-                  Download
-                  {' '}
-                  {log.date}
-                </a>
-              ))
-            }
           </FormGroup>
+          {
+            logs.map(log => (
+              <div className="download">
+                <a href={`data:application/octet-stream;charset=utf-16le;base64,${log.encoded}`} download={`imapsync_log-${log.email}-${log.date}.txt`} className="font-weight-bold">
+                  {`Download ${log.email} log`}
+                </a>
+                <span className="ml-1 font-weight-light">{log.date}</span>
+              </div>
+            ))
+          }
         </Container>
       </Jumbotron>
     );
