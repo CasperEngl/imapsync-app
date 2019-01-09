@@ -6,18 +6,12 @@ const {
 } = require('electron');
 const ElectronPreferences = require('electron-preferences');
 const notifier = require('node-notifier');
-const appRootDir = require('app-root-dir');
 const path = require('path');
 const isDev = require('electron-is-dev');
 const shell = require('shelljs');
-const { spawn } = require('child_process');
 const os = require('os');
 
-const getPlatform = require('./get-platform');
-
-const execPath = isDev
-  ? path.join(appRootDir.get(), 'resources', getPlatform())
-  : path.join(path.dirname(appRootDir.get()), 'bin');
+const { doTransfer } = require('./doTransfer');
 
 shell.config.execPath = shell.which('node');
 
@@ -314,21 +308,18 @@ app.on('activate', () => {
 });
 
 ipcMain.on('command', (event, commands) => {
-  commands.forEach((command) => {
-    const cmd = spawn(`${path.join(execPath, 'sync_bin')}`, [...command, '--nolog'], {
-      detached: true,
+  if (commands.length) {
+    doTransfer({
+      event,
+      commands,
+      currentCommand: commands[0],
+      index: 0,
     });
+  } else {
+    event.sender.send('command-stdout', 'No commands found.');
+  }
 
-    cmd.stdout.on('data', (data) => {
-      event.sender.send('command-stdout', data.toString());
-    });
-
-    cmd.stderr.on('data', () => {
-      // console.log(data.toString());
-    });
-
-    // 7z7R1!77q
-  });
+  // 7z7R1!77q
 });
 
 notifier.notify({
