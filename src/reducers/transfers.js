@@ -70,20 +70,37 @@ export default function (state = initialState, action) {
         }],
         inputs: [...state.inputs, {
           id: state.transfersCount,
-          host_1: duplicate.host_1,
-          user_1: duplicate.user_1,
-          password_1: duplicate.password_1,
-          args_1: duplicate.args_1,
-          host_2: duplicate.host_2,
-          user_2: duplicate.user_2,
-          password_2: duplicate.password_2,
-          args_2: duplicate.args_2,
+          host_1: duplicate.host_1 || '',
+          user_1: duplicate.user_1 || '',
+          password_1: duplicate.password_1 || '',
+          args_1: duplicate.args_1 || '',
+          host_2: duplicate.host_2 || '',
+          user_2: duplicate.user_2 || '',
+          password_2: duplicate.password_2 || '',
+          args_2: duplicate.args_2 || '',
         }],
       };
     case REMOVE_TRANSFER:
       return {
         ...state,
         transfers: state.transfers.filter(transfer => transfer.id !== data),
+        inputs: state.inputs.map((input) => {
+          if (input.id === data) {
+            return {
+              ...input,
+              host_1: initialState.inputs[1].host_1,
+              user_1: initialState.inputs[1].user_1,
+              password_1: initialState.inputs[1].password_1,
+              args_1: initialState.inputs[1].args_1,
+              host_2: initialState.inputs[1].host_2,
+              user_2: initialState.inputs[1].user_2,
+              password_2: initialState.inputs[1].password_2,
+              args_2: initialState.inputs[1].args_2,
+            };
+          }
+
+          return input;
+        }),
       };
     case CLEAR_TRANSFERS:
       return {
