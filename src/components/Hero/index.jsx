@@ -5,6 +5,7 @@ class-methods-use-this: 0,
 */
 
 import React, { PureComponent } from 'react';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
@@ -16,6 +17,8 @@ import {
   Button,
 } from 'reactstrap';
 import styled from 'styled-components';
+
+import { compileTransfers } from '../../actions/UserActions';
 
 const { ipcRenderer } = window.require('electron');
 
@@ -33,6 +36,7 @@ class Hero extends PureComponent {
   static propTypes = {
     command: PropTypes.string.isRequired,
     commandJson: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string.isRequired)).isRequired,
+    compileTransfers: PropTypes.func.isRequired,
   }
 
   constructor(props) {
@@ -86,8 +90,10 @@ class Hero extends PureComponent {
     }));
   }
 
-  execute() {
-    const { commandJson } = this.props;
+  async execute() {
+    const { compileTransfers, commandJson } = this.props;
+
+    await compileTransfers();
 
     if (commandJson.length) {
       const confirmed = confirm('Run synchronization'); // eslint-disable-line
@@ -95,14 +101,6 @@ class Hero extends PureComponent {
       if (confirmed) {
         ipcRenderer.send('command', commandJson);
       }
-    } else {
-      alert(`
-Fill in all the fields.
-
-Host fields must be a valid URL or IP address.
-Email fields must be valid email addresses.
-Passwords must contain at least one character.
-      `);
     }
   }
 
@@ -137,7 +135,7 @@ Passwords must contain at least one character.
           </FormGroup>
           {
             logs.map(log => (
-              <div className="download">
+              <div className="download" key={log.date}>
                 <a href={`data:application/octet-stream;charset=utf-16le;base64,${log.encoded}`} download={`imapsync_log-${log.email}-${log.date}.txt`} className="font-weight-bold">
                   {`Download ${log.email} log`}
                 </a>
@@ -156,4 +154,8 @@ const mapStateToProps = state => ({
   commandJson: state.compiler.command.json,
 });
 
-export default connect(mapStateToProps)(Hero);
+const mapDispatchToProps = dispatch => bindActionCreators({
+  compileTransfers,
+}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Hero);
