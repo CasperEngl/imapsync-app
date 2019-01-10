@@ -1,9 +1,3 @@
-/*
-eslint
-
-no-shadow: 0,
-*/
-
 import React, { PureComponent, Fragment } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -19,7 +13,7 @@ import styled from 'styled-components';
 
 import UserInputs from '../UserInputs';
 
-import { removeTransfer, duplicateTransfer } from '../../actions/UserActions';
+import { removeTransfer, duplicateTransfer, compileTransfers } from '../../actions/UserActions';
 
 const StyledButtonGroup = styled(ButtonGroup)`
   margin: 0;
@@ -30,6 +24,7 @@ class Transfer extends PureComponent {
     number: PropTypes.number.isRequired,
     removeTransfer: PropTypes.func.isRequired,
     duplicateTransfer: PropTypes.func.isRequired,
+    compileTransfers: PropTypes.func.isRequired,
   }
 
   render() {
@@ -37,6 +32,7 @@ class Transfer extends PureComponent {
       number,
       removeTransfer,
       duplicateTransfer,
+      compileTransfers,
     } = this.props;
 
     return (
@@ -56,8 +52,24 @@ class Transfer extends PureComponent {
         </Row>
         <ButtonToolbar>
           <StyledButtonGroup>
-            <Button color="danger" onClick={() => removeTransfer(number)}>Remove</Button>
-            <Button color="secondary" onClick={() => duplicateTransfer(number)}>Duplicate</Button>
+            <Button
+              color="danger"
+              onClick={async () => {
+                await removeTransfer(number);
+                compileTransfers();
+              }}
+            >
+              Remove
+            </Button>
+            <Button
+              color="secondary"
+              onClick={async () => {
+                await duplicateTransfer(number);
+                compileTransfers();
+              }}
+            >
+              Duplicate
+            </Button>
           </StyledButtonGroup>
         </ButtonToolbar>
       </Fragment>
@@ -68,6 +80,7 @@ class Transfer extends PureComponent {
 const mapDispatchToProps = dispatch => bindActionCreators({
   removeTransfer,
   duplicateTransfer,
+  compileTransfers,
 }, dispatch);
 
 export default connect(
