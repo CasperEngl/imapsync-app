@@ -1,9 +1,3 @@
-/*
-eslint
-
-no-shadow: 0,
-*/
-
 import React, { Component, Fragment } from 'react';
 import {
   ButtonToolbar, ButtonGroup, Button, Input,
@@ -15,7 +9,11 @@ import PropTypes from 'prop-types';
 import { StyledFormGroup, StyledLabel } from '../Styled';
 
 import {
-  addTransfer, compileTransfers, clearTransfers, toggleSSL, addExtraArgs,
+  addTransfer,
+  compileTransfers,
+  clearTransfers,
+  toggleSSL,
+  addExtraArgs,
 } from '../../actions/UserActions';
 
 class ActionBar extends Component {
