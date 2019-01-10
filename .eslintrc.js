@@ -25,5 +25,7 @@ module.exports = {
 		'jsx-a11y/anchor-is-valid': 0,
 		'func-names': 0,
 		'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
+		'no-shadow': 0,
+		'class-methods-use-this': 0,
 	},
 };
