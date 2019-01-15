@@ -24,3 +24,4 @@ src/style/index.css
 dist
 react-imapsync*.tgz
 LOG_imapsync
+resources/

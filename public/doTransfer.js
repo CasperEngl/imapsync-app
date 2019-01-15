@@ -78,7 +78,7 @@ const doTransfer = ({
 
     try {
       const directory = `${os.homedir()}/Documents/IMAPSYNC_LOG`;
-      const dirExists = exists(directory);
+      const dirExists = await exists(directory);
 
       if (!dirExists) {
         await mkdir(directory, {
@@ -88,7 +88,7 @@ const doTransfer = ({
 
       await writeFile(`${directory}/imapsync_log-${log.email}-${log.date}.txt`, outputLog, 'utf8');
     } catch (err) {
-      console.error(err);
+      // console.error(err);
     }
     event.sender.send('command-log', log);
   });
