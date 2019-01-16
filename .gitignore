@@ -26,3 +26,5 @@ react-imapsync*.tgz
 LOG_imapsync
 resources/
 .cache
+public/lib
+public/electron.js

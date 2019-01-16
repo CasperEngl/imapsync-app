@@ -6,7 +6,7 @@
       "esnext",
       "dom"
     ],
-    "outDir": "./public/dist",
+    "outDir": "./public",
     "strict": true,
     "typeRoots": [
       "./node_modules/@types",

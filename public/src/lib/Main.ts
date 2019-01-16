@@ -24,6 +24,7 @@ export class Main {
 		this.onWindowAllClosed = this.onWindowAllClosed.bind(this);
 		this.onClose = this.onClose.bind(this);
 		this.onReady = this.onReady.bind(this);
+		this.onReadyToShow = this.onReadyToShow.bind(this);
 		this.initialize = this.initialize.bind(this);
 	}
 
@@ -34,8 +35,13 @@ export class Main {
 	}
 
 	onClose() {
-		// Dereference the window object.
 		this.MainWindow = null;
+	}
+
+	onReadyToShow() {
+		if (this.MainWindow) {
+			this.MainWindow.show();
+		}
 	}
 
 	onReady() {
@@ -45,6 +51,8 @@ export class Main {
 			height: 645,
 			minWidth: 320,
 			minHeight: 645,
+			show: false,
+			backgroundColor: '#007bff',
 			webPreferences: {
 				nodeIntegration: true,
 			},
@@ -55,6 +63,7 @@ export class Main {
 				isDev ? 'http://localhost:3000' : `file://${join(__dirname, '../build/index.html')}`
 			);
 			this.MainWindow.on('closed', this.onClose);
+			this.MainWindow.once('ready-to-show', this.onReadyToShow);
 		}
 
 		notify({
