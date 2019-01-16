@@ -6,18 +6,12 @@ import {
   Row,
   Col,
   ButtonToolbar,
-  ButtonGroup,
   Button,
 } from 'reactstrap';
-import styled from 'styled-components';
 
 import UserInputs from '../UserInputs';
 
 import { removeTransfer, duplicateTransfer, compileTransfers } from '../../actions/UserActions';
-
-const StyledButtonGroup = styled(ButtonGroup)`
-  margin: 0;
-`;
 
 class Transfer extends PureComponent {
   static propTypes = {
@@ -51,26 +45,24 @@ class Transfer extends PureComponent {
           </Col>
         </Row>
         <ButtonToolbar>
-          <StyledButtonGroup>
-            <Button
-              color="danger"
-              onClick={async () => {
-                await removeTransfer(number);
-                compileTransfers();
-              }}
-            >
-              Remove
-            </Button>
-            <Button
-              color="secondary"
-              onClick={async () => {
-                await duplicateTransfer(number);
-                compileTransfers();
-              }}
-            >
-              Duplicate
-            </Button>
-          </StyledButtonGroup>
+          <Button
+            color="danger"
+            onClick={async () => {
+              await removeTransfer(number);
+              compileTransfers();
+            }}
+          >
+            Remove
+          </Button>
+          <Button
+            color="link"
+            onClick={async () => {
+              await duplicateTransfer(number);
+              compileTransfers();
+            }}
+          >
+            Duplicate
+          </Button>
         </ButtonToolbar>
       </Fragment>
     );

@@ -7,10 +7,15 @@ jsx-a11y/tabindex-no-positive: 0,
 import React, { PureComponent, Fragment } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { FormGroup, Input } from 'reactstrap';
-import { Dropdown, MenuItem } from 'react-bootstrap';
+import {
+  FormGroup,
+  Input,
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+} from 'reactstrap';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import {
   isURL,
   isIP,
@@ -19,16 +24,6 @@ import {
 } from 'validator';
 
 import { updateTransferData, compileTransfers } from '../../actions/UserActions';
-
-const StyledDropdown = styled(Dropdown)`
-  display: block;
-  margin: 0;
-  padding: 0;
-
-  > button {
-    margin: 0 0 1rem;
-  }
-`;
 
 class UserInputs extends PureComponent {
   static propTypes = {
@@ -46,9 +41,11 @@ class UserInputs extends PureComponent {
       hostValidated: false,
       userValidated: false,
       passwordValidated: false,
+      dropdownOpen: false,
     };
 
     this.validateInputs = this.validateInputs.bind(this);
+    this.toggleDropdown = this.toggleDropdown.bind(this);
   }
 
   componentDidMount() {
@@ -87,17 +84,28 @@ class UserInputs extends PureComponent {
     setTimeout(() => this.validateInputs(), 250);
   }
 
-  handleDropdown(number, target, event) {
+  handleServerClick(value) {
+    const { number, user } = this.props;
     const { updateTransferData, compileTransfers } = this.props;
-    const value = event;
 
-    updateTransferData(number, target, value);
+    updateTransferData(number, `host_${user}`, value);
     compileTransfers();
+  }
+
+  toggleDropdown() {
+    this.setState(prevState => ({
+      dropdownOpen: !prevState.dropdownOpen,
+    }));
   }
 
   render() {
     const { number, user, inputs } = this.props;
-    const { hostValidated, userValidated, passwordValidated } = this.state;
+    const {
+      hostValidated,
+      userValidated,
+      passwordValidated,
+      dropdownOpen,
+    } = this.state;
 
     if (!inputs[number]) {
       return null;
@@ -105,20 +113,19 @@ class UserInputs extends PureComponent {
 
     return (
       <Fragment>
-        <StyledDropdown
-          id={`host_${user}_${number}`}
-          bsStyle="primary"
-          onSelect={event => this.handleDropdown(number, `host_${user}`, event)}
-        >
-          <Dropdown.Toggle bsStyle="primary">Servers</Dropdown.Toggle>
-          <Dropdown.Menu>
-            <MenuItem eventKey="he1.danaweb.org">he1.danaweb.org</MenuItem>
-            <MenuItem eventKey="mail.danaweb.org">mail.danaweb.org</MenuItem>
-            <MenuItem eventKey="imap.gigahost.dk">imap.gigahost.dk</MenuItem>
-            <MenuItem eventKey="mail.office365.com">mail.office365.com</MenuItem>
-            <MenuItem eventKey="mail.surftown.com">mail.surftown.com</MenuItem>
-          </Dropdown.Menu>
-        </StyledDropdown>
+        <Dropdown isOpen={dropdownOpen} toggle={this.toggleDropdown}>
+          <DropdownToggle color="primary" caret className="mb-4">
+            Server
+          </DropdownToggle>
+          <DropdownMenu>
+            <DropdownItem onClick={() => this.handleServerClick('he1.danaweb.org')}>he1.danaweb.org</DropdownItem>
+            <DropdownItem onClick={() => this.handleServerClick('mail.danaweb.org')}>mail.danaweb.org</DropdownItem>
+            <DropdownItem onClick={() => this.handleServerClick('imap.gigahost.dk')}>imap.gigahost.dk</DropdownItem>
+            <DropdownItem onClick={() => this.handleServerClick('mail.office365.com')}>mail.office365.com</DropdownItem>
+            <DropdownItem onClick={() => this.handleServerClick('mail.surftown.com')}>mail.surftown.com</DropdownItem>
+            <DropdownItem onClick={() => this.handleServerClick('mail.onlinemail.io')}>mail.onlinemail.io (Curanet)</DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
         <FormGroup>
           <Input
             type="url"

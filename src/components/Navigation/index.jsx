@@ -9,18 +9,17 @@ import { Navbar, NavbarBrand, Container } from 'reactstrap';
 
 const Navigation = () => (
   <Navbar
-    color="wkt"
+    color="light"
     fixed="top"
     dark
     style={{
       WebkitAppRegion: 'drag',
-      position: 'fixed',
     }}
     className="py-0"
   >
     <Container>
-      <NavbarBrand className="mx-auto">
-          Web-Koncept
+      <NavbarBrand className="mx-auto font-weight-bold">
+        IMAPSYNC
       </NavbarBrand>
     </Container>
   </Navbar>
