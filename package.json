@@ -5,7 +5,7 @@
   "private": true,
   "author": "Casper Engelmann",
   "description": "Application to make commands for imapsync by Gilles LAMIRAL",
-  "main": "public/dist/electron.js",
+  "main": "public/electron.js",
   "build": {
     "appId": "com.casperengelmann.imapsync",
     "productName": "Imapsync",
@@ -81,7 +81,7 @@
     "electron:dev": "concurrently \"yarn ts:watch\" \"BROWSER=none yarn cra:start\" \"wait-on http://localhost:3000 && electron .\"",
     "electron:pack": "run-s electron:prebuild electron:build",
     "electron:prebuild": "yarn ts:build && yarn cra:build",
-    "electron:build": "electron-builder -c.extraMetadata.main=build/dist/electron.js",
+    "electron:build": "electron-builder -c.extraMetadata.main=build/electron.js",
     "electron:start": "electron .",
     "ts:build": "tsc --noEmit false --module commonjs",
     "ts:watch": "tsc -w --noEmit false --module commonjs"
