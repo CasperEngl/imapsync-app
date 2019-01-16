@@ -1,27 +1,13 @@
-const {
-  app,
-  BrowserWindow,
-  Menu,
-  ipcMain,
-} = require('electron');
-const ElectronPreferences = require('electron-preferences');
-const notifier = require('node-notifier');
-const path = require('path');
-const isDev = require('electron-is-dev');
-const shell = require('shelljs');
-const os = require('os');
+import { homedir } from 'os';
+import * as path from 'path';
+import ElectronPreferences from 'electron-preferences';
+import { app, Menu } from 'electron';
 
-const { doTransfer } = require('./doTransfer');
-
-shell.config.execPath = shell.which('node');
-
-let mainWindow;
-
-const preferences = new ElectronPreferences({
+export const preferences = new ElectronPreferences({
   dataStore: path.resolve(app.getPath('userData'), 'preferences.json'),
   defaults: {
     notes: {
-      folder: path.resolve(os.homedir(), 'Notes'),
+      folder: path.resolve(homedir(), 'Notes'),
     },
     markdown: {
       auto_format_links: true,
@@ -39,7 +25,7 @@ const preferences = new ElectronPreferences({
    * preferences are loaded for the first time.
    * The return value of this method will be stored as the preferences object.
    */
-  onLoad: preferences => preferences, // eslint-disable-line
+  onLoad: (preferences: any) => preferences,
   /**
    * The preferences window is divided into sections. Each section has a label, an icon, and one or
    * more fields associated with it. Each section should also be given a unique ID.
@@ -183,7 +169,7 @@ const preferences = new ElectronPreferences({
   ],
 });
 
-const menu = Menu.buildFromTemplate([
+export const menu = Menu.buildFromTemplate([
   {
     label: 'Menu',
     submenu: [
@@ -193,13 +179,6 @@ const menu = Menu.buildFromTemplate([
           preferences.show();
         },
         accelerator: 'CmdOrCtrl+E',
-      },
-      {
-        label: 'Toggle Developer Tools',
-        click() {
-          mainWindow.webContents.toggleDevTools();
-        },
-        accelerator: 'CmdOrCtrl+Alt+I',
       },
       {
         label: 'Quit',
@@ -275,55 +254,3 @@ const menu = Menu.buildFromTemplate([
     ],
   },
 ]);
-
-function createWindow() {
-  mainWindow = new BrowserWindow({
-    titleBarStyle: 'hiddenInset',
-    width: 600,
-    height: 645,
-    minWidth: 320,
-    minHeight: 645,
-    webPreferences: {
-      nodeIntegration: true,
-    },
-  });
-  mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`);
-  mainWindow.on('closed', () => (mainWindow = null)); // eslint-disable-line
-
-  Menu.setApplicationMenu(menu);
-}
-
-app.on('ready', createWindow);
-
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
-});
-
-app.on('activate', () => {
-  if (mainWindow === null) {
-    createWindow();
-  }
-});
-
-ipcMain.on('command', (event, commands) => {
-  if (commands.length) {
-    doTransfer({
-      event,
-      commands,
-      currentCommand: commands[0],
-      index: 0,
-    });
-  } else {
-    event.sender.send('command-stdout', 'No commands found.');
-  }
-
-  // 7z7R1!77q
-});
-
-notifier.notify({
-  title: 'Imapsync',
-  message: 'Initialized',
-  icon: path.join(__dirname, '../assets/icon.png'),
-});

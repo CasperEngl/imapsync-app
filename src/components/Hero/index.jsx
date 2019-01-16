@@ -17,19 +17,23 @@ import {
   Button,
 } from 'reactstrap';
 import styled from 'styled-components';
+import { Transition, config, animated } from 'react-spring';
 
 import { compileTransfers } from '../../actions/UserActions';
+import { slideUp } from '../../transition';
 
 const { ipcRenderer } = window.require('electron');
 
 const OutputWindow = styled.textarea`
+  padding: 1rem;
   height: 300px;
   width: 100%;
-  background: #222;
   resize: none;
   font-family: monospace;
   font-weight: 700;
   color: white;
+  box-shadow: none;
+  outline: none;
 `;
 
 class Hero extends PureComponent {
@@ -96,11 +100,7 @@ class Hero extends PureComponent {
     await compileTransfers();
 
     if (commandJson.length) {
-      const confirmed = confirm('Run synchronization'); // eslint-disable-line
-
-      if (confirmed) {
-        ipcRenderer.send('command', commandJson);
-      }
+      ipcRenderer.send('command', commandJson);
     }
   }
 
@@ -120,29 +120,56 @@ class Hero extends PureComponent {
     const { output, logs } = this.state;
 
     return (
-      <Jumbotron className="mt-4">
+      <Jumbotron className="hero mt-4 pb-3 overflow-hidden">
         <Container>
-          <h1>IMAP SYNC</h1>
           <FormGroup>
-            <Input type="text" placeholder="Script will appear here" value={command} readOnly />
+            <Input
+              type="text"
+              placeholder="./imapsync_bin --host1 'imap.server.tld' --user1 'user@domain.tld' --host2 'imap.server.tld' --user2 'user@domain.tld';"
+              value={command}
+              className="bg-dark text-white-50"
+              readOnly
+            />
           </FormGroup>
           <FormGroup>
-            <OutputWindow value={output} ref={this.outputLog} readOnly />
+            <OutputWindow
+              value={output}
+              ref={this.outputLog}
+              className="border-0 border-radius-sm bg-dark text-white-50"
+              readOnly
+            />
             <ButtonGroup>
               <Button color="primary" onClick={this.execute}>Execute</Button>
               <Button color="warning" onClick={this.reset}>Reset</Button>
             </ButtonGroup>
           </FormGroup>
-          {
-            logs.map(log => (
-              <div className="download" key={log.date}>
-                <a href={`data:application/octet-stream;charset=utf-16le;base64,${log.encoded}`} download={`imapsync_log-${log.email}-${log.date}.txt`} className="font-weight-bold">
-                  {`Download ${log.email} log`}
-                </a>
-                <span className="ml-1 font-weight-light">{log.date}</span>
-              </div>
-            ))
-          }
+          <div className="bg-white p-4 border-radius-sm" style={{ margin: '0 -1.5rem' }}>
+            <Transition
+              items={logs}
+              keys={item => item.date}
+              from={slideUp.from}
+              enter={slideUp.enter}
+              leave={slideUp.leave}
+            >
+              {item => styles => (
+                <animated.div
+                  style={styles}
+                  config={config.default}
+                  className="w-100 my-2"
+                >
+                  <div className="download">
+                    <a
+                      href={`data:application/octet-stream;charset=utf-16le;base64,${item.encoded}`}
+                      download={`imapsync_log-${item.email}-${item.date}.txt`}
+                      className="font-weight-bold"
+                    >
+                      {`Download ${item.email} log`}
+                    </a>
+                  </div>
+                </animated.div>
+              )}
+            </Transition>
+          </div>
         </Container>
       </Jumbotron>
     );
