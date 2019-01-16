@@ -32,6 +32,6 @@ Only include the OS's you want to build for
 
 Alternatively, use the shorthard **-mwl**
 ```
-yarn electron:prepack
+yarn electron:prebuild
 yarn electron:build -m -w -l
 ```
