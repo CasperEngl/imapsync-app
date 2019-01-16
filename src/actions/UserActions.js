@@ -16,7 +16,6 @@ import {
   isEmpty,
 } from 'validator';
 import { store } from '../App';
-import '../components/trimLiteral';
 
 export const ADD_TRANSFER = 'ADD_TRANSFER';
 export const DUPLICATE_TRANSFER = 'DUPLICATE_TRANSFER';

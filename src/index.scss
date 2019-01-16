@@ -1,9 +1,8 @@
-@import '~bootstrap/scss/functions';
-@import '~bootstrap/scss/variables';
-@import '~bootstrap/scss/mixins';
-@import '~bootstrap/scss/root';
-@import '~bootstrap/scss/buttons';
-@import '~bootstrap/scss/navbar';
+$box-shadow-sm: 0 .125rem .25rem  rgba(black, .075);
+$box-shadow:    0 .25rem  1rem    rgba(black, .15);
+$box-shadow-lg: 0 .5rem   3rem    rgba(black, .175);
+
+@import '~bootstrap/scss/bootstrap';
 
 @media only screen and (max-width: 768px) and (max-height: 768px) {
   .actionbar--mobile-fixed {
@@ -14,94 +13,29 @@
   }
 }
 
-:root {
-  --wkt-primary: #507894;
-}
-
-$colors: (
-  primary: $blue,
-  secondary: $secondary,
-  success: $success,
-  info: $info,
-  warning: $warning,
-  danger: $danger
-);
-
-@each $name, $color in $colors {
-  .bg-#{$name} {
-    background: $color !important;
-  }
-}
-
-.bg-wkt {
-  background: var(--wkt-primary) !important;
-}
-
-body {
-  position: relative;
-  margin: 0;
-  padding: 0;
-  font-family: var(--font-family-sans-serif);
-}
-
-ul {
-  padding: 0 15px;
-}
-
-label {
-  margin-bottom: 0;
-}
-
-h1 {
-  font-weight: 700;
-}
-
-input.form-control {
-  padding: .75rem;
-}
-
 #root {
   padding-bottom: 30rem;
 }
 
-.hide {
-  visibility: hidden;
+.hero {
+  background: url('/arc.svg') no-repeat top center;
+  background-size: cover;
 }
 
-.navbar-brand {
-  height: auto;
+
+.border-radius {
+  border-radius: $border-radius;
 }
 
-#root .btn {
-  &:focus, &.focus {
-    box-shadow: none;
-  }
+.border-radius-lg {
+  border-radius: $border-radius-lg;
 }
 
-.alert.show {
-  opacity: 1;
+.border-radius-sm {
+  border-radius: $border-radius-sm;
 }
 
-.dropdown-menu {
-  top: 70%;
-}
-
-.open > .dropdown-menu {
-  display: block;
-}
-
-.dropdown-menu > li > a {
-  display: block;
-  padding: 3px 20px;
-  clear: both;
-  font-weight: normal;
-  line-height: 1.42857143;
-  color: #ebebeb;
-  white-space: nowrap;
-  
-  &:hover, &:focus {
-    text-decoration: none;
-    color: #ffffff;
-    background-color: var(--primary);
-  }
+.form-control, .btn:not(.btn-link) {
+  @extend .shadow;
+  border: none;
 }
