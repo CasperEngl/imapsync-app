@@ -25,3 +25,4 @@ dist
 react-imapsync*.tgz
 LOG_imapsync
 resources/
+.cache
