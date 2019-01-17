@@ -57,6 +57,7 @@ class Hero extends PureComponent {
     this.state = {
       output: '',
       logs: [],
+      preferences: {},
     };
   }
 
@@ -65,6 +66,13 @@ class Hero extends PureComponent {
     ipcRenderer.on('command-stdout', this.stdoutListener);
     ipcRenderer.on('command-stderr', this.stderrListener);
     ipcRenderer.on('command-log', this.logListener);
+
+    const preferences = ipcRenderer.sendSync('getPreferences');
+
+    this.setState(prevState => ({
+      ...prevState,
+      preferences,
+    }));
 
     this.scrollToBottom(this.outputLog.current);
   }
@@ -117,7 +125,13 @@ class Hero extends PureComponent {
 
   render() {
     const { command } = this.props;
-    const { output, logs } = this.state;
+    const { output, logs, preferences } = this.state;
+
+    const { settings = {} } = preferences;
+
+    const { output_bg: outputBg, output_color: outputColor } = settings;
+
+    console.log(outputBg, outputBg ? `${outputBg} !important` : null);
 
     return (
       <Jumbotron className="hero mt-4 pb-3 overflow-hidden">
@@ -127,7 +141,10 @@ class Hero extends PureComponent {
               type="text"
               placeholder="./imapsync_bin --host1 '127.0.0.1' --user1 'user@domain.com' --host2 '127.0.0.1' --user2 'user@domain.com';"
               value={command}
-              className="bg-dark text-white-50"
+              style={{
+                backgroundColor: `${outputBg || '#343a40'}`,
+                color: `${outputColor || 'rgba(255, 255, 255, 0.5)'}`,
+              }}
               readOnly
             />
           </FormGroup>
@@ -135,7 +152,11 @@ class Hero extends PureComponent {
             <OutputWindow
               value={output}
               ref={this.outputLog}
-              className="border-0 border-radius-sm bg-dark text-white-50"
+              className="border-0 border-radius-sm"
+              style={{
+                backgroundColor: `${outputBg || '#343a40'}`,
+                color: `${outputColor || 'rgba(255, 255, 255, 0.5)'}`,
+              }}
               readOnly
             />
             <ButtonGroup>
