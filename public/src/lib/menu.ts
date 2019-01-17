@@ -1,23 +1,15 @@
-import { homedir } from 'os';
 import * as path from 'path';
-import ElectronPreferences from 'electron-preferences';
+import { homedir } from 'os';
 import { app, Menu } from 'electron';
+import ElectronPreferences from 'electron-preferences';
 
 export const preferences = new ElectronPreferences({
 	dataStore: path.resolve(app.getPath('userData'), 'preferences.json'),
 	defaults: {
-		notes: {
-			folder: path.resolve(homedir(), 'Notes'),
-		},
-		markdown: {
-			auto_format_links: true,
-			show_gutter: false,
-		},
-		preview: {
-			show: true,
-		},
-		drawer: {
-			show: true,
+		settings: {
+			output_bg: '#343a40',
+			output_color: 'rgba(255, 255, 255, 0.75)',
+			documents_directory: path.resolve(homedir(), 'Documents'),
 		},
 	},
 	onLoad: (preferences: any) => preferences,
@@ -25,7 +17,7 @@ export const preferences = new ElectronPreferences({
 		{
 			id: 'settings',
 			label: 'Settings',
-			icon: 'folder-15',
+			icon: 'preferences',
 			form: {
 				groups: [
 					{
