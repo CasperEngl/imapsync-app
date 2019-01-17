@@ -1,25 +1,31 @@
-import { BrowserWindow, Menu } from 'electron';
-import { join } from 'path';
+import * as path from 'path';
+import { BrowserWindow, Menu, powerSaveBlocker } from 'electron';
 import { notify } from 'node-notifier';
-import * as isDev from 'electron-is-dev';
+import isDev from 'electron-is-dev';
+import serve from 'electron-serve';
 
 import { Command, transfer } from './transfer';
 import { menu } from './menu';
-import { getPlatform } from './platform';
+
+const loadURL = serve({
+	directory: 'build',
+})
 
 export class Main {
 	MainWindow!: Electron.BrowserWindow | null;
 	Application: Electron.App;
 	ipcMain: Electron.IpcMain;
 	BrowserWindow: any;
+	powerSaveBlock: any;
 
 	appName = 'Imapsync';
-	appIcon = join(__dirname, '../assets/icon.png');
+	appIcon = path.join(__dirname, '../../assets/icon.png');
 
 	constructor(app: Electron.App, browserWindow: typeof BrowserWindow, ipcMain: Electron.IpcMain) {
 		this.BrowserWindow = browserWindow;
 		this.Application = app;
 		this.ipcMain = ipcMain;
+		this.powerSaveBlock = powerSaveBlocker.start('prevent-display-sleep');
 
 		this.onWindowAllClosed = this.onWindowAllClosed.bind(this);
 		this.onClose = this.onClose.bind(this);
@@ -29,9 +35,8 @@ export class Main {
 	}
 
 	onWindowAllClosed() {
-		if (getPlatform() !== 'darwin') {
-			this.Application.quit();
-		}
+		// this.powerSaveBlock.stop();
+		this.Application.quit();
 	}
 
 	onClose() {
@@ -51,17 +56,21 @@ export class Main {
 			height: 645,
 			minWidth: 320,
 			minHeight: 645,
-			show: false,
 			backgroundColor: '#007bff',
+			show: false,
 			webPreferences: {
 				nodeIntegration: true,
 			},
 		});
 
+
 		if (this.MainWindow) {
-			this.MainWindow.loadURL(
-				isDev ? 'http://localhost:3000' : `file://${join(__dirname, '../build/index.html')}`
-			);
+			if (isDev) {
+				this.MainWindow.loadURL('http://localhost:3000');
+			} else {
+				loadURL(this.MainWindow);
+			}
+
 			this.MainWindow.on('closed', this.onClose);
 			this.MainWindow.once('ready-to-show', this.onReadyToShow);
 		}
