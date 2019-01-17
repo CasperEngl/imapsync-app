@@ -125,7 +125,7 @@ class Hero extends PureComponent {
           <FormGroup>
             <Input
               type="text"
-              placeholder="./imapsync_bin --host1 'imap.server.tld' --user1 'user@domain.tld' --host2 'imap.server.tld' --user2 'user@domain.tld';"
+              placeholder="./imapsync_bin --host1 '127.0.0.1' --user1 'user@domain.com' --host2 '127.0.0.1' --user2 'user@domain.com';"
               value={command}
               className="bg-dark text-white-50"
               readOnly
