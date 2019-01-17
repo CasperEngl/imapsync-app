@@ -59,6 +59,7 @@
     "jquery": "^3.3.1",
     "node-notifier": "^5.3.0",
     "node-sass-chokidar": "^1.2.2",
+    "parse-color": "^1.0.0",
     "prop-types": "^15.6.1",
     "react": "^16.3.2",
     "react-bootstrap": "^0.32.1",

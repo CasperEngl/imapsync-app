@@ -18,6 +18,7 @@ import {
 } from 'reactstrap';
 import styled from 'styled-components';
 import { Transition, config, animated } from 'react-spring';
+import parseColor from 'parse-color';
 
 import { compileTransfers } from '../../actions/UserActions';
 import { slideUp } from '../../transition';
@@ -58,6 +59,8 @@ class Hero extends PureComponent {
       output: '',
       logs: [],
       preferences: {},
+      outputBg: '#343a40',
+      outputColor: 'rgba(255, 255, 255, 0.75)',
     };
   }
 
@@ -69,10 +72,19 @@ class Hero extends PureComponent {
 
     const preferences = ipcRenderer.sendSync('getPreferences');
 
-    this.setState(prevState => ({
-      ...prevState,
-      preferences,
-    }));
+    if (preferences) {
+      const { output_bg: opBg, output_color: opColor } = preferences.settings;
+
+      const outputBg = parseColor(opBg);
+      const outputColor = parseColor(opColor);
+
+      this.setState(prevState => ({
+        ...prevState,
+        preferences,
+        outputBg: outputBg.rgba ? `rgba(${outputBg.rgba.join(', ')})` : prevState.outputBg,
+        outputColor: outputColor.rgba ? `rgba(${outputColor.rgba.join(', ')})` : prevState.outputColor,
+      }));
+    }
 
     this.scrollToBottom(this.outputLog.current);
   }
@@ -125,13 +137,12 @@ class Hero extends PureComponent {
 
   render() {
     const { command } = this.props;
-    const { output, logs, preferences } = this.state;
-
-    const { settings = {} } = preferences;
-
-    const { output_bg: outputBg, output_color: outputColor } = settings;
-
-    console.log(outputBg, outputBg ? `${outputBg} !important` : null);
+    const {
+      output,
+      logs,
+      outputBg,
+      outputColor,
+    } = this.state;
 
     return (
       <Jumbotron className="hero mt-4 pb-3 overflow-hidden">
@@ -142,8 +153,8 @@ class Hero extends PureComponent {
               placeholder="./imapsync_bin --host1 '127.0.0.1' --user1 'user@domain.com' --host2 '127.0.0.1' --user2 'user@domain.com';"
               value={command}
               style={{
-                backgroundColor: `${outputBg || '#343a40'}`,
-                color: `${outputColor || 'rgba(255, 255, 255, 0.5)'}`,
+                backgroundColor: outputBg,
+                color: outputColor,
               }}
               readOnly
             />
@@ -154,8 +165,8 @@ class Hero extends PureComponent {
               ref={this.outputLog}
               className="border-0 border-radius-sm"
               style={{
-                backgroundColor: `${outputBg || '#343a40'}`,
-                color: `${outputColor || 'rgba(255, 255, 255, 0.5)'}`,
+                backgroundColor: outputBg,
+                color: outputColor,
               }}
               readOnly
             />
