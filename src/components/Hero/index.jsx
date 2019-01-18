@@ -18,6 +18,7 @@ import {
 } from 'reactstrap';
 import styled from 'styled-components';
 import { Transition, config, animated } from 'react-spring';
+import parseColor from 'parse-color';
 
 import { compileTransfers } from '../../actions/UserActions';
 import { slideUp } from '../../transition';
@@ -57,6 +58,9 @@ class Hero extends PureComponent {
     this.state = {
       output: '',
       logs: [],
+      preferences: {},
+      outputBg: '#343a40',
+      outputColor: 'rgba(255, 255, 255, 0.75)',
     };
   }
 
@@ -65,6 +69,22 @@ class Hero extends PureComponent {
     ipcRenderer.on('command-stdout', this.stdoutListener);
     ipcRenderer.on('command-stderr', this.stderrListener);
     ipcRenderer.on('command-log', this.logListener);
+
+    const preferences = ipcRenderer.sendSync('getPreferences');
+
+    if (preferences) {
+      const { output_bg: opBg, output_color: opColor } = preferences.settings;
+
+      const outputBg = parseColor(opBg);
+      const outputColor = parseColor(opColor);
+
+      this.setState(prevState => ({
+        ...prevState,
+        preferences,
+        outputBg: outputBg.rgba ? `rgba(${outputBg.rgba.join(', ')})` : prevState.outputBg,
+        outputColor: outputColor.rgba ? `rgba(${outputColor.rgba.join(', ')})` : prevState.outputColor,
+      }));
+    }
 
     this.scrollToBottom(this.outputLog.current);
   }
@@ -117,7 +137,12 @@ class Hero extends PureComponent {
 
   render() {
     const { command } = this.props;
-    const { output, logs } = this.state;
+    const {
+      output,
+      logs,
+      outputBg,
+      outputColor,
+    } = this.state;
 
     return (
       <Jumbotron className="hero mt-4 pb-3 overflow-hidden">
@@ -127,7 +152,10 @@ class Hero extends PureComponent {
               type="text"
               placeholder="./imapsync_bin --host1 '127.0.0.1' --user1 'user@domain.com' --host2 '127.0.0.1' --user2 'user@domain.com';"
               value={command}
-              className="bg-dark text-white-50"
+              style={{
+                backgroundColor: outputBg,
+                color: outputColor,
+              }}
               readOnly
             />
           </FormGroup>
@@ -135,7 +163,11 @@ class Hero extends PureComponent {
             <OutputWindow
               value={output}
               ref={this.outputLog}
-              className="border-0 border-radius-sm bg-dark text-white-50"
+              className="border-0 border-radius-sm"
+              style={{
+                backgroundColor: outputBg,
+                color: outputColor,
+              }}
               readOnly
             />
             <ButtonGroup>

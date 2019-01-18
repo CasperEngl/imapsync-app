@@ -1,11 +1,11 @@
 import * as path from 'path';
 import { homedir } from 'os';
 import { spawn } from 'child_process';
+import { app } from 'electron';
 import { notify } from 'node-notifier';
 import { isEmail } from 'validator';
 import { promisifyAll } from 'bluebird';
-import * as appRootDir from 'app-root-dir';
-import * as isDev from 'electron-is-dev';
+import isDev from 'electron-is-dev';
 import * as base64 from 'base-64';
 
 import { getPlatform } from './platform';
@@ -13,8 +13,8 @@ import { getPlatform } from './platform';
 const fs = promisifyAll(require('fs'));
 
 const execPath = isDev
-	? path.join(appRootDir.get(), 'resources', getPlatform())
-	: path.join(path.dirname(appRootDir.get()), 'bin');
+	? path.join(app.getAppPath(), 'resources', getPlatform())
+	: path.join(app.getAppPath(), '../bin');
 
 export type Command = string[];
 
@@ -25,7 +25,7 @@ export type Transfer = {
 	index: number;
 };
 
-export function transfer({ event, commands, currentCommand, index }: Transfer) {
+export function transfer({ event, commands, currentCommand, index }: Transfer): void {
 	let outputLog = '';
 
 	const cmd = spawn(`${path.join(execPath, 'sync_bin')}`, [...currentCommand, '--nolog'], {
@@ -36,10 +36,6 @@ export function transfer({ event, commands, currentCommand, index }: Transfer) {
 		outputLog += data.toString();
 
 		event.sender.send('command-stdout', data.toString());
-	});
-
-	cmd.stderr.on('data', () => {
-		// console.log(data.toString());
 	});
 
 	cmd.on('exit', async () => {
@@ -82,6 +78,7 @@ export function transfer({ event, commands, currentCommand, index }: Transfer) {
 		} catch (err) {
 			// console.error(err);
 		}
+
 		event.sender.send('command-log', log);
 	});
 }
