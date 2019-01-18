@@ -43,6 +43,19 @@
       "artifactName": "imapsync.${version}.${ext}"
     }
   },
+  "scripts": {
+    "cra:start": "react-scripts start",
+    "cra:build": "react-scripts build",
+    "cra:test": "react-scripts test --env=jsdom",
+    "cra:eject": "react-scripts eject",
+    "electron:dev": "concurrently \"yarn ts:watch\" \"BROWSER=none yarn cra:start\" \"wait-on http://localhost:3000 && electron .\"",
+    "electron:pack": "run-s electron:prebuild electron:build",
+    "electron:prebuild": "yarn ts:build && yarn cra:build",
+    "electron:build": "electron-builder -c.extraMetadata.main=build/electron.js",
+    "electron:start": "electron .",
+    "ts:build": "tsc --noEmit false --module commonjs",
+    "ts:watch": "tsc -w --noEmit false --module commonjs"
+  },
   "dependencies": {
     "babel-eslint": "9.0.0",
     "base-64": "^0.1.0",
@@ -72,19 +85,6 @@
     "redux-thunk": "^2.2.0",
     "styled-components": "^4.1.3",
     "validator": "^10.10.0"
-  },
-  "scripts": {
-    "cra:start": "react-scripts start",
-    "cra:build": "react-scripts build",
-    "cra:test": "react-scripts test --env=jsdom",
-    "cra:eject": "react-scripts eject",
-    "electron:dev": "concurrently \"yarn ts:watch\" \"BROWSER=none yarn cra:start\" \"wait-on http://localhost:3000 && electron .\"",
-    "electron:pack": "run-s electron:prebuild electron:build",
-    "electron:prebuild": "yarn ts:build && yarn cra:build",
-    "electron:build": "electron-builder -c.extraMetadata.main=build/electron.js",
-    "electron:start": "electron .",
-    "ts:build": "tsc --noEmit false --module commonjs",
-    "ts:watch": "tsc -w --noEmit false --module commonjs"
   },
   "devDependencies": {
     "@types/app-root-dir": "^0.1.0",
