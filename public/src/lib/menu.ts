@@ -28,8 +28,8 @@ export const preferences = new ElectronPreferences({
 								key: 'output_bg',
 								type: 'text',
 								help: 'Enter hex, rgb, rgba, hsl or other valid CSS color types.',
-              },
-              {
+							},
+							{
 								label: 'Text color',
 								key: 'output_color',
 								type: 'text',
@@ -50,7 +50,7 @@ export const menu = Menu.buildFromTemplate([
 			{
 				label: 'Settings',
 				click() {
-          preferences.show();
+					preferences.show();
 				},
 				accelerator: 'CmdOrCtrl+E',
 			},
