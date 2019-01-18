@@ -28,8 +28,6 @@ export type Transfer = {
 export function transfer({ event, commands, currentCommand, index }: Transfer): void {
 	let outputLog = '';
 
-	// event.sender.send('command-stdout', `${path.join(execPath, 'sync_bin')}`);
-
 	const cmd = spawn(`${path.join(execPath, 'sync_bin')}`, [...currentCommand, '--nolog'], {
 		detached: true,
 	});
@@ -38,10 +36,6 @@ export function transfer({ event, commands, currentCommand, index }: Transfer): 
 		outputLog += data.toString();
 
 		event.sender.send('command-stdout', data.toString());
-	});
-
-	cmd.stderr.on('data', () => {
-		// console.log(data.toString());
 	});
 
 	cmd.on('exit', async () => {
@@ -84,7 +78,7 @@ export function transfer({ event, commands, currentCommand, index }: Transfer): 
 		} catch (err) {
 			// console.error(err);
 		}
-		
+
 		event.sender.send('command-log', log);
 	});
 }
