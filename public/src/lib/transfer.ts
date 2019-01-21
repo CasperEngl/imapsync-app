@@ -18,14 +18,14 @@ const execPath = isDev
 
 export type Command = string[];
 
-export type Transfer = {
+export interface ITransfer {
 	event: Electron.Event;
 	commands: Command[];
 	currentCommand: Command;
 	index: number;
-};
+}
 
-export function transfer({ event, commands, currentCommand, index }: Transfer): void {
+export function transfer({ event, commands, currentCommand, index }: ITransfer): void {
 	let outputLog = '';
 
 	const cmd = spawn(`${path.join(execPath, 'sync_bin')}`, [...currentCommand, '--nolog'], {
