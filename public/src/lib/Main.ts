@@ -8,99 +8,98 @@ import { Command, transfer } from './transfer';
 import { menu } from './menu';
 
 const loadURL = serve({
-	directory: 'build',
-})
+  directory: 'build',
+});
 
 export class Main {
-	MainWindow!: Electron.BrowserWindow | null;
-	Application: Electron.App;
-	ipcMain: Electron.IpcMain;
-	BrowserWindow: any;
-	powerSaveBlock: any;
+  public appName = 'Imapsync';
+  public appIcon = path.join(__dirname, '../../assets/icon.png');
+  public BrowserWindow: typeof BrowserWindow;
+  public powerSaveBlock: number;
 
-	appName = 'Imapsync';
-	appIcon = path.join(__dirname, '../../assets/icon.png');
+  private MainWindow!: Electron.BrowserWindow | null;
+  private Application: Electron.App;
+  private ipcMain: Electron.IpcMain;
 
-	constructor(app: Electron.App, browserWindow: typeof BrowserWindow, ipcMain: Electron.IpcMain) {
-		this.BrowserWindow = browserWindow;
-		this.Application = app;
-		this.ipcMain = ipcMain;
-		this.powerSaveBlock = powerSaveBlocker.start('prevent-display-sleep');
+  constructor(app: Electron.App, browserWindow: typeof BrowserWindow, ipcMain: Electron.IpcMain) {
+    this.BrowserWindow = browserWindow;
+    this.Application = app;
+    this.ipcMain = ipcMain;
+    this.powerSaveBlock = powerSaveBlocker.start('prevent-display-sleep');
 
-		this.onWindowAllClosed = this.onWindowAllClosed.bind(this);
-		this.onClose = this.onClose.bind(this);
-		this.onReady = this.onReady.bind(this);
-		this.onReadyToShow = this.onReadyToShow.bind(this);
-		this.initialize = this.initialize.bind(this);
-	}
+    this.onWindowAllClosed = this.onWindowAllClosed.bind(this);
+    this.onClose = this.onClose.bind(this);
+    this.onReady = this.onReady.bind(this);
+    this.onReadyToShow = this.onReadyToShow.bind(this);
+    this.initialize = this.initialize.bind(this);
+  }
 
-	onWindowAllClosed() {
-		// this.powerSaveBlock.stop();
-		this.Application.quit();
-	}
+  public initialize() {
+    this.Application.on('window-all-closed', this.onWindowAllClosed);
+    this.Application.on('ready', this.onReady);
 
-	onClose() {
-		this.MainWindow = null;
-	}
+    this.ipcMain.on('command', (event: Electron.Event, commands: Command[]) => {
+      if (commands.length) {
+        transfer({
+          event,
+          commands,
+          currentCommand: commands[0],
+          index: 0,
+        });
+      } else {
+        event.sender.send('command-stdout', 'No commands found.');
+      }
 
-	onReadyToShow() {
-		if (this.MainWindow) {
-			this.MainWindow.show();
-		}
-	}
+      // 7z7R1!77q
+    });
 
-	onReady() {
-		this.MainWindow = new BrowserWindow({
-			titleBarStyle: 'hiddenInset',
-			width: 600,
-			height: 645,
-			minWidth: 320,
-			minHeight: 645,
-			backgroundColor: '#007bff',
-			show: false,
-			webPreferences: {
-				nodeIntegration: true,
-			},
-		});
+    Menu.setApplicationMenu(menu);
+  }
 
+  private onWindowAllClosed() {
+    // this.powerSaveBlock.stop();
+    this.Application.quit();
+  }
 
-		if (this.MainWindow) {
-			if (isDev) {
-				this.MainWindow.loadURL('http://localhost:3000');
-			} else {
-				loadURL(this.MainWindow);
-			}
+  private onClose() {
+    this.MainWindow = null;
+  }
 
-			this.MainWindow.on('closed', this.onClose);
-			this.MainWindow.once('ready-to-show', this.onReadyToShow);
-		}
+  private onReadyToShow() {
+    if (this.MainWindow) {
+      this.MainWindow.show();
+    }
+  }
 
-		notify({
-			title: this.appName,
-			icon: this.appIcon,
-			message: 'Initialized',
-		});
-	}
+  private onReady() {
+    this.MainWindow = new BrowserWindow({
+      titleBarStyle: 'hiddenInset',
+      width: 600,
+      height: 645,
+      minWidth: 320,
+      minHeight: 645,
+      backgroundColor: '#007bff',
+      show: false,
+      webPreferences: {
+        nodeIntegration: true,
+      },
+    });
 
-	initialize() {
-		this.Application.on('window-all-closed', this.onWindowAllClosed);
-		this.Application.on('ready', this.onReady);
+    if (this.MainWindow) {
+      if (isDev) {
+        this.MainWindow.loadURL('http://localhost:3000');
+      } else {
+        loadURL(this.MainWindow);
+      }
 
-		this.ipcMain.on('command', (event: Electron.Event, commands: Command[]) => {
-			if (commands.length) {
-				transfer({
-					event,
-					commands,
-					currentCommand: commands[0],
-					index: 0,
-				});
-			} else {
-				event.sender.send('command-stdout', 'No commands found.');
-			}
+      this.MainWindow.on('closed', this.onClose);
+      this.MainWindow.once('ready-to-show', this.onReadyToShow);
+    }
 
-			// 7z7R1!77q
-		});
-
-		Menu.setApplicationMenu(menu);
-	}
+    notify({
+      title: this.appName,
+      icon: this.appIcon,
+      message: 'Initialized',
+    });
+  }
 }
