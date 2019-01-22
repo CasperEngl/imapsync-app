@@ -124,6 +124,7 @@ class UserInputs extends PureComponent {
             <DropdownItem onClick={() => this.handleServerClick('mail.office365.com')}>mail.office365.com</DropdownItem>
             <DropdownItem onClick={() => this.handleServerClick('mail.surftown.com')}>mail.surftown.com</DropdownItem>
             <DropdownItem onClick={() => this.handleServerClick('mail.onlinemail.io')}>mail.onlinemail.io (Curanet)</DropdownItem>
+            <DropdownItem onClick={() => this.handleServerClick('imap.one.com')}>imap.one.com</DropdownItem>
           </DropdownMenu>
         </Dropdown>
         <FormGroup>
