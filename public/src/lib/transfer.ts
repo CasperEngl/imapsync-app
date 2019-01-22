@@ -1,16 +1,16 @@
 import * as path from 'path';
+import { promises as fs } from 'fs';
 import { homedir } from 'os';
 import { spawn } from 'child_process';
 import { app } from 'electron';
 import { notify } from 'node-notifier';
 import { isEmail } from 'validator';
-import { promisifyAll } from 'bluebird';
 import isDev from 'electron-is-dev';
 import * as base64 from 'base-64';
+import mkdirp from 'mkdirp';
 
 import { getPlatform } from './platform';
-
-const fs = promisifyAll(require('fs'));
+import { resolve } from 'dns';
 
 const execPath = isDev
 	? path.join(app.getAppPath(), 'resources', getPlatform())
@@ -18,67 +18,125 @@ const execPath = isDev
 
 export type Command = string[];
 
-export type Transfer = {
+export interface ITransfer {
 	event: Electron.Event;
+	command: Command;
 	commands: Command[];
-	currentCommand: Command;
 	index: number;
-};
+}
 
-export function transfer({ event, commands, currentCommand, index }: Transfer): void {
-	let outputLog = '';
+export interface ILog {
+	encoded: string;
+	date: string;
+	email: string | undefined;
+}
 
-	const cmd = spawn(`${path.join(execPath, 'sync_bin')}`, [...currentCommand, '--nolog'], {
-		detached: true,
-	});
+export class Transfer {
+	public outputLog: string;
+	public event: Electron.Event;
+	public command: Command;
+	public commands: Command[];
+	public index: number;
+	public process: any;
 
-	cmd.stdout.on('data', (data: Buffer) => {
-		outputLog += data.toString();
+	constructor({ event, command, commands, index }: ITransfer) {
+		this.event = event;
+		this.command = command;
+		this.commands = commands;
+		this.index = index;
 
-		event.sender.send('command-stdout', data.toString());
-	});
+		this.outputLog = '';
 
-	cmd.on('exit', async () => {
-		const log = {
-			encoded: base64.encode(outputLog),
-			date: new Date().toISOString(),
-			email: '',
-		};
+		this.onStdout = this.onStdout.bind(this);
+		this.onExit = this.onExit.bind(this);
+		this.writeLogToDisk = this.writeLogToDisk.bind(this);
+	}
 
-		for (const arg of currentCommand) {
-			if (isEmail(arg)) {
-				log.email = arg;
-			}
-		}
-
-		notify({
-			title: 'Imapsync',
-			message: `Finished ${log.email}`,
-			icon: path.join(__dirname, '../assets/icon.png'),
+	public start(): any {
+		this.process = spawn(`${path.join(execPath, 'sync_bin')}`, [...this.command, '--nolog'], {
+			detached: true,
 		});
 
-		// Check if there are more transfers to complete
-		if (commands.length > 1 && commands.length > index + 1) {
-			transfer({
-				event,
-				commands,
-				currentCommand: commands[index + 1],
-				index: index + 1,
-			});
-		}
+		this.event.sender.send('command-pid', {
+			email: this.command.reverse().find((arg) => isEmail(arg)),
+			pid: this.process.pid,
+		});
 
+		this.process.stdout.on('data', this.onStdout);
+		this.process.on('exit', this.onExit);
+
+		return process;
+	}
+
+	private onStdout(data: Buffer): void {
+		this.outputLog += data.toString();
+
+		this.event.sender.send('command-stdout', data.toString());
+	}
+
+	private async onExit(): Promise<any> {
 		try {
-			const directory = `${homedir()}/Documents/IMAPSYNC_LOG`;
+			const log = await this.writeLogToDisk();
+			await this.notification(log);
 
-			await fs.mkdirAsync(directory, {
-				recursive: true,
+			this.event.sender.send('command-log', log);
+			this.event.sender.send('command-exit', this.process.pid);
+
+			this.restart();
+		} catch (err) {
+			throw new Error(err);
+		}
+	}
+
+	private notification(log: ILog | undefined): Promise<void> {
+		return new Promise((resolve) => {
+			if (log && log.email) {
+				notify({
+					title: 'Imapsync',
+					message: `Finished ${log.email}`,
+					icon: path.join(__dirname, '../assets/icon.png'),
+				});
+			} else {
+				notify({
+					title: 'Imapsync',
+					icon: path.join(__dirname, '../assets/icon.png'),
+				});
+			}
+
+			resolve();
+		});
+	}
+
+	private async writeLogToDisk(): Promise<ILog | undefined> {
+		const log: ILog = {
+			encoded: base64.encode(this.outputLog),
+			date: new Date().toISOString(),
+			email: this.command.reverse().find((arg) => isEmail(arg)),
+		};
+
+		const directory = `${homedir()}/Documents/IMAPSYNC_LOG`;
+
+		mkdirp(directory, async (err: any) => {
+			if (err) {
+				throw new Error(err);
+			}
+
+			await fs.writeFile(`${directory}/imapsync_log-${log.email}-${log.date}.txt`, this.outputLog, 'utf8');
+		});
+
+		return log;
+	}
+
+	private async restart(): Promise<any> {
+		if (this.commands.length > 1 && this.commands.length > this.index + 1) {
+			const transfer = new Transfer({
+				event: this.event,
+				commands: this.commands,
+				command: this.commands[this.index + 1],
+				index: this.index + 1,
 			});
 
-			await fs.writeFileAsync(`${directory}/imapsync_log-${log.email}-${log.date}.txt`, outputLog, 'utf8');
-		} catch (err) {
-			// console.error(err);
+			transfer.start();
 		}
-
-		event.sender.send('command-log', log);
-	});
+	}
 }
