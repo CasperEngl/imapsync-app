@@ -1,16 +1,8 @@
 import { platform } from 'os';
 
 export type Platform =
-  | 'aix'
-  | 'freebsd'
   | 'linux'
-  | 'openbsd'
-  | 'android'
-  | 'linux'
-  | 'darwin'
-  | 'sunos'
   | 'mac'
-  | 'win32'
   | 'win'
   | 'Unknown OS';
 
