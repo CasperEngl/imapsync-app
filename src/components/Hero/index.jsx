@@ -51,13 +51,18 @@ class Hero extends PureComponent {
     this.stdoutListener = this.stdoutListener.bind(this);
     this.stderrListener = this.stderrListener.bind(this);
     this.logListener = this.logListener.bind(this);
+    this.pidListener = this.pidListener.bind(this);
+    this.exitListener = this.exitListener.bind(this);
     this.scrollToBottom = this.scrollToBottom.bind(this);
     this.reset = this.reset.bind(this);
+    this.cancel = this.cancel.bind(this);
     this.outputLog = React.createRef();
 
     this.state = {
       output: '',
       logs: [],
+      pids: [],
+      disabled: false,
       preferences: {},
       outputBg: '#343a40',
       outputColor: 'rgba(255, 255, 255, 0.75)',
@@ -69,6 +74,8 @@ class Hero extends PureComponent {
     ipcRenderer.on('command-stdout', this.stdoutListener);
     ipcRenderer.on('command-stderr', this.stderrListener);
     ipcRenderer.on('command-log', this.logListener);
+    ipcRenderer.on('command-pid', this.pidListener);
+    ipcRenderer.on('command-exit', this.exitListener);
 
     const preferences = ipcRenderer.sendSync('getPreferences');
 
@@ -92,6 +99,9 @@ class Hero extends PureComponent {
   componentWillUnmount() {
     ipcRenderer.removeListener('command-stdout', this.stdoutListener);
     ipcRenderer.removeListener('command-stderr', this.stderrListener);
+    ipcRenderer.removeListener('command-log', this.logListener);
+    ipcRenderer.removeListener('command-pid', this.pidListener);
+    ipcRenderer.removeListener('command-exit', this.exitListener);
   }
 
   stdoutListener(event, stdout) {
@@ -107,10 +117,28 @@ class Hero extends PureComponent {
 
   logListener(event, log) {
     this.setState(prevState => ({
+      disabled: false,
       logs: [
         ...prevState.logs,
         log,
       ],
+    }));
+  }
+
+  pidListener(event, pid) {
+    this.setState(prevState => ({
+      disabled: true,
+      pids: [
+        ...prevState.pids,
+        pid,
+      ],
+    }));
+  }
+
+  exitListener(event, pid) {
+    this.setState(prevState => ({
+      disabled: false,
+      pids: prevState.pids.filter(obj => obj.pid !== pid),
     }));
   }
 
@@ -124,10 +152,23 @@ class Hero extends PureComponent {
     }
   }
 
+  async cancel(pid) {
+    const { compileTransfers } = this.props;
+
+    await compileTransfers();
+
+    this.setState(prevState => ({
+      pids: prevState.pids.filter(obj => obj.pid !== pid),
+    }));
+
+    ipcRenderer.send('command-cancelled', pid);
+  }
+
   reset() {
     this.setState({
       output: '',
       logs: [],
+      pids: [],
     });
   }
 
@@ -140,6 +181,8 @@ class Hero extends PureComponent {
     const {
       output,
       logs,
+      pids,
+      disabled,
       outputBg,
       outputColor,
     } = this.state;
@@ -171,11 +214,31 @@ class Hero extends PureComponent {
               readOnly
             />
             <ButtonGroup>
-              <Button color="primary" onClick={this.execute}>Execute</Button>
-              <Button color="warning" onClick={this.reset}>Reset</Button>
+              <Button color="primary" onClick={this.execute} disabled={disabled}>Execute</Button>
+              <Button color="warning" onClick={this.reset} disabled={disabled}>Reset</Button>
             </ButtonGroup>
           </FormGroup>
           <div className="bg-white p-4 border-radius-sm" style={{ margin: '0 -1.5rem' }}>
+            <Transition
+              items={pids}
+              keys={item => item.pid}
+              from={slideUp.from}
+              enter={slideUp.enter}
+              leave={slideUp.leave}
+            >
+              {item => styles => (
+                <animated.div
+                  style={styles}
+                  config={config.default}
+                  className="btn btn-warning w-100 my-2"
+                  onClick={() => this.cancel(item.pid)}
+                >
+                  Cancel
+                  {' '}
+                  {item.email}
+                </animated.div>
+              )}
+            </Transition>
             <Transition
               items={logs}
               keys={item => item.date}
