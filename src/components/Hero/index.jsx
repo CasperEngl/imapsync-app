@@ -19,22 +19,18 @@ import {
 import styled from 'styled-components';
 import { Transition, config, animated } from 'react-spring';
 import parseColor from 'parse-color';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 
 import { compileTransfers } from '../../actions/UserActions';
 import { slideUp } from '../../transition';
 
 const { ipcRenderer } = window.require('electron');
 
-const OutputWindow = styled.textarea`
+const OutputWindow = styled(PerfectScrollbar)`
   padding: 1rem;
   height: 300px;
-  width: 100%;
-  resize: none;
   font-family: monospace;
   font-weight: 700;
-  color: white;
-  box-shadow: none;
-  outline: none;
 `;
 
 class Hero extends PureComponent {
@@ -53,7 +49,7 @@ class Hero extends PureComponent {
     this.logListener = this.logListener.bind(this);
     this.pidListener = this.pidListener.bind(this);
     this.exitListener = this.exitListener.bind(this);
-    this.scrollToBottom = this.scrollToBottom.bind(this);
+    this.outputScrollBottom = this.outputScrollBottom.bind(this);
     this.reset = this.reset.bind(this);
     this.cancel = this.cancel.bind(this);
     this.outputLog = React.createRef();
@@ -93,7 +89,7 @@ class Hero extends PureComponent {
       }));
     }
 
-    this.scrollToBottom(this.outputLog.current);
+    this.outputScrollBottom(this.outputLog.current);
   }
 
   componentWillUnmount() {
@@ -105,14 +101,22 @@ class Hero extends PureComponent {
   }
 
   stdoutListener(event, stdout) {
-    this.setState(prevState => ({
-      output: prevState.output + stdout,
-    }));
-    this.scrollToBottom(this.outputLog.current);
+    this.setState((prevState) => {
+      const shortened = prevState.output
+        .split(/\r\n|\r|\n/)
+        .splice(prevState.output.split(/\r\n|\r|\n/).length - 200)
+        .join('\n');
+
+      return {
+        output: shortened + stdout,
+      };
+    });
+
+    this.outputScrollBottom();
   }
 
   stderrListener() {
-    this.scrollToBottom(this.outputLog.current);
+    this.outputScrollBottom();
   }
 
   logListener(event, log) {
@@ -172,8 +176,8 @@ class Hero extends PureComponent {
     });
   }
 
-  scrollToBottom(element) {
-    element.scrollTop = element.scrollHeight; // eslint-disable-line
+  outputScrollBottom() {
+    this.outputLog.scrollTop = this.outputLog.scrollHeight;
   }
 
   render() {
@@ -204,15 +208,21 @@ class Hero extends PureComponent {
           </FormGroup>
           <FormGroup>
             <OutputWindow
-              value={output}
-              ref={this.outputLog}
-              className="border-0 border-radius-sm"
+              containerRef={ref => this.outputLog = ref} //eslint-disable-line 
               style={{
                 backgroundColor: outputBg,
-                color: outputColor,
+                height: '300px',
               }}
-              readOnly
-            />
+            >
+              <pre
+                className="overflow-hidden"
+                style={{
+                  color: outputColor,
+                }}
+              >
+                {output}
+              </pre>
+            </OutputWindow>
             <ButtonGroup>
               <Button color="primary" onClick={this.execute} disabled={disabled}>Execute</Button>
               <Button color="warning" onClick={this.reset} disabled={disabled}>Reset</Button>
