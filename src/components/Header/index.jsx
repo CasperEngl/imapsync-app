@@ -7,7 +7,7 @@ react/jsx-no-target-blank: 0,
 import React from 'react';
 import { Navbar, NavbarBrand, Container } from 'reactstrap';
 
-const Navigation = () => (
+const Header = () => (
   <Navbar
     color="light"
     fixed="top"
@@ -25,4 +25,4 @@ const Navigation = () => (
   </Navbar>
 );
 
-export default Navigation;
+export default Header;
