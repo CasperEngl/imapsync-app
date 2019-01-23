@@ -28,6 +28,7 @@ const { ipcRenderer } = window.require('electron');
 
 const OutputWindow = styled(PerfectScrollbar)`
   padding: 1rem;
+  margin-bottom: 1rem;
   height: 300px;
   font-family: monospace;
   font-weight: 700;
@@ -209,9 +210,9 @@ class Hero extends PureComponent {
           <FormGroup>
             <OutputWindow
               containerRef={ref => this.outputLog = ref} //eslint-disable-line 
+              className="shadow-lg"
               style={{
                 backgroundColor: outputBg,
-                height: '300px',
               }}
             >
               <pre
