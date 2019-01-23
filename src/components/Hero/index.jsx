@@ -211,7 +211,6 @@ class Hero extends PureComponent {
               containerRef={ref => this.outputLog = ref} //eslint-disable-line 
               style={{
                 backgroundColor: outputBg,
-                height: '300px',
               }}
             >
               <pre
