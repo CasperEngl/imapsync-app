@@ -88,23 +88,19 @@ export class Transfer {
 		}
 	}
 
-	private notification(log: ILog | undefined): Promise<void> {
-		return new Promise((resolve) => {
-			if (log && log.email) {
-				notify({
-					title: 'Imapsync',
-					message: `Finished ${log.email}`,
-					icon: path.join(__dirname, '../assets/icon.png'),
-				});
-			} else {
-				notify({
-					title: 'Imapsync',
-					icon: path.join(__dirname, '../assets/icon.png'),
-				});
-			}
-
-			resolve();
-		});
+	private async notification(log: ILog | undefined): Promise<void> {
+		if (log && log.email) {
+			notify({
+				title: 'Imapsync',
+				message: `Finished ${log.email}`,
+				icon: path.join(__dirname, '../assets/icon.png'),
+			});
+		} else {
+			notify({
+				title: 'Imapsync',
+				icon: path.join(__dirname, '../assets/icon.png'),
+			});
+		}
 	}
 
 	private async writeLogToDisk(): Promise<ILog | undefined> {
