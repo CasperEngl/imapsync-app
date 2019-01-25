@@ -53,6 +53,10 @@ export class Transfer {
 	}
 
 	public start(): any {
+		if (!this.command) {
+			return;
+		}
+
 		this.process = spawn(`${path.join(execPath, 'sync_bin')}`, [...this.command, '--nolog'], {
 			detached: true,
 		});
