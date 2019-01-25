@@ -1,32 +1,45 @@
-import React, { Component, Fragment } from 'react';
+import * as React from 'react';
 import {
-  ButtonToolbar, ButtonGroup, Button, Input,
+  ButtonToolbar,
+  ButtonGroup,
+  Button,
+  Input,
 } from 'reactstrap';
-import { bindActionCreators } from 'redux';
+import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 
 import { StyledFormGroup, StyledLabel } from '../Styled';
 
 import {
   addTransfer,
-  compileTransfers,
   clearTransfers,
+} from '../../actions/transfer';
+import {
+  compileTransfers,
   toggleSSL,
   addExtraArgs,
-} from '../../actions/UserActions';
+} from '../../actions/compiler';
 
-class ActionBar extends Component {
-  static propTypes = {
-    addTransfer: PropTypes.func.isRequired,
-    compileTransfers: PropTypes.func.isRequired,
-    clearTransfers: PropTypes.func.isRequired,
-    toggleSSL: PropTypes.func.isRequired,
-    addExtraArgs: PropTypes.func.isRequired,
-    ssl: PropTypes.bool.isRequired,
-  }
+interface Props {
+  addTransfer(): any;
+  compileTransfers(): any;
+  clearTransfers(): any;
+  toggleSSL(): any;
+  addExtraArgs(args: string): any;
+  ssl: boolean;
+}
 
-  handleExtraArgs(event) {
+interface Compiler {
+  ssl: boolean;
+  extraArgs: string;
+}
+
+interface State {
+  compiler: Compiler;
+}
+
+class ActionBar extends React.Component<Props, State> {
+  handleExtraArgs(event: { target: HTMLInputElement }) {
     const { addExtraArgs, compileTransfers } = this.props;
     const { value } = event.target;
 
@@ -44,7 +57,7 @@ class ActionBar extends Component {
     } = this.props;
 
     return (
-      <Fragment>
+      <React.Fragment>
         <ButtonToolbar className="actionbar--mobile-fixed">
           <ButtonGroup>
             <Button color="primary" onClick={addTransfer}>Add Transfer</Button>
@@ -81,20 +94,20 @@ class ActionBar extends Component {
           <Input
             id="extra-args"
             type="text"
-            onChange={event => this.handleExtraArgs(event)}
+            onChange={(event: any) => this.handleExtraArgs(event)}
           />
         </StyledFormGroup>
-      </Fragment>
+      </React.Fragment>
     );
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state: State) => ({
   ssl: state.compiler.ssl,
   extraArgs: state.compiler.extraArgs,
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({
+const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
   addTransfer,
   compileTransfers,
   clearTransfers,

@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "WKT IMAP SYNC",
+  "short_name": "Imapsync",
+  "name": "Imapsync",
   "icons": [
     {
       "src": "favicon.png",
@@ -10,6 +10,6 @@
   ],
   "start_url": "./index.html",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#007BFF",
+  "background_color": "#FFFFFF"
 }

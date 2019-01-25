@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { Provider } from 'react-redux';
 import { applyMiddleware, createStore } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
@@ -12,8 +12,6 @@ import Transfers from './components/Transfers';
 import ActionBar from './components/ActionBar';
 
 import rootReducer from './reducers/rootReducer';
-
-import './index.scss';
 
 const middleware = [thunk];
 

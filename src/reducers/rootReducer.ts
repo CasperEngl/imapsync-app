@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux';
 
-import transfer from './transfers';
+import transfer from './transfer';
 import compiler from './compiler';
 
-const rootReducer = combineReducers({
-  transfer,
-  compiler,
+const rootReducer = combineReducers<any>({
+	transfer,
+	compiler,
 });
 
 export default rootReducer;

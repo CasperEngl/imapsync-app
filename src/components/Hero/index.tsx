@@ -1,13 +1,10 @@
-/*
-eslint
+declare global {
+  interface Window { require: any; }
+}
 
-class-methods-use-this: 0,
-*/
-
-import React, { PureComponent } from 'react';
-import { bindActionCreators } from 'redux';
+import * as React from 'react';
+import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import {
   Container,
   Jumbotron,
@@ -16,32 +13,82 @@ import {
   ButtonGroup,
   Button,
 } from 'reactstrap';
-import styled from 'styled-components';
-import { Transition, config, animated } from 'react-spring';
-import parseColor from 'parse-color';
-import PerfectScrollbar from 'react-perfect-scrollbar';
+import { Transition, animated } from 'react-spring';
+import tinycolor from 'tinycolor2';
 
-import { compileTransfers } from '../../actions/UserActions';
+import { OutputWindow } from '../Styled';
+
+import { compileTransfers } from '../../actions/compiler';
 import { slideUp } from '../../transition';
 
 const { ipcRenderer } = window.require('electron');
 
-const OutputWindow = styled(PerfectScrollbar)`
-  padding: 1rem;
-  margin-bottom: 1rem;
-  height: 300px;
-  font-family: monospace;
-  font-weight: 700;
-`;
+interface Log {
+  encoded?: string;
+  date?: string;
+  email?: string;
+}
 
-class Hero extends PureComponent {
-  static propTypes = {
-    command: PropTypes.string.isRequired,
-    commandJson: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string.isRequired)).isRequired,
-    compileTransfers: PropTypes.func.isRequired,
+interface Pid {
+  email: string;
+  pid: number;
+}
+
+interface Preferences {
+  output_bg?: string;
+  output_color?: string;
+  documents_directory?: string;
+}
+
+interface CompilerCommand {
+  command: CompilerCommand;
+  text: string;
+  json: Command;
+}
+
+interface State {
+  output: string;
+  logs: Log[];
+  pids: Pid[];
+  disabled: boolean;
+  preferences: Preferences;
+  outputBg: string;
+  outputColor: string;
+}
+
+interface RState {
+  compiler: CompilerCommand;
+}
+
+interface Command {
+  host_1: string;
+  host_2: string;
+  password_1: string;
+  password_2: string;
+  user_1: string;
+  user_2: string;
+}
+
+interface Props {
+  command: string;
+  commandJson: Command[];
+  compileTransfers(): void;
+}
+
+class Hero extends React.PureComponent<Props, State> {
+  private outputLog: any;
+
+  public state: State = {
+    output: '',
+    logs: [],
+    pids: [],
+    disabled: false,
+    preferences: {},
+    outputBg: '#343a40',
+    outputColor: 'rgba(255, 255, 255, 0.75)',
   }
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
 
     this.execute = this.execute.bind(this);
@@ -53,17 +100,7 @@ class Hero extends PureComponent {
     this.outputScrollBottom = this.outputScrollBottom.bind(this);
     this.reset = this.reset.bind(this);
     this.cancel = this.cancel.bind(this);
-    this.outputLog = React.createRef();
-
-    this.state = {
-      output: '',
-      logs: [],
-      pids: [],
-      disabled: false,
-      preferences: {},
-      outputBg: '#343a40',
-      outputColor: 'rgba(255, 255, 255, 0.75)',
-    };
+    this.outputLog = React.createRef<any>();
   }
 
   componentDidMount() {
@@ -79,18 +116,18 @@ class Hero extends PureComponent {
     if (preferences) {
       const { output_bg: opBg, output_color: opColor } = preferences.settings;
 
-      const outputBg = parseColor(opBg);
-      const outputColor = parseColor(opColor);
+      const outputBg = tinycolor(opBg);
+      const outputColor = tinycolor(opColor);
 
       this.setState(prevState => ({
         ...prevState,
         preferences,
-        outputBg: outputBg.rgba ? `rgba(${outputBg.rgba.join(', ')})` : prevState.outputBg,
-        outputColor: outputColor.rgba ? `rgba(${outputColor.rgba.join(', ')})` : prevState.outputColor,
+        outputBg: outputBg.isValid() ? outputBg.toRgbString() : prevState.outputBg,
+        outputColor: outputColor.isValid() ? outputColor.toRgbString() : prevState.outputColor,
       }));
     }
 
-    this.outputScrollBottom(this.outputLog.current);
+    this.outputScrollBottom();
   }
 
   componentWillUnmount() {
@@ -101,7 +138,7 @@ class Hero extends PureComponent {
     ipcRenderer.removeListener('command-exit', this.exitListener);
   }
 
-  stdoutListener(event, stdout) {
+  stdoutListener(event: any, stdout: string) {
     this.setState((prevState) => {
       const shortened = prevState.output
         .split(/\r\n|\r|\n/)
@@ -120,7 +157,7 @@ class Hero extends PureComponent {
     this.outputScrollBottom();
   }
 
-  logListener(event, log) {
+  logListener(event: any, log: Log) {
     this.setState(prevState => ({
       disabled: false,
       logs: [
@@ -130,7 +167,7 @@ class Hero extends PureComponent {
     }));
   }
 
-  pidListener(event, pid) {
+  pidListener(event: any, pid: Pid) {
     this.setState(prevState => ({
       disabled: true,
       pids: [
@@ -140,7 +177,7 @@ class Hero extends PureComponent {
     }));
   }
 
-  exitListener(event, pid) {
+  exitListener(event: any, pid: number) {
     this.setState(prevState => ({
       disabled: false,
       pids: prevState.pids.filter(obj => obj.pid !== pid),
@@ -157,7 +194,7 @@ class Hero extends PureComponent {
     }
   }
 
-  async cancel(pid) {
+  async cancel(pid: number) {
     const { compileTransfers } = this.props;
 
     await compileTransfers();
@@ -209,11 +246,10 @@ class Hero extends PureComponent {
           </FormGroup>
           <FormGroup>
             <OutputWindow
-              containerRef={ref => this.outputLog = ref} //eslint-disable-line 
+              containerRef={ref => this.outputLog = ref}
+              outputBg={outputBg}
+              outputColor={outputColor}
               className="shadow-lg"
-              style={{
-                backgroundColor: outputBg,
-              }}
             >
               <pre
                 className="overflow-hidden"
@@ -232,15 +268,14 @@ class Hero extends PureComponent {
           <div className="bg-white p-4 border-radius-sm" style={{ margin: '0 -1.5rem' }}>
             <Transition
               items={pids}
-              keys={item => item.pid}
+              keys={(item: any) => item.pid}
               from={slideUp.from}
               enter={slideUp.enter}
               leave={slideUp.leave}
             >
-              {item => styles => (
+              {(item: Pid) => (styles: any) => (
                 <animated.div
                   style={styles}
-                  config={config.default}
                   className="btn btn-warning w-100 my-2"
                   onClick={() => this.cancel(item.pid)}
                 >
@@ -252,15 +287,14 @@ class Hero extends PureComponent {
             </Transition>
             <Transition
               items={logs}
-              keys={item => item.date}
+              keys={(item: Log) => item.date}
               from={slideUp.from}
               enter={slideUp.enter}
               leave={slideUp.leave}
             >
-              {item => styles => (
+              {(item: Log) => (styles: any) => (
                 <animated.div
                   style={styles}
-                  config={config.default}
                   className="w-100 my-2"
                 >
                   <div className="download">
@@ -282,12 +316,12 @@ class Hero extends PureComponent {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state: RState) => ({
   command: state.compiler.command.text,
   commandJson: state.compiler.command.json,
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({
+const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
   compileTransfers,
 }, dispatch);
 
