@@ -1,5 +1,7 @@
 declare global {
-  interface Window { require: any; }
+  interface Window {
+    require: any;
+  }
 }
 
 import * as React from 'react';
@@ -95,7 +97,6 @@ class Hero extends React.PureComponent<Props, State> {
   }
 
   componentDidMount() {
-    // ipcRenderer.on('command-stdout', this.stdoutListener);
     ipcRenderer.on('command-stdout', this.stdoutListener);
     ipcRenderer.on('command-stderr', this.stderrListener);
     ipcRenderer.on('command-log', this.logListener);
@@ -210,7 +211,7 @@ class Hero extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { command, commandList } = this.props;
+    const { command } = this.props;
     const {
       output,
       logs,
