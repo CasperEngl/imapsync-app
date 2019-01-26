@@ -9,15 +9,11 @@ type Transfer = {
   id: number;
 };
 
-interface ITransfer {
-  transfers?: Transfer[];
-}
-
 interface State {
-  transfer: ITransfer;
+  transfer: Props;
 }
 
-interface Props extends State {
+interface Props {
   transfers?: Transfer[];
 }
 
