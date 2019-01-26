@@ -16,6 +16,7 @@ export const OutputWindow = styled(PerfectScrollbar)`
   font-weight: 700;
   background: ${(props: OutputProps) => props.outputBg};
   color: ${(props: OutputProps) => props.outputColor};
+  border-radius: .25rem;
 `;
 
 export const StyledFormGroup = styled(FormGroup)`
