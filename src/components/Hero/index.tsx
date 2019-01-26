@@ -220,8 +220,6 @@ class Hero extends React.PureComponent<Props, State> {
       outputColor,
     } = this.state;
 
-    console.log(commandList);
-
     return (
       <Jumbotron className="hero mt-4 pb-3 overflow-hidden">
         <Container>
