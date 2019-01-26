@@ -1,12 +1,7 @@
 import * as React from 'react';
 import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import {
-  Row,
-  Col,
-  ButtonToolbar,
-  Button,
-} from 'reactstrap';
+import { Row, Col, ButtonToolbar, Button } from 'reactstrap';
 
 import UserInputs from '../UserInputs';
 
@@ -21,20 +16,11 @@ interface Props {
 }
 
 function Transfer(props: Props) {
-  const {
-    number,
-    removeTransfer,
-    duplicateTransfer,
-    compileTransfers,
-  } = props;
+  const { number, removeTransfer, duplicateTransfer, compileTransfers } = props;
 
   return (
     <React.Fragment>
-      <h2>
-        Transfer
-        {' '}
-        {number}
-      </h2>
+      <h2>Transfer {number}</h2>
       <Row>
         <Col xs="12" md="6">
           <UserInputs number={number} user={1} />
@@ -67,11 +53,15 @@ function Transfer(props: Props) {
   );
 }
 
-const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
-  removeTransfer,
-  duplicateTransfer,
-  compileTransfers,
-}, dispatch);
+const mapDispatchToProps = (dispatch: Dispatch) =>
+  bindActionCreators(
+    {
+      removeTransfer,
+      duplicateTransfer,
+      compileTransfers,
+    },
+    dispatch,
+  );
 
 export default connect(
   null,

@@ -7,7 +7,7 @@ import { slideUp } from '../../transition';
 
 type Transfer = {
   id: number;
-}
+};
 
 interface ITransfer {
   transfers?: Transfer[];

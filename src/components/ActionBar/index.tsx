@@ -1,24 +1,21 @@
 import * as React from 'react';
-import {
-  ButtonToolbar,
-  ButtonGroup,
-  Button,
-  Input,
-} from 'reactstrap';
+import { ButtonToolbar, ButtonGroup, Button, Input } from 'reactstrap';
 import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 
 import { StyledFormGroup, StyledLabel } from '../Styled';
 
-import {
-  addTransfer,
-  clearTransfers,
-} from '../../actions/transfer';
+import { addTransfer, clearTransfers } from '../../actions/transfer';
 import {
   compileTransfers,
   toggleSSL,
   addExtraArgs,
 } from '../../actions/compiler';
+
+interface Compiler {
+  ssl: boolean;
+  extraArgs: string;
+}
 
 interface Props {
   addTransfer(): any;
@@ -27,11 +24,6 @@ interface Props {
   toggleSSL(): any;
   addExtraArgs(args: string): any;
   ssl: boolean;
-}
-
-interface Compiler {
-  ssl: boolean;
-  extraArgs: string;
 }
 
 interface State {
@@ -60,7 +52,9 @@ class ActionBar extends React.Component<Props, State> {
       <React.Fragment>
         <ButtonToolbar className="actionbar--mobile-fixed">
           <ButtonGroup>
-            <Button color="primary" onClick={addTransfer}>Add Transfer</Button>
+            <Button color="primary" onClick={addTransfer}>
+              Add Transfer
+            </Button>
             <Button
               color="warning"
               onClick={() => {
@@ -68,7 +62,7 @@ class ActionBar extends React.Component<Props, State> {
                 compileTransfers();
               }}
             >
-            Clear
+              Clear
             </Button>
           </ButtonGroup>
         </ButtonToolbar>
@@ -87,9 +81,7 @@ class ActionBar extends React.Component<Props, State> {
         </StyledFormGroup>
         <StyledFormGroup>
           <StyledLabel for="extra-args">
-            Extra arguments
-            {' '}
-            <small>(for all transfers)</small>
+            Extra arguments <small>(for all transfers)</small>
           </StyledLabel>
           <Input
             id="extra-args"
@@ -107,12 +99,19 @@ const mapStateToProps = (state: State) => ({
   extraArgs: state.compiler.extraArgs,
 });
 
-const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
-  addTransfer,
-  compileTransfers,
-  clearTransfers,
-  toggleSSL,
-  addExtraArgs,
-}, dispatch);
+const mapDispatchToProps = (dispatch: Dispatch) =>
+  bindActionCreators(
+    {
+      addTransfer,
+      compileTransfers,
+      clearTransfers,
+      toggleSSL,
+      addExtraArgs,
+    },
+    dispatch,
+  );
 
-export default connect(mapStateToProps, mapDispatchToProps)(ActionBar);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ActionBar);
