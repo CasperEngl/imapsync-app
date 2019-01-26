@@ -10,7 +10,6 @@ import * as base64 from 'base-64';
 import mkdirp from 'mkdirp';
 
 import { getPlatform } from './platform';
-import { resolve } from 'dns';
 
 const execPath = isDev
 	? path.join(app.getAppPath(), 'resources', getPlatform())
