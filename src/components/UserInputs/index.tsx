@@ -9,12 +9,7 @@ import {
   DropdownMenu,
   DropdownItem,
 } from 'reactstrap';
-import {
-  isURL,
-  isIP,
-  isEmail,
-  isEmpty,
-} from 'validator';
+import { isURL, isIP, isEmail, isEmpty } from 'validator';
 
 import { updateTransferData, TransferData } from '../../actions/transfer';
 import { compileTransfers } from '../../actions/compiler';
@@ -31,10 +26,6 @@ interface Input {
   args_2: string;
 }
 
-interface Inputs {
-  [key: number]: any;
-}
-
 interface State {
   hostValidated: boolean;
   userValidated: boolean;
@@ -43,7 +34,7 @@ interface State {
 }
 
 interface Transfer {
-  [key: string]: Input;
+  inputs: Input[];
 }
 
 interface RState {
@@ -51,12 +42,11 @@ interface RState {
 }
 
 interface Props {
-  transfer: Input[];
   number: number;
   user: number;
   updateTransferData(args: TransferData): void;
   compileTransfers(): void;
-  inputs: Inputs;
+  inputs: Input[];
 }
 
 class UserInputs extends React.PureComponent<Props, State> {
@@ -65,7 +55,7 @@ class UserInputs extends React.PureComponent<Props, State> {
     userValidated: false,
     passwordValidated: false,
     dropdownOpen: false,
-  }
+  };
 
   constructor(props: Props) {
     super(props);
@@ -82,18 +72,22 @@ class UserInputs extends React.PureComponent<Props, State> {
     const { number, user, inputs } = this.props;
 
     if (
-      !inputs[number]
-      || (!inputs[number][`host_${user}`] && inputs[number][`user_${user}`] && inputs[number][`password_${user}`])
+      !inputs[number] ||
+      (!inputs[number][`host_${user}`] &&
+        inputs[number][`user_${user}`] &&
+        inputs[number][`password_${user}`])
     ) {
       return;
     }
 
     this.setState({
       hostValidated:
-        isEmpty(inputs[number][`host_${user}`])
-        || isURL(inputs[number][`host_${user}`])
-        || isIP(inputs[number][`host_${user}`]),
-      userValidated: isEmpty(inputs[number][`user_${user}`]) || isEmail(inputs[number][`user_${user}`]),
+        isEmpty(inputs[number][`host_${user}`]) ||
+        isURL(inputs[number][`host_${user}`]) ||
+        isIP(inputs[number][`host_${user}`]),
+      userValidated:
+        isEmpty(inputs[number][`user_${user}`]) ||
+        isEmail(inputs[number][`user_${user}`]),
       passwordValidated: !isEmpty(inputs[number][`password_${user}`]),
     });
   }
@@ -105,7 +99,7 @@ class UserInputs extends React.PureComponent<Props, State> {
   }: {
     number: number;
     target?: string;
-    event: { target: HTMLInputElement }
+    event: { target: HTMLInputElement };
   }) {
     const { updateTransferData, compileTransfers } = this.props;
     const { name, value: content } = event.target;
@@ -149,7 +143,10 @@ class UserInputs extends React.PureComponent<Props, State> {
   render() {
     const { number, user, inputs } = this.props;
     const {
-      hostValidated, userValidated, passwordValidated, dropdownOpen,
+      hostValidated,
+      userValidated,
+      passwordValidated,
+      dropdownOpen,
     } = this.state;
 
     if (!inputs[number]) {
@@ -163,38 +160,50 @@ class UserInputs extends React.PureComponent<Props, State> {
             Server
           </DropdownToggle>
           <DropdownMenu>
-            <DropdownItem onClick={() => this.handleServerClick('he1.danaweb.org')}>
+            <DropdownItem
+              onClick={() => this.handleServerClick('he1.danaweb.org')}
+            >
               he1.danaweb.org
-
             </DropdownItem>
-            <DropdownItem onClick={() => this.handleServerClick('mail.danaweb.org')}>
+            <DropdownItem
+              onClick={() => this.handleServerClick('mail.danaweb.org')}
+            >
               mail.danaweb.org
-
             </DropdownItem>
-            <DropdownItem onClick={() => this.handleServerClick('imap.gigahost.dk')}>
+            <DropdownItem
+              onClick={() => this.handleServerClick('imap.gigahost.dk')}
+            >
               imap.gigahost.dk
-
             </DropdownItem>
-            <DropdownItem onClick={() => this.handleServerClick('mail.office365.com')}>
+            <DropdownItem
+              onClick={() => this.handleServerClick('mail.office365.com')}
+            >
               mail.office365.com
-
             </DropdownItem>
-            <DropdownItem onClick={() => this.handleServerClick('mail.surftown.com')}>
+            <DropdownItem
+              onClick={() => this.handleServerClick('mail.surftown.com')}
+            >
               mail.surftown.com
-
             </DropdownItem>
-            <DropdownItem onClick={() => this.handleServerClick('mail.onlinemail.io')}>
+            <DropdownItem
+              onClick={() => this.handleServerClick('mail.onlinemail.io')}
+            >
               mail.onlinemail.io (Curanet)
-
             </DropdownItem>
-            <DropdownItem onClick={() => this.handleServerClick('imap.one.com')}>imap.one.com</DropdownItem>
-            <DropdownItem onClick={() => this.handleServerClick('mail.atriumweb.dk')}>
+            <DropdownItem
+              onClick={() => this.handleServerClick('imap.one.com')}
+            >
+              imap.one.com
+            </DropdownItem>
+            <DropdownItem
+              onClick={() => this.handleServerClick('mail.atriumweb.dk')}
+            >
               mail.atriumweb.dk
-
             </DropdownItem>
-            <DropdownItem onClick={() => this.handleServerClick('mail.unoeuro.com')}>
+            <DropdownItem
+              onClick={() => this.handleServerClick('mail.unoeuro.com')}
+            >
               mail.unoeuro.com
-
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>
@@ -203,10 +212,12 @@ class UserInputs extends React.PureComponent<Props, State> {
             type="url"
             placeholder="192.168.1.1 / mail.example.com"
             name={`host_${user}`}
-            onChange={event => this.handleInput({
-              number,
-              event
-            })}
+            onChange={event =>
+              this.handleInput({
+                number,
+                event,
+              })
+            }
             value={inputs[number][`host_${user}`]}
             invalid={!hostValidated}
           />
@@ -216,11 +227,13 @@ class UserInputs extends React.PureComponent<Props, State> {
             type="email"
             placeholder="example@example.com"
             name={`user_${user}`}
-            onChange={event => this.handleInput({
-              number,
-              target: 'user_2',
-              event
-            })}
+            onChange={event =>
+              this.handleInput({
+                number,
+                target: 'user_2',
+                event,
+              })
+            }
             value={inputs[number][`user_${user}`]}
             invalid={!userValidated}
           />
@@ -230,10 +243,12 @@ class UserInputs extends React.PureComponent<Props, State> {
             type="text"
             placeholder="example123"
             name={`password_${user}`}
-            onChange={event => this.handleInput({
-              number,
-              event
-            })}
+            onChange={event =>
+              this.handleInput({
+                number,
+                event,
+              })
+            }
             value={inputs[number][`password_${user}`]}
             invalid={!passwordValidated}
           />
@@ -243,10 +258,12 @@ class UserInputs extends React.PureComponent<Props, State> {
             type="text"
             placeholder={`--gmail${user} --office${user} --exchange${user}`}
             name={`args_${user}`}
-            onChange={event => this.handleInput({
-              number,
-              event
-            })}
+            onChange={event =>
+              this.handleInput({
+                number,
+                event,
+              })
+            }
             value={inputs[number][`args_${user}`]}
           />
         </FormGroup>
@@ -259,13 +276,14 @@ const mapStateToProps = (state: RState) => ({
   inputs: state.transfer.inputs,
 });
 
-const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators(
-  {
-    updateTransferData,
-    compileTransfers,
-  },
-  dispatch,
-);
+const mapDispatchToProps = (dispatch: Dispatch) =>
+  bindActionCreators(
+    {
+      updateTransferData,
+      compileTransfers,
+    },
+    dispatch,
+  );
 
 export default connect(
   mapStateToProps,

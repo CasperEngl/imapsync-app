@@ -40,10 +40,10 @@ interface Preferences {
   documents_directory?: string;
 }
 
-interface CompilerCommand {
-  command: CompilerCommand;
+interface Command {
+  command: Command;
   text: string;
-  json: Command;
+  json: string[];
 }
 
 interface State {
@@ -57,21 +57,12 @@ interface State {
 }
 
 interface RState {
-  compiler: CompilerCommand;
-}
-
-interface Command {
-  host_1: string;
-  host_2: string;
-  password_1: string;
-  password_2: string;
-  user_1: string;
-  user_2: string;
+  compiler: Command;
 }
 
 interface Props {
   command: string;
-  commandJson: Command[];
+  commandList: string[];
   compileTransfers(): void;
 }
 
@@ -185,12 +176,12 @@ class Hero extends React.PureComponent<Props, State> {
   }
 
   async execute() {
-    const { compileTransfers, commandJson } = this.props;
+    const { compileTransfers, commandList } = this.props;
 
     await compileTransfers();
 
-    if (commandJson.length) {
-      ipcRenderer.send('command', commandJson);
+    if (commandList.length) {
+      ipcRenderer.send('command', commandList);
     }
   }
 
@@ -219,7 +210,7 @@ class Hero extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { command } = this.props;
+    const { command, commandList } = this.props;
     const {
       output,
       logs,
@@ -228,6 +219,8 @@ class Hero extends React.PureComponent<Props, State> {
       outputBg,
       outputColor,
     } = this.state;
+
+    console.log(commandList);
 
     return (
       <Jumbotron className="hero mt-4 pb-3 overflow-hidden">
@@ -318,7 +311,7 @@ class Hero extends React.PureComponent<Props, State> {
 
 const mapStateToProps = (state: RState) => ({
   command: state.compiler.command.text,
-  commandJson: state.compiler.command.json,
+  commandList: state.compiler.command.json,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
