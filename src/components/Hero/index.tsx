@@ -18,7 +18,7 @@ import {
 import { Transition, animated } from 'react-spring';
 import tinycolor from 'tinycolor2';
 
-import { OutputWindow } from '../Styled';
+import OutputWindow from '../OutputWindow';
 
 import { compileTransfers } from '../../actions/compiler';
 import { slideUp } from '../../transition';
@@ -222,7 +222,7 @@ class Hero extends React.PureComponent<Props, State> {
     } = this.state;
 
     return (
-      <Jumbotron className="hero mt-4 pb-3 overflow-hidden">
+      <Jumbotron className="hero mt-4 mb-0 pb-3 overflow-hidden">
         <Container>
           <FormGroup>
             <Input
