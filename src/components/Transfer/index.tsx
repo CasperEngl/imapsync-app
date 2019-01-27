@@ -15,9 +15,12 @@ interface Props {
   number: number;
 }
 
-function Transfer(props: Props) {
-  const { number, removeTransfer, duplicateTransfer, compileTransfers } = props;
-
+function Transfer({
+  number,
+  removeTransfer,
+  duplicateTransfer,
+  compileTransfers,
+}: Props) {
   return (
     <React.Fragment>
       <h2>Transfer {number}</h2>

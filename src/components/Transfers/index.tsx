@@ -17,9 +17,7 @@ interface Props {
   transfers?: Transfer[];
 }
 
-function Transfers(props: Props) {
-  const { transfers } = props;
-
+function Transfers({ transfers }: Props) {
   return (
     <Transition
       items={transfers}
