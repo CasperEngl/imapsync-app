@@ -1,21 +1,21 @@
-import { COMPILE_TRANSFERS, TOGGLE_SSL, EXTRA_ARGUMENTS } from '../actions/compiler';
+import { COMPILE_TRANSFERS, TOGGLE_SSL } from '../actions/compiler';
 
-const initialState = {
+interface Command {
+	text: string;
+	json: string[];
+}
+
+interface State {
+	command: Command;
+	ssl: boolean;
+}
+
+const initialState: State = {
 	command: {
 		text: '',
-		json: [
-			{
-				host_1: '',
-				user_1: '',
-				password_1: '',
-				host_2: '',
-				user_2: '',
-				password_2: '',
-			},
-		],
+		json: [],
 	},
 	ssl: true,
-	extraArgs: '',
 };
 
 export default function(state = initialState, action: any) {
@@ -31,11 +31,6 @@ export default function(state = initialState, action: any) {
 			return {
 				...state,
 				ssl: !state.ssl,
-			};
-		case EXTRA_ARGUMENTS:
-			return {
-				...state,
-				extraArgs: data,
 			};
 
 		default:
