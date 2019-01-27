@@ -1,6 +1,3 @@
-import { ActionType } from 'typesafe-actions';
-
-import * as transfer from '../actions/transfer';
 import {
 	ADD_TRANSFER,
 	REMOVE_TRANSFER,
@@ -9,9 +6,29 @@ import {
 	DUPLICATE_TRANSFER,
 } from '../actions/transfer';
 
-export type TransferActions = ActionType<typeof transfer>;
+interface Transfer {
+	id: number;
+}
 
-const initialState = {
+interface Input {
+	id?: number;
+	host_1?: string;
+	user_1?: string;
+	password_1?: string;
+	args_1?: string;
+	host_2?: string;
+	user_2?: string;
+	password_2?: string;
+	args_2?: string;
+}
+
+interface State {
+	transfers: Transfer[];
+	transfersCount: number;
+	inputs: Input[];
+}
+
+const initialState: State = {
 	transfers: [
 		{
 			id: 1,
@@ -34,7 +51,7 @@ const initialState = {
 	],
 };
 
-export default function(state = initialState, action: TransferActions) {
+export default function(state = initialState, action: any) {
 	const { type, payload } = action;
 
 	switch (type) {
