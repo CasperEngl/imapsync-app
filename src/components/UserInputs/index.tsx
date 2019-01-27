@@ -50,7 +50,7 @@ interface Props {
 }
 
 class UserInputs extends React.PureComponent<Props, State> {
-  public state: State = {
+  state: State = {
     hostValidated: false,
     userValidated: false,
     passwordValidated: false,
