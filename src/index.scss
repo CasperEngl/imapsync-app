@@ -1,40 +1,54 @@
-$box-shadow-sm: 0 .125rem .25rem  rgba(black, .075);
-$box-shadow:    0 .25rem  1rem    rgba(black, .15);
-$box-shadow-lg: 0 .5rem   3rem    rgba(black, .175);
+$box-shadow-sm: 0 0.125rem 0.25rem rgba(black, 0.075);
+$box-shadow: 0 0.25rem 1rem rgba(black, 0.15);
+$box-shadow-lg: 0 0.5rem 3rem rgba(black, 0.175);
 
 @import '~bootstrap/scss/bootstrap';
 
 @media only screen and (max-width: 768px) and (max-height: 768px) {
-  .actionbar--mobile-fixed {
-    position: fixed;
-    z-index: 9999;
-    left: 1rem;
-    bottom: 1rem;
-  }
+	.actionbar--mobile-fixed {
+		position: fixed;
+		z-index: 9999;
+		left: 1rem;
+		bottom: 1rem;
+	}
 }
 
 #root {
-  padding-bottom: 30rem;
+	padding-bottom: 30rem;
 }
 
 .hero {
-  background: url('/arc.svg') no-repeat top center;
-  background-size: cover;
+	background: url('/arc.svg') no-repeat top center;
+	background-size: cover;
 }
 
 .border-radius {
-  border-radius: $border-radius;
+	border-radius: $border-radius;
 }
 
 .border-radius-lg {
-  border-radius: $border-radius-lg;
+	border-radius: $border-radius-lg;
 }
 
 .border-radius-sm {
-  border-radius: $border-radius-sm;
+	border-radius: $border-radius-sm;
 }
 
-.form-control, .btn:not(.btn-link) {
-  @extend .shadow;
-  border: none;
+.form-control,
+.btn:not(.btn-link) {
+	@extend .shadow;
+	border: none;
+}
+
+.dropdown-menu {
+	@extend .border-0, .shadow, .position-fixed;
+}
+
+.dropdown-item {
+	transition: $transition-base;
+
+	&:hover,
+	&:focus {
+		outline: none;
+	}
 }
