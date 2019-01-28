@@ -33,7 +33,7 @@ function ActionBar({
 }: Props) {
   return (
     <React.Fragment>
-      <ButtonToolbar className="actionbar--mobile-fixed">
+      <ButtonToolbar className="actionbar--mobile-fixed mt-3">
         <ButtonGroup>
           <Button color="primary" onClick={addTransfer}>
             Add Transfer
