@@ -49,7 +49,7 @@
     "cra:test": "react-scripts test --env=jsdom",
     "cra:eject": "react-scripts eject",
     "electron:dev": "concurrently \"yarn ts:build\" \"BROWSER=none yarn cra:start\" \"wait-on http://localhost:3000 && electron .\"",
-    "electron:pack": "run-s electron:prebuild electron:build",
+    "electron:pack": "run-s 'electron:prebuild' 'electron:build -mwl'",
     "electron:prebuild": "yarn ts:build && yarn cra:build",
     "electron:build": "electron-builder -c.extraMetadata.main=build/electron.js",
     "electron:start": "electron .",
