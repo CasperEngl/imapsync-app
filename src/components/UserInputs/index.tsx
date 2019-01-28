@@ -14,7 +14,13 @@ import { isURL, isIP, isEmail, isEmpty } from 'validator';
 import { updateTransferData, TransferData } from '../../actions/transfer';
 import { compileTransfers } from '../../actions/compiler';
 
+interface Server {
+  name: string;
+  host: string;
+}
+
 interface Input {
+  [key: string]: any;
   id: number;
   host_1: string;
   host_2: string;
@@ -31,6 +37,7 @@ interface State {
   userValidated: boolean;
   passwordValidated: boolean;
   dropdownOpen: boolean;
+  servers: Server[];
 }
 
 interface Transfer {
@@ -55,6 +62,48 @@ class UserInputs extends React.PureComponent<Props, State> {
     userValidated: false,
     passwordValidated: false,
     dropdownOpen: false,
+    servers: [
+      {
+        host: 'he1.danaweb.org',
+        name: 'he1.danaweb.org',
+      },
+      {
+        host: 'mail.danaweb.org',
+        name: 'mail.danaweb.org',
+      },
+      {
+        host: 'imap.gigahost.dk',
+        name: 'imap.gigahost.dk',
+      },
+      {
+        host: 'mail.office365.com',
+        name: 'mail.office365.com',
+      },
+      {
+        host: 'mail.surftown.com',
+        name: 'mail.surftown.com',
+      },
+      {
+        host: 'mail.onlinemail.io',
+        name: 'mail.onlinemail.io (Curanet)',
+      },
+      {
+        host: 'imap.one.com',
+        name: 'imap.one.com',
+      },
+      {
+        host: 'mail.atriumweb.dk',
+        name: 'mail.atriumweb.dk',
+      },
+      {
+        host: 'mail.unoeuro.com',
+        name: 'mail.unoeuro.com',
+      },
+      {
+        host: 'mail.mail-1.dk',
+        name: 'mail.mail-1.dk (Søgemedier)',
+      },
+    ]
   };
 
   constructor(props: Props) {
@@ -147,6 +196,7 @@ class UserInputs extends React.PureComponent<Props, State> {
       userValidated,
       passwordValidated,
       dropdownOpen,
+      servers,
     } = this.state;
 
     if (!inputs[number]) {
@@ -160,51 +210,16 @@ class UserInputs extends React.PureComponent<Props, State> {
             Server
           </DropdownToggle>
           <DropdownMenu>
-            <DropdownItem
-              onClick={() => this.handleServerClick('he1.danaweb.org')}
-            >
-              he1.danaweb.org
-            </DropdownItem>
-            <DropdownItem
-              onClick={() => this.handleServerClick('mail.danaweb.org')}
-            >
-              mail.danaweb.org
-            </DropdownItem>
-            <DropdownItem
-              onClick={() => this.handleServerClick('imap.gigahost.dk')}
-            >
-              imap.gigahost.dk
-            </DropdownItem>
-            <DropdownItem
-              onClick={() => this.handleServerClick('mail.office365.com')}
-            >
-              mail.office365.com
-            </DropdownItem>
-            <DropdownItem
-              onClick={() => this.handleServerClick('mail.surftown.com')}
-            >
-              mail.surftown.com
-            </DropdownItem>
-            <DropdownItem
-              onClick={() => this.handleServerClick('mail.onlinemail.io')}
-            >
-              mail.onlinemail.io (Curanet)
-            </DropdownItem>
-            <DropdownItem
-              onClick={() => this.handleServerClick('imap.one.com')}
-            >
-              imap.one.com
-            </DropdownItem>
-            <DropdownItem
-              onClick={() => this.handleServerClick('mail.atriumweb.dk')}
-            >
-              mail.atriumweb.dk
-            </DropdownItem>
-            <DropdownItem
-              onClick={() => this.handleServerClick('mail.unoeuro.com')}
-            >
-              mail.unoeuro.com
-            </DropdownItem>
+            {
+              servers.map((server) => (
+                <DropdownItem
+                  key={server.host}
+                  onClick={() => this.handleServerClick(server.host)}
+                >
+                  {server.name}
+                </DropdownItem>
+              ))
+            }
           </DropdownMenu>
         </Dropdown>
         <FormGroup>
