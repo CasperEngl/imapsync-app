@@ -42,6 +42,7 @@ interface State {
 
 interface Transfer {
   inputs: Input[];
+  locked: boolean;
 }
 
 interface RState {
@@ -190,7 +191,7 @@ class UserInputs extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { number, user, inputs } = this.props;
+    const { number, user, inputs, locked } = this.props;
     const {
       hostValidated,
       userValidated,
@@ -206,7 +207,7 @@ class UserInputs extends React.PureComponent<Props, State> {
     return (
       <React.Fragment>
         <Dropdown isOpen={dropdownOpen} toggle={this.toggleDropdown}>
-          <DropdownToggle color="primary" caret className="mb-4">
+          <DropdownToggle color="primary" caret className="mb-4" disabled={locked}>
             Server
           </DropdownToggle>
           <DropdownMenu>
@@ -235,6 +236,7 @@ class UserInputs extends React.PureComponent<Props, State> {
             }
             value={inputs[number][`host_${user}`]}
             invalid={!hostValidated}
+            disabled={locked}
           />
         </FormGroup>
         <FormGroup>
@@ -251,6 +253,7 @@ class UserInputs extends React.PureComponent<Props, State> {
             }
             value={inputs[number][`user_${user}`]}
             invalid={!userValidated}
+            disabled={locked}
           />
         </FormGroup>
         <FormGroup>
@@ -266,6 +269,7 @@ class UserInputs extends React.PureComponent<Props, State> {
             }
             value={inputs[number][`password_${user}`]}
             invalid={!passwordValidated}
+            disabled={locked}
           />
         </FormGroup>
         <FormGroup>
@@ -280,6 +284,7 @@ class UserInputs extends React.PureComponent<Props, State> {
               })
             }
             value={inputs[number][`args_${user}`]}
+            disabled={locked}
           />
         </FormGroup>
       </React.Fragment>
@@ -289,6 +294,7 @@ class UserInputs extends React.PureComponent<Props, State> {
 
 const mapStateToProps = (state: RState) => ({
   inputs: state.transfer.inputs,
+  locked: state.transfer.locked,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) =>

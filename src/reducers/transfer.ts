@@ -4,6 +4,7 @@ import {
 	UPDATE_TRANSFER_DATA,
 	CLEAR_TRANSFERS,
 	DUPLICATE_TRANSFER,
+	LOCK_TRANSFERS,
 } from '../actions/transfer';
 
 interface Transfer {
@@ -26,9 +27,11 @@ interface State {
 	transfers: Transfer[];
 	transfersCount: number;
 	inputs: Input[];
+	locked: boolean,
 }
 
 const initialState: State = {
+	locked: false,
 	transfers: [
 		{
 			id: 1,
@@ -81,7 +84,7 @@ export default function(state = initialState, action: any) {
 				],
 			};
 		case DUPLICATE_TRANSFER:
-			const duplicate = state.inputs.filter(input => input.id === payload)[0];
+			const duplicate = state.inputs.find(input => input.id === payload.id);
 
 			return {
 				...state,
@@ -96,23 +99,23 @@ export default function(state = initialState, action: any) {
 					...state.inputs,
 					{
 						id: state.transfersCount,
-						host_1: duplicate.host_1 || '',
-						user_1: duplicate.user_1 || '',
-						password_1: duplicate.password_1 || '',
-						args_1: duplicate.args_1 || '',
-						host_2: duplicate.host_2 || '',
-						user_2: duplicate.user_2 || '',
-						password_2: duplicate.password_2 || '',
-						args_2: duplicate.args_2 || '',
+						host_1: duplicate && duplicate.host_1 || '',
+						user_1: duplicate && duplicate.user_1 || '',
+						password_1: duplicate && duplicate.password_1 || '',
+						args_1: duplicate && duplicate.args_1 || '',
+						host_2: duplicate && duplicate.host_2 || '',
+						user_2: duplicate && duplicate.user_2 || '',
+						password_2: duplicate && duplicate.password_2 || '',
+						args_2: duplicate && duplicate.args_2 || '',
 					},
 				],
 			};
 		case REMOVE_TRANSFER:
 			return {
 				...state,
-				transfers: state.transfers.filter(transfer => transfer.id !== payload),
+				transfers: state.transfers.filter(transfer => transfer.id !== payload.id),
 				inputs: state.inputs.map(input => {
-					if (input.id === payload) {
+					if (input.id === payload.id) {
 						return {
 							...input,
 							host_1: initialState.inputs[1].host_1,
@@ -154,6 +157,11 @@ export default function(state = initialState, action: any) {
 					},
 				}),
 			};
+		case LOCK_TRANSFERS:
+			return {
+				...state,
+				locked: payload.lock,
+			}
 
 		default:
 			return state;

@@ -21,6 +21,7 @@ import tinycolor from 'tinycolor2';
 import OutputWindow from '../OutputWindow';
 
 import { compileTransfers } from '../../actions/compiler';
+import { lockTransfers } from '../../actions/transfer';
 import { slideUp } from '../../transition';
 
 const { ipcRenderer } = window.require('electron');
@@ -48,11 +49,14 @@ interface Command {
   json: string[];
 }
 
+interface Transfer {
+  locked: boolean;
+}
+
 interface State {
   output: string;
   logs: Log[];
   pids: Pid[];
-  disabled: boolean;
   preferences: Preferences;
   outputBg: string;
   outputColor: string;
@@ -60,12 +64,14 @@ interface State {
 
 interface RState {
   compiler: Command;
+  transfer: Transfer;
 }
 
 interface Props {
   command: string;
   commandList: string[];
   compileTransfers(): void;
+  lockTransfers(lock?: boolean): void;
 }
 
 class Hero extends React.PureComponent<Props, State> {
@@ -75,7 +81,6 @@ class Hero extends React.PureComponent<Props, State> {
     output: '',
     logs: [],
     pids: [],
-    disabled: false,
     preferences: {},
     outputBg: '#343a40',
     outputColor: 'rgba(255, 255, 255, 0.75)',
@@ -150,28 +155,37 @@ class Hero extends React.PureComponent<Props, State> {
   }
 
   logListener(event: any, log: Log) {
+    const { lockTransfers } = this.props;
+
+    lockTransfers(false);
+    
     this.setState(prevState => ({
-      disabled: false,
       logs: [
         ...prevState.logs,
         log,
       ],
     }));
   }
-
+  
   pidListener(event: any, pid: Pid) {
+    const { lockTransfers } = this.props;
+  
+    lockTransfers(true);
+    
     this.setState(prevState => ({
-      disabled: true,
       pids: [
         ...prevState.pids,
         pid,
       ],
     }));
   }
-
+  
   exitListener(event: any, pid: number) {
+    const { lockTransfers } = this.props;
+  
+    lockTransfers(false);
+    
     this.setState(prevState => ({
-      disabled: false,
       pids: prevState.pids.filter(obj => obj.pid !== pid),
     }));
   }
@@ -211,12 +225,11 @@ class Hero extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { command } = this.props;
+    const { command, locked } = this.props;
     const {
       output,
       logs,
       pids,
-      disabled,
       outputBg,
       outputColor,
     } = this.state;
@@ -253,8 +266,8 @@ class Hero extends React.PureComponent<Props, State> {
               </pre>
             </OutputWindow>
             <ButtonGroup>
-              <Button color="primary" onClick={this.execute} disabled={disabled}>Execute</Button>
-              <Button color="warning" onClick={this.reset} disabled={disabled}>Reset</Button>
+              <Button color="primary" onClick={this.execute} disabled={locked}>Execute</Button>
+              <Button color="warning" onClick={this.reset} disabled={locked}>Reset</Button>
             </ButtonGroup>
           </FormGroup>
           <div className="bg-white p-4 border-radius-sm" style={{ margin: '0 -1.5rem' }}>
@@ -311,10 +324,12 @@ class Hero extends React.PureComponent<Props, State> {
 const mapStateToProps = (state: RState) => ({
   command: state.compiler.command.text,
   commandList: state.compiler.command.json,
+  locked: state.transfer.locked,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
   compileTransfers,
+  lockTransfers,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Hero);

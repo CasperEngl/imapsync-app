@@ -8,7 +8,15 @@ import UserInputs from '../UserInputs';
 import { removeTransfer, duplicateTransfer } from '../../actions/transfer';
 import { compileTransfers } from '../../actions/compiler';
 
-interface Props {
+interface Transfer {
+  locked: boolean;
+}
+
+interface State {
+  transfer: Transfer;
+}
+
+interface Props extends Transfer {
   removeTransfer(number: number): void;
   duplicateTransfer(number: number): void;
   compileTransfers(): void;
@@ -17,6 +25,7 @@ interface Props {
 
 function Transfer({
   number,
+  locked,
   removeTransfer,
   duplicateTransfer,
   compileTransfers,
@@ -35,6 +44,7 @@ function Transfer({
       <ButtonToolbar>
         <Button
           color="danger"
+          disabled={locked}
           onClick={async () => {
             await removeTransfer(number);
             compileTransfers();
@@ -44,6 +54,7 @@ function Transfer({
         </Button>
         <Button
           color="link"
+          disabled={locked}
           onClick={async () => {
             await duplicateTransfer(number);
             compileTransfers();
@@ -56,6 +67,10 @@ function Transfer({
   );
 }
 
+const mapStateToProps = (state: State) => ({
+  locked: state.transfer.locked,
+})
+
 const mapDispatchToProps = (dispatch: Dispatch) =>
   bindActionCreators(
     {
@@ -67,6 +82,6 @@ const mapDispatchToProps = (dispatch: Dispatch) =>
   );
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps,
 )(Transfer);

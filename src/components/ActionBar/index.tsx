@@ -11,6 +11,10 @@ interface Compiler {
   extraArgs: string;
 }
 
+interface Transfer {
+  locked: boolean;
+}
+
 interface Props {
   addTransfer(): any;
   compileTransfers(): any;
@@ -18,10 +22,12 @@ interface Props {
   toggleSSL(): any;
   addExtraArgs(args: string): any;
   ssl: boolean;
+  locked: boolean;
 }
 
 interface State {
   compiler: Compiler;
+  transfer: Transfer;
 }
 
 function ActionBar({
@@ -30,16 +36,22 @@ function ActionBar({
   clearTransfers,
   toggleSSL,
   ssl,
+  locked,
 }: Props) {
   return (
     <React.Fragment>
       <ButtonToolbar className="actionbar--mobile-fixed mt-3">
         <ButtonGroup>
-          <Button color="primary" onClick={addTransfer}>
+          <Button
+            color="primary"
+            disabled={locked}
+            onClick={addTransfer}
+          >
             Add Transfer
           </Button>
           <Button
             color="warning"
+            disabled={locked}
             onClick={() => {
               clearTransfers();
               compileTransfers();
@@ -53,11 +65,12 @@ function ActionBar({
         <Label>
           <Input
             type="checkbox"
+            disabled={locked}
+            checked={ssl}
             onChange={() => {
               toggleSSL();
               compileTransfers();
             }}
-            checked={ssl}
           />
           Toggle SSL
         </Label>
@@ -69,6 +82,7 @@ function ActionBar({
 const mapStateToProps = (state: State) => ({
   ssl: state.compiler.ssl,
   extraArgs: state.compiler.extraArgs,
+  locked: state.transfer.locked,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) =>

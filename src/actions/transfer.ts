@@ -11,12 +11,17 @@ export const DUPLICATE_TRANSFER = 'DUPLICATE_TRANSFER';
 export const REMOVE_TRANSFER = 'REMOVE_TRANSFER';
 export const UPDATE_TRANSFER_DATA = 'UPDATE_TRANSFER_DATA';
 export const CLEAR_TRANSFERS = 'CLEAR_TRANSFERS';
+export const LOCK_TRANSFERS = 'LOCK_TRANSFERS';
 
 export const addTransfer = () => action(ADD_TRANSFER);
 
-export const duplicateTransfer = (number: number) => action(DUPLICATE_TRANSFER, number);
+export const duplicateTransfer = (id: number) => action(DUPLICATE_TRANSFER, {
+	id,
+});
 
-export const removeTransfer = (number: number) => action(REMOVE_TRANSFER, number);
+export const removeTransfer = (id: number) => action(REMOVE_TRANSFER, {
+	id,
+});
 
 export const clearTransfers = () => action(CLEAR_TRANSFERS);
 
@@ -24,4 +29,8 @@ export const updateTransferData = ({ number, name, content }: TransferData) => a
 	id: number,
 	name,
 	content,
+});
+
+export const lockTransfers = (lock?: false) => action(LOCK_TRANSFERS, {
+	lock,
 });
