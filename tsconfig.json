@@ -25,7 +25,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "noEmit": true,
+    "noEmit": true
   },
   "include": [
     "./public/src/electron.ts",
