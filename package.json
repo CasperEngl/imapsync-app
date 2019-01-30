@@ -57,6 +57,9 @@
     "ts:watch": "tsc -w --noEmit false --module commonjs"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.13",
+    "@fortawesome/free-solid-svg-icons": "^5.7.0",
+    "@fortawesome/react-fontawesome": "^0.1.4",
     "base-64": "^0.1.0",
     "bootstrap": "^4.1.0",
     "electron-is-dev": "^1.0.1",
@@ -95,6 +98,7 @@
     "@types/react-dom": "^16.0.11",
     "@types/react-redux": "^7.0.0",
     "@types/reactstrap": "^7.1.0",
+    "@types/redux": "^3.6.0",
     "@types/styled-components": "^4.1.6",
     "@types/tinycolor2": "^1.4.1",
     "@types/validator": "^10.9.0",

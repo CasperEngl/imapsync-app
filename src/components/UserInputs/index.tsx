@@ -52,6 +52,7 @@ interface RState {
 interface Props {
   number: number;
   user: number;
+  locked: boolean;
   updateTransferData(args: TransferData): void;
   compileTransfers(): void;
   inputs: Input[];

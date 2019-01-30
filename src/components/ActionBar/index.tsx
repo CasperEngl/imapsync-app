@@ -21,8 +21,8 @@ interface Props {
   clearTransfers(): any;
   toggleSSL(): any;
   addExtraArgs(args: string): any;
-  ssl: boolean;
-  locked: boolean;
+  ssl?: boolean;
+  locked?: boolean;
 }
 
 interface State {

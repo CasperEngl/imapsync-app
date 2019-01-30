@@ -4,32 +4,25 @@ import { applyMiddleware, createStore } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 import { save, load } from 'redux-localstorage-simple';
-import { Container } from 'reactstrap';
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faCross } from '@fortawesome/free-solid-svg-icons'
 
-import Header from './components/Header';
-import Hero from './components/Hero';
-import Transfers from './components/Transfers';
-import ActionBar from './components/ActionBar';
+import ProxyApp from './components/ProxyApp';
 
 import rootReducer from './reducers/rootReducer';
 
 const middleware = [thunk];
 
-export const store = createStore(
-  rootReducer,
-  load(),
-  composeWithDevTools(applyMiddleware(...middleware, save())),
-);
+export const store = createStore(rootReducer, load(), composeWithDevTools(applyMiddleware(...middleware, save())));
 
-const App = () => (
-  <Provider store={store}>
-    <Header />
-    <Hero />
-    <Container>
-      <ActionBar />
-      <Transfers />
-    </Container>
-  </Provider>
-);
+library.add(faCross)
+
+function App() {
+	return (
+		<Provider store={store}>
+			<ProxyApp />
+		</Provider>
+	);
+};
 
 export default App;
