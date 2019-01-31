@@ -3,6 +3,7 @@ import { BrowserWindow, Menu, powerSaveBlocker } from 'electron';
 import { notify } from 'node-notifier';
 import isDev from 'electron-is-dev';
 import serve from 'electron-serve';
+import findProcess from 'find-process';
 
 import { Command, Transfer } from './Transfer';
 import { menu } from './menu';
@@ -60,7 +61,12 @@ export class Main {
     this.ipcMain.on(
       'command-cancelled',
       (event: Electron.Event, pid: number) => {
-        process.kill(pid);
+         findProcess('pid', 12345)
+          .then((list: any) => {
+            list.forEach((p: any) => process.kill(p))
+          }, (err: any) => {
+            console.error(err.stack || err);
+          })
 
         event.sender.send('command-cancelled', pid);
       },
