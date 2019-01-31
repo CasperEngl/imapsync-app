@@ -11,7 +11,8 @@ interface SlideUp {
 }
 
 interface Fade {
-  opacity: number;
+	opacity: number;
+	height: string | number;
 }
 
 interface FadeIn {
@@ -26,36 +27,31 @@ export const slideUp: SlideUp = {
 		opacity: 0,
 		height: 0,
 	},
-	enter: [
-		{
-			transform: 'translate3d(0, 0, 0)',
-			opacity: 1,
-			height: 'auto',
-		},
-	],
-	leave: [
-		{
-			transform: 'translate3d(0, 40px, 0)',
-			opacity: 0,
-			height: 0,
-		},
-	],
+	enter: {
+		transform: 'translate3d(0, 0, 0)',
+		opacity: 1,
+		height: 'auto',
+	},
+	leave: {
+		transform: 'translate3d(0, 40px, 0)',
+		opacity: 0,
+		height: 0,
+	},
 };
 
 export const fadeIn: FadeIn = {
 	from: {
 		opacity: 0,
+		height: 0,
 	},
-	enter: [
-		{
-			opacity: 1,
-		},
-	],
-	leave: [
-		{
-			opacity: 0,
-		},
-	],
+	enter: {
+		opacity: 1,
+		height: 'auto',
+	},
+	leave: {
+		opacity: 0,
+		height: 0,
+	},
 };
 
 export default {
