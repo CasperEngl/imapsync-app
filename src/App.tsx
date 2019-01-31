@@ -5,7 +5,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 import { save, load } from 'redux-localstorage-simple';
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faCross } from '@fortawesome/free-solid-svg-icons'
+import { faTimes } from '@fortawesome/free-solid-svg-icons'
 
 import ProxyApp from './components/ProxyApp';
 
@@ -15,7 +15,7 @@ const middleware = [thunk];
 
 export const store = createStore(rootReducer, load(), composeWithDevTools(applyMiddleware(...middleware, save())));
 
-library.add(faCross)
+library.add(faTimes)
 
 function App() {
 	return (
