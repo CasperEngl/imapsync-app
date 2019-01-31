@@ -43,11 +43,7 @@ export default function(state = initialState, action: any) {
     case REMOVE_PID:
       return {
         ...state,
-        pids: state.pids.filter((item: Pid) => {
-          console.log(item);
-
-          return true;
-        }),
+        pids: state.pids.filter((item: Pid) => item.pid !== payload.pid),
       };
     case CLEAR_PIDS:
       return {
@@ -57,24 +53,20 @@ export default function(state = initialState, action: any) {
 		case ADD_LOG:
 			return {
 				...state,
-				pids: [
-          ...state.pids,
-          payload.pid,
+				logs: [
+          ...state.logs,
+          payload.log,
         ]
       };
     case REMOVE_LOG:
       return {
         ...state,
-        pids: state.pids.filter((item: Pid) => {
-          console.log(item);
-
-          return true
-        }),
+        logs: state.logs.filter((item: Log) => item.date !== payload.log.date),
       };
     case CLEAR_LOGS:
       return {
         ...state,
-        pids: initialState.pids,
+        logs: initialState.logs,
       };
 
 		default:
