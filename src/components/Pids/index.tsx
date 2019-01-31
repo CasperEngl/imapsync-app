@@ -70,7 +70,7 @@ class Pids extends React.Component<Props> {
   }
   
   exitListener(event: any, pid: Pid) {
-    const { lockTransfers } = this.props;
+    const { lockTransfers, removePid } = this.props;
   
     lockTransfers(false);
     removePid(pid);
@@ -86,14 +86,10 @@ class Pids extends React.Component<Props> {
 
 	render() {
     const { pids } = this.props;
-
-    console.log(pids);
     
     if (!pids) {
       return (null);
     }
-    
-    console.log(pids);
 
 		return (
 			<Transition
