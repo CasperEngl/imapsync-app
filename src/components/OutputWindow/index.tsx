@@ -103,7 +103,7 @@ class OutputWindow extends React.Component<Props, State> {
 		const { color } = this.props;
 
 		return (
-			<Window containerRef={ref => (this.outputLog = ref)} className="shadow-lg">
+			<Window containerRef={ref => (this.outputLog = ref)} className="shadow-lg overflow-hidden">
 				<pre
 					className="overflow-hidden"
 					style={{
