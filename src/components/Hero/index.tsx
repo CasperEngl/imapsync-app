@@ -71,11 +71,11 @@ class Hero extends React.PureComponent<Props> {
 						/>
 					</FormGroup>
 					<OutputWindow />
-					<FormGroup>
+					<FormGroup className="my-3">
+						<Pids />
 						<Controller />
 					</FormGroup>
 					<div className="bg-white p-4 border-radius-sm" style={{ margin: '0 -1.5rem' }}>
-						<Pids />
 						<Logs />
 					</div>
 				</Container>
