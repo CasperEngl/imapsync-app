@@ -1,3 +1,9 @@
+declare global {
+  interface Window {
+    require: any;
+  }
+}
+
 import * as React from 'react';
 import { Dispatch, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -56,8 +62,6 @@ class Logs extends React.Component<Props> {
 
 	remove(log: Log) {
 		const { removeLog } = this.props;
-
-		console.log(log);
 
 		removeLog(log);
 	}
