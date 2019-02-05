@@ -61,7 +61,7 @@ export class Main {
     this.ipcMain.on(
       'command-cancelled',
       (event: Electron.Event, pid: number) => {
-         findProcess('pid', 12345)
+         findProcess('pid', pid)
           .then((list: any) => {
             list.forEach((p: any) => process.kill(p))
           }, (err: any) => {
