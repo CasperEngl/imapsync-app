@@ -10,15 +10,19 @@ import Transfers from '../Transfers';
 import ActionBar from '../ActionBar';
 
 import { setOutputBackground, setOutputColor } from '../../actions/settings';
+import { lockTransfers } from '../../actions/transfer';
 const { ipcRenderer } = window.require('electron');
 
 interface Props {
 	setOutputBackground(color: string): void;
 	setOutputColor(color: string): void;
+	lockTransfers(lock?: boolean): void;
 }
 
-function ProxyApp({ setOutputBackground, setOutputColor }: Props) {
+function ProxyApp({ setOutputBackground, setOutputColor, lockTransfers }: Props) {
 	const preferences = ipcRenderer.sendSync('getPreferences');
+
+	lockTransfers(false);
 
 	if (preferences) {
 		const { output_bg: opBg, output_color: opColor } = preferences.settings;
@@ -47,6 +51,7 @@ const mapDispatchToProps = (dispatch: Dispatch) =>
 		{
 			setOutputBackground,
 			setOutputColor,
+			lockTransfers,
 		},
 		dispatch
 	);
