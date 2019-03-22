@@ -15,7 +15,7 @@ const middleware = [thunk];
 
 export const store = createStore(rootReducer, load(), composeWithDevTools(applyMiddleware(...middleware, save())));
 
-library.add(faTimes)
+library.add(faTimes);
 
 function App() {
 	return (
