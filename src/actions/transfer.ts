@@ -1,10 +1,12 @@
+import { action } from 'typesafe-actions';
+
+import { TransferState } from '../reducers/transfer';
+
 export interface TransferData {
 	number: number;
 	name: string;
 	content: string;
 }
-
-import { action } from 'typesafe-actions';
 
 export const ADD_TRANSFER = 'ADD_TRANSFER';
 export const DUPLICATE_TRANSFER = 'DUPLICATE_TRANSFER';
@@ -12,6 +14,7 @@ export const REMOVE_TRANSFER = 'REMOVE_TRANSFER';
 export const UPDATE_TRANSFER_DATA = 'UPDATE_TRANSFER_DATA';
 export const CLEAR_TRANSFERS = 'CLEAR_TRANSFERS';
 export const LOCK_TRANSFERS = 'LOCK_TRANSFERS';
+export const IMPORT_TRANSFERS = 'IMPORT_TRANSFERS';
 
 export const addTransfer = () => action(ADD_TRANSFER);
 
@@ -34,3 +37,13 @@ export const updateTransferData = ({ number, name, content }: TransferData) => a
 export const lockTransfers = (lock?: false) => action(LOCK_TRANSFERS, {
 	lock,
 });
+
+export const importTransfers = ({
+	transfers,
+	inputs,
+	count,
+}: TransferState) => action(IMPORT_TRANSFERS, {
+	transfers,
+	inputs,
+	count,
+})

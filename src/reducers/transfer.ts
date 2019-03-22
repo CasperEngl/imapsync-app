@@ -5,13 +5,14 @@ import {
 	CLEAR_TRANSFERS,
 	DUPLICATE_TRANSFER,
 	LOCK_TRANSFERS,
+	IMPORT_TRANSFERS,
 } from '../actions/transfer';
 
-interface Transfer {
+export interface Transfer {
 	id: number;
 }
 
-interface Input {
+export interface Input {
 	id?: number;
 	host_1?: string;
 	user_1?: string;
@@ -23,21 +24,21 @@ interface Input {
 	args_2?: string;
 }
 
-interface State {
+export interface TransferState {
 	transfers: Transfer[];
-	transfersCount: number;
+	count: number;
 	inputs: Input[];
 	locked: boolean,
 }
 
-const initialState: State = {
+const initialState: TransferState = {
 	locked: false,
 	transfers: [
 		{
 			id: 1,
 		},
 	],
-	transfersCount: 2,
+	count: 2,
 	inputs: [
 		{},
 		{
@@ -61,17 +62,17 @@ export default function(state = initialState, action: any) {
 		case ADD_TRANSFER:
 			return {
 				...state,
-				transfersCount: state.transfersCount + 1,
+				count: state.count + 1,
 				transfers: [
 					...state.transfers,
 					{
-						id: state.transfersCount,
+						id: state.count,
 					},
 				],
 				inputs: [
 					...state.inputs,
 					{
-						id: state.transfersCount,
+						id: state.count,
 						host_1: initialState.inputs[1].host_1,
 						user_1: initialState.inputs[1].user_1,
 						password_1: initialState.inputs[1].password_1,
@@ -88,17 +89,17 @@ export default function(state = initialState, action: any) {
 
 			return {
 				...state,
-				transfersCount: state.transfersCount + 1,
+				count: state.count + 1,
 				transfers: [
 					...state.transfers,
 					{
-						id: state.transfersCount,
+						id: state.count,
 					},
 				],
 				inputs: [
 					...state.inputs,
 					{
-						id: state.transfersCount,
+						id: state.count,
 						host_1: duplicate && duplicate.host_1 || '',
 						user_1: duplicate && duplicate.user_1 || '',
 						password_1: duplicate && duplicate.password_1 || '',
@@ -136,7 +137,7 @@ export default function(state = initialState, action: any) {
 			return {
 				...state,
 				transfers: initialState.transfers,
-				transfersCount: initialState.transfersCount,
+				count: initialState.count,
 				inputs: initialState.inputs,
 			};
 		case UPDATE_TRANSFER_DATA:
@@ -161,6 +162,13 @@ export default function(state = initialState, action: any) {
 			return {
 				...state,
 				locked: payload.lock,
+			}
+		case IMPORT_TRANSFERS:
+			return {
+				...state,
+				transfers: payload.transfers,
+				inputs: payload.inputs,
+				count: payload.count,
 			}
 
 		default:
