@@ -28,3 +28,4 @@ resources/
 .cache
 public/lib
 public/electron.js
+*.ai
