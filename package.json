@@ -1,6 +1,6 @@
 {
 	"name": "imapsync",
-	"version": "0.8.0",
+	"version": "0.9.0",
 	"homepage": "./",
 	"private": true,
 	"author": "Casper Engelmann",
@@ -90,7 +90,6 @@
 		"styled-components": "^4.1.3",
 		"tinycolor2": "^1.4.1",
 		"typesafe-actions": "^3.0.0",
-		"update-electron-app": "^1.3.0",
 		"validator": "^10.10.0"
 	},
 	"devDependencies": {
