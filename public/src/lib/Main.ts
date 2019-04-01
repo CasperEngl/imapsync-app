@@ -19,6 +19,7 @@ export class Main {
   public appIcon = path.join(__dirname, '../../assets/icon.png');
   public BrowserWindow: typeof BrowserWindow;
   public powerSaveBlock: number;
+  public transfer?: any;
 
   private MainWindow!: Electron.BrowserWindow | null;
   private Application: Electron.App;
@@ -42,37 +43,48 @@ export class Main {
   }
 
   public initialize() {
-    this.Application.on('window-all-closed', this.onWindowAllClosed);
-    this.Application.on('ready', this.onReady);
+    try {
+      this.Application.on('window-all-closed', this.onWindowAllClosed);
+      this.Application.on('ready', this.onReady);
 
-    this.ipcMain.on(
-      'command',
-      async (event: Electron.Event, commands: Command[]) => {
-        const transfer = new Transfer({
-          event,
-          commands,
-          command: commands[0],
-          index: 0,
-        });
+      this.ipcMain.on(
+        'command',
+        async (event: Electron.Event, commands: Command[]) => {
+          const transfer = new Transfer({
+            event,
+            commands,
+            command: commands[0],
+            index: 0,
+          });
 
-        transfer.start();
-      },
-    );
-    this.ipcMain.on(
-      'command-cancelled',
-      (event: Electron.Event, pid: number) => {
-         findProcess('pid', pid)
-          .then((list: any) => {
-            list.forEach((p: any) => process.kill(p))
-          }, (err: any) => {
-            console.error(err.stack || err);
-          })
+          this.transfer = transfer;
 
-        event.sender.send('command-cancelled', pid);
-      },
-    );
+          transfer.start();
+        },
+      );
+      this.ipcMain.on(
+        'command-cancelled',
+        async (event: Electron.Event, pid: number) => {
+          try {
+            const list = await findProcess('pid', pid);
 
-    Menu.setApplicationMenu(menu);
+            for (const p of list) {
+              process.kill(p.pid);
+            }
+
+            this.transfer.stop();
+
+            event.sender.send('command-cancelled', pid);
+          } catch (err) {
+            console.error(err);
+          }
+        },
+      );
+
+      Menu.setApplicationMenu(menu);
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   private onWindowAllClosed() {

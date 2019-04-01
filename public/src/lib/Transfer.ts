@@ -52,29 +52,45 @@ export class Transfer {
 	}
 
 	public start(): any {
-		if (!this.command) {
-			return;
+		try {
+			if (!this.command) {
+				return;
+			}
+
+			this.process = spawn(`${path.join(execPath, 'sync_bin')}`, [...this.command, '--nolog'], {
+				detached: true,
+			});
+
+			this.event.sender.send('command-pid', {
+				email: this.command.reverse().find((arg) => isEmail(arg)),
+				pid: this.process.pid,
+			});
+
+			this.process.stdout.on('data', this.onStdout);
+			this.process.on('exit', this.onExit);
+
+			return process;
+		} catch (err) {
+			console.error(err);
 		}
+	}
 
-		this.process = spawn(`${path.join(execPath, 'sync_bin')}`, [...this.command, '--nolog'], {
-			detached: true,
-		});
-
-		this.event.sender.send('command-pid', {
-			email: this.command.reverse().find((arg) => isEmail(arg)),
-			pid: this.process.pid,
-		});
-
-		this.process.stdout.on('data', this.onStdout);
-		this.process.on('exit', this.onExit);
-
-		return process;
+	public stop(): any {
+		try {
+			this.commands = [['']];
+		} catch (err) {
+			console.error(err);
+		}
 	}
 
 	private onStdout(data: Buffer): void {
-		this.outputLog += data.toString();
+		try {
+			this.outputLog += data.toString();
 
-		this.event.sender.send('command-stdout', data.toString());
+			this.event.sender.send('command-stdout', data.toString());
+		} catch (err) {
+			console.error(err);
+		}
 	}
 
 	private async onExit(): Promise<any> {
@@ -92,50 +108,62 @@ export class Transfer {
 	}
 
 	private async notification(log: ILog | undefined): Promise<void> {
-		if (log && log.email) {
-			notify({
-				title: 'Imapsync',
-				message: `Finished ${log.email}`,
-				icon: path.join(__dirname, '../assets/icon.png'),
-			});
-		} else {
-			notify({
-				title: 'Imapsync',
-				icon: path.join(__dirname, '../assets/icon.png'),
-			});
+		try {
+			if (log && log.email) {
+				notify({
+					title: 'Imapsync',
+					message: `Finished ${log.email}`,
+					icon: path.join(__dirname, '../assets/icon.png'),
+				});
+			} else {
+				notify({
+					title: 'Imapsync',
+					icon: path.join(__dirname, '../assets/icon.png'),
+				});
+			}
+		} catch (err) {
+			console.error(err);
 		}
 	}
 
 	private async writeLogToDisk(): Promise<ILog | undefined> {
-		const log: ILog = {
-			encoded: base64.encode(this.outputLog),
-			date: new Date().toISOString(),
-			email: this.command.reverse().find((arg) => isEmail(arg)),
-		};
+		try {
+			const log: ILog = {
+				encoded: base64.encode(this.outputLog),
+				date: new Date().toISOString(),
+				email: this.command.reverse().find((arg) => isEmail(arg)),
+			};
 
-		const directory = `${homedir()}/Documents/IMAPSYNC_LOG`;
+			const directory = `${homedir()}/Documents/IMAPSYNC_LOG`;
 
-		mkdirp(directory, async (err: any) => {
-			if (err) {
-				throw new Error(err);
-			}
+			mkdirp(directory, async (err: any) => {
+				if (err) {
+					throw new Error(err);
+				}
 
-			await fs.writeFile(`${directory}/imapsync_log-${log.email}-${log.date}.txt`, this.outputLog, 'utf8');
-		});
+				await fs.writeFile(`${directory}/imapsync_log-${log.email}-${log.date}.txt`, this.outputLog, 'utf8');
+			});
 
-		return log;
+			return log;
+		} catch (err) {
+			console.error(err);
+		}
 	}
 
 	private async restart(): Promise<any> {
-		if (this.commands.length > 1 && this.commands.length > this.index + 1) {
-			const transfer = new Transfer({
-				event: this.event,
-				commands: this.commands,
-				command: this.commands[this.index + 1],
-				index: this.index + 1,
-			});
+		try {
+			if (this.commands.length > 1 && this.commands.length > this.index + 1) {
+				const transfer = new Transfer({
+					event: this.event,
+					commands: this.commands,
+					command: this.commands[this.index + 1],
+					index: this.index + 1,
+				});
 
-			transfer.start();
+				transfer.start();
+			}
+		} catch (err) {
+			console.error(err);
 		}
 	}
 }
