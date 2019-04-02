@@ -19,13 +19,13 @@ const initialState: State = {
 };
 
 export default function(state = initialState, action: any) {
-	const { type, data } = action;
+	const { type, payload } = action;
 
 	switch (type) {
 		case COMPILE_TRANSFERS:
 			return {
 				...state,
-				command: data,
+				command: payload,
 			};
 		case TOGGLE_SSL:
 			return {
