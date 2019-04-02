@@ -12,6 +12,11 @@ const loadURL = serve({
   directory: 'build',
 });
 
+export type NewCommand = {
+  index: number;
+  command: Command;
+}
+
 // 7z7R1!77q
 
 export class Main {
@@ -49,12 +54,11 @@ export class Main {
 
       this.ipcMain.on(
         'command',
-        async (event: Electron.Event, commands: Command[]) => {
+        async (event: Electron.Event, obj: NewCommand) => {
           const transfer = new Transfer({
             event,
-            commands,
-            command: commands[0],
-            index: 0,
+            command: obj.command,
+            index: obj.index,
           });
 
           this.transfer = transfer;

@@ -20,7 +20,6 @@ export type Command = string[];
 export interface ITransfer {
 	event: Electron.Event;
 	command: Command;
-	commands: Command[];
 	index: number;
 }
 
@@ -34,14 +33,12 @@ export class Transfer {
 	public outputLog: string;
 	public event: Electron.Event;
 	public command: Command;
-	public commands: Command[];
 	public index: number;
 	public process: any;
 
-	constructor({ event, command, commands, index }: ITransfer) {
+	constructor({ event, command, index }: ITransfer) {
 		this.event = event;
 		this.command = command;
-		this.commands = commands;
 		this.index = index;
 
 		this.outputLog = '';
@@ -77,7 +74,7 @@ export class Transfer {
 
 	public stop(): any {
 		try {
-			this.commands = [['']];
+			this.command = [''];
 		} catch (err) {
 			console.error(err);
 		}
@@ -99,9 +96,10 @@ export class Transfer {
 			await this.notification(log);
 
 			this.event.sender.send('command-log', log);
-			this.event.sender.send('command-exit', this.process.pid);
-
-			this.restart();
+			this.event.sender.send('command-exit', {
+				index: this.index,
+				pid: this.process.pid
+			});
 		} catch (err) {
 			throw new Error(err);
 		}
@@ -145,23 +143,6 @@ export class Transfer {
 			});
 
 			return log;
-		} catch (err) {
-			console.error(err);
-		}
-	}
-
-	private async restart(): Promise<any> {
-		try {
-			if (this.commands.length > 1 && this.commands.length > this.index + 1) {
-				const transfer = new Transfer({
-					event: this.event,
-					commands: this.commands,
-					command: this.commands[this.index + 1],
-					index: this.index + 1,
-				});
-
-				transfer.start();
-			}
 		} catch (err) {
 			console.error(err);
 		}
