@@ -6,6 +6,7 @@ import {
 	DUPLICATE_TRANSFER,
 	LOCK_TRANSFERS,
 	IMPORT_TRANSFERS,
+	SET_CANCELLED,
 } from '../actions/transfer';
 
 export interface Transfer {
@@ -29,10 +30,12 @@ export interface TransferState {
 	count: number;
 	inputs: Input[];
 	locked: boolean,
+	cancelled: boolean,
 }
 
 const initialState: TransferState = {
 	locked: false,
+	cancelled: false,
 	transfers: [
 		{
 			id: 1,
@@ -169,6 +172,11 @@ export default function(state = initialState, action: any) {
 				transfers: payload.transfers,
 				inputs: payload.inputs,
 				count: payload.count,
+			}
+		case SET_CANCELLED:
+			return {
+				...state,
+				cancelled: payload.cancelled,
 			}
 
 		default:
