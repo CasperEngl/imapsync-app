@@ -1,4 +1,5 @@
 interface Slide {
+  margin: string | number;
   transform: string;
   opacity: number;
   height: string | number;
@@ -23,16 +24,19 @@ interface FadeIn {
 
 export const slideUp: SlideUp = {
 	from: {
+		margin: 0,
 		transform: 'translate3d(0, 40px, 0)',
 		opacity: 0,
 		height: 0,
 	},
 	enter: {
+		margin: '1rem 0',
 		transform: 'translate3d(0, 0, 0)',
 		opacity: 1,
 		height: 'auto',
 	},
 	leave: {
+		margin: 0,
 		transform: 'translate3d(0, 40px, 0)',
 		opacity: 0,
 		height: 0,
