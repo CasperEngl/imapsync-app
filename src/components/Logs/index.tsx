@@ -9,7 +9,7 @@ import { Dispatch, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Transition, animated } from 'react-spring';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Row, ButtonGroup, Button } from 'reactstrap';
+import { Button, Row, Col } from 'reactstrap';
 
 import { lockTransfers } from '../../actions/transfer';
 import { addLog, removeLog } from '../../actions/process';
@@ -38,71 +38,72 @@ interface Props {
 	logs?: Log[];
 }
 
-class Logs extends React.Component<Props> {
-	constructor(props: Props) {
-		super(props);
-
-		this.listener = this.listener.bind(this);
-	}
-
-	componentDidMount() {
-		ipcRenderer.on('command-log', this.listener);
-	}
-
-	componentWillUnmount() {
-		ipcRenderer.removeListener('command-log', this.listener);
-	}
-
-	listener(event: any, log: Log) {
-		const { lockTransfers, addLog } = this.props;
-
+function Logs({ logs, lockTransfers, addLog, removeLog }: Props) {
+	function listener(event: any, log: Log) {
 		lockTransfers(false);
 		addLog(log);
 	}
 
-	remove(log: Log) {
-		const { removeLog } = this.props;
-
+	function remove(log: Log) {
 		removeLog(log);
 	}
 
-	render() {
-		const { logs } = this.props;
+	React.useEffect(() => {
+		ipcRenderer.on('command-log', listener);
 
-		if (!logs) {
-			return null;
+		return () => {
+			ipcRenderer.removeListener('command-log', listener);
 		}
+	})
 
-		return (
-			<Row>
-				<Transition
-					items={logs}
-					keys={(item: Log) => item.date}
-					from={slideUp.from}
-					enter={slideUp.enter}
-					leave={slideUp.leave}
-				>
-					{(item: Log) => (styles: any) => (
-						<animated.div style={styles} className="my-2 col-12 col-md-6 col-lg-4">
-							<ButtonGroup>
-								<Button
-									color="primary"
-									tag="a"
-									href={`data:application/octet-stream;charset=utf-16le;base64,${item.encoded}`}
-									download={`imapsync_log-${item.email}-${item.date}.txt`}
-								>
-									{`Download ${item.email} log`}
-								</Button>
-								<Button color="warning" onClick={() => this.remove(item)}>
-									<FontAwesomeIcon icon="times" />
-								</Button>
-							</ButtonGroup>
-						</animated.div>
-					)}
-				</Transition>
-			</Row>
-		);
+	if (!logs) {
+		return null;
 	}
+
+	return (
+		<Row>
+			<Transition
+				items={logs}
+				keys={(item: Log) => item.date}
+				from={slideUp.from}
+				enter={slideUp.enter}
+				leave={slideUp.leave}
+			>
+				{(item: Log) => (styles: any) => {
+					if (!item.email) {
+						return null;
+					}
+
+					return (
+						<animated.div
+							style={styles}
+							className="col-12"
+							key={item.date}
+						>
+							<Row className="my-n2">
+								<Col>
+									<Button
+										color="primary"
+										tag="a"
+										href={`data:application/octet-stream;charset=utf-16le;base64,${item.encoded}`}
+										download={`imapsync_log-${item.email}-${item.date}.txt`}
+										className="w-100"
+									>
+										{`Download ${item.email} log`}
+									</Button>
+								</Col>
+								<Col xs="auto" className="pl-0">
+									<Button color="warning" onClick={() => remove(item)}>
+										<FontAwesomeIcon icon="times" />
+									</Button>
+								</Col>
+							</Row>
+						</animated.div>
+					)
+				}}
+			</Transition>
+		</Row>
+	);
 }
 
 const mapStateToProps = (state: State) => ({

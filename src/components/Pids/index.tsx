@@ -8,12 +8,14 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch, bindActionCreators } from 'redux';
 import { Transition, animated } from 'react-spring';
+import { Row, Col, Button } from 'reactstrap';
 
-import { lockTransfers } from '../../actions/transfer';
+import { lockTransfers, setCancelled } from '../../actions/transfer';
 import { addPid, removePid, clearPids } from '../../actions/process';
 import { slideUp } from '../../transition';
 
 import { compileTransfers } from '../../actions/compiler';
+import { store } from '../../App';
 
 const { ipcRenderer } = window.require('electron');
 
@@ -37,80 +39,93 @@ interface Props {
   removePid(pid: Pid): void;
   clearPids(): void;
   compileTransfers(): void;
+  setCancelled(cancelled: boolean): void;
 }
 
-class Pids extends React.Component<Props> {
-  constructor(props: Props) {
-    super(props);
-
-    this.listener = this.listener.bind(this);
-    this.exitListener = this.exitListener.bind(this);
-    this.cancel = this.cancel.bind(this);
-  }
-
-  componentDidMount() {
-    const { clearPids } = this.props;
-
-    clearPids();
-
-    ipcRenderer.on('command-pid', this.listener);
-    ipcRenderer.on('command-exit', this.exitListener);
-  }
-
-  componentWillUnmount() {
-    ipcRenderer.removeListener('command-pid', this.listener);
-    ipcRenderer.removeListener('command-exit', this.exitListener);
-  }
-
-  listener(event: any, pid: Pid) {
-    const { lockTransfers, addPid } = this.props;
-
+function Pids({
+  pids,
+  lockTransfers,
+  addPid,
+  removePid,
+  clearPids,
+  compileTransfers,
+  setCancelled,
+}: Props) {
+  function listener(event: any, pid: Pid) {
     lockTransfers(true);
     addPid(pid);
   }
   
-  exitListener(event: any, pid: Pid) {
-    const { lockTransfers, removePid } = this.props;
-  
+  function exitListener(event: any, pid: Pid) {  
     lockTransfers(false);
     removePid(pid);
   }
 
-  async cancel(pid: number) {
-    const { compileTransfers } = this.props;
+  async function cancel(pid: number) {
+    setCancelled(true);
 
     await compileTransfers();
 
     ipcRenderer.send('command-cancelled', pid);
   }
 
-	render() {
-    const { pids } = this.props;
+  React.useEffect(() => {
+    ipcRenderer.on('command-pid', listener);
+    ipcRenderer.on('command-exit', exitListener);
     
-    if (!pids) {
-      return (null);
+    return () => {
+      ipcRenderer.removeListener('command-pid', listener);
+      ipcRenderer.removeListener('command-exit', exitListener);
     }
+  }, [pids]);
 
-		return (
-			<Transition
-				items={pids}
-				keys={(item: any) => item.pid}
-				from={slideUp.from}
-				enter={slideUp.enter}
-				leave={slideUp.leave}
-			>
-				{(item: Pid) => (styles: any) => (
-					<animated.div
-						style={styles}
-						className="btn btn-warning w-100 my-2"
-						onClick={() => this.cancel(item.pid)}
-					>
-						Cancel {item.email}
-					</animated.div>
-				)}
-			</Transition>
-		);
-	}
+  React.useEffect(() => {
+    clearPids();
+
+    return () => clearPids();
+  }, []);
+
+  if (!pids) {
+    return null;
+  }
+  
+  return (
+    <Row>
+      <Transition
+        items={pids}
+        keys={(item: any) => item.pid}
+        from={slideUp.from}
+        enter={slideUp.enter}
+        leave={slideUp.leave}
+      >
+        {(item: Pid) => (styles: any) => {
+          if (!item.pid) {
+            return null;
+          }
+
+          return (
+            <animated.div
+              style={styles}
+              className="col-12"
+              key={item.pid}
+            >
+              <Row>
+                <Col>
+                  <Button
+                    color="warning"
+                    onClick={() => cancel(item.pid)}
+                    className="w-100"
+                  >
+                    Cancel {item.email}
+                  </Button>
+                </Col>
+              </Row>
+            </animated.div>
+          )
+        }}
+      </Transition>
+    </Row>
+  )
 }
 
 const mapStateToProps = (state: State) => ({
@@ -123,6 +138,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
   addPid,
   removePid,
   clearPids,
+  setCancelled,
 }, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(Pids);
