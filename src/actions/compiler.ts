@@ -82,7 +82,7 @@ export function compileTransfers() {
 
       return dispatch({
         type: COMPILE_TRANSFERS,
-        data: {
+        payload: {
           text,
           json,
         },
