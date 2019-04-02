@@ -15,6 +15,7 @@ export const UPDATE_TRANSFER_DATA = 'UPDATE_TRANSFER_DATA';
 export const CLEAR_TRANSFERS = 'CLEAR_TRANSFERS';
 export const LOCK_TRANSFERS = 'LOCK_TRANSFERS';
 export const IMPORT_TRANSFERS = 'IMPORT_TRANSFERS';
+export const SET_CANCELLED = 'SET_CANCELLED';
 
 export const addTransfer = () => action(ADD_TRANSFER);
 
@@ -34,7 +35,7 @@ export const updateTransferData = ({ number, name, content }: TransferData) => a
 	content,
 });
 
-export const lockTransfers = (lock?: false) => action(LOCK_TRANSFERS, {
+export const lockTransfers = (lock: boolean = false) => action(LOCK_TRANSFERS, {
 	lock,
 });
 
@@ -46,4 +47,8 @@ export const importTransfers = ({
 	transfers,
 	inputs,
 	count,
-})
+});
+
+export const setCancelled = (cancelled: boolean = false) => action(SET_CANCELLED, {
+	cancelled,
+});
