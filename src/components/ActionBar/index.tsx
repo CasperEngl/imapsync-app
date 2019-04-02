@@ -57,12 +57,22 @@ function ActionBar({
 					importTransfers(JSON.parse(evt.target.result));
 				}
 			};
-			reader.onerror = evt => {
-				console.log('error loading file');
+			reader.onerror = (evt: any) => {
+				console.log('error loading file', evt);
 			};
 
 			(importFileInput!.current! as any).value = '';
 		}
+	}
+
+	function reset() {
+		clearTransfers();
+		compileTransfers();
+	}
+
+	function sslCheck() {
+		toggleSSL();
+		compileTransfers();
 	}
 
 	return (
@@ -83,12 +93,9 @@ function ActionBar({
 							<Button
 								color="warning"
 								disabled={transfer.locked}
-								onClick={() => {
-									clearTransfers();
-									compileTransfers();
-								}}
+								onClick={reset}
 							>
-								Clear
+								Reset Transfers
 							</Button>
 						</ButtonGroup>
 					</ButtonToolbar>
@@ -110,7 +117,11 @@ function ActionBar({
 							>
 								Export
 							</Button>
-							<Button color="warning" disabled={transfer.locked} onClick={() => triggerImport()}>
+							<Button 
+								color="warning" 
+								disabled={transfer.locked} 
+								onClick={() => triggerImport()}
+							>
 								Import
 							</Button>
 						</ButtonGroup>
@@ -123,10 +134,7 @@ function ActionBar({
 						type="checkbox"
 						disabled={transfer.locked}
 						checked={ssl}
-						onChange={() => {
-							toggleSSL();
-							compileTransfers();
-						}}
+						onChange={sslCheck}
 					/>
 					Toggle SSL
 				</Label>
