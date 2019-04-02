@@ -7,23 +7,25 @@ export const ADD_LOG = 'ADD_LOG';
 export const REMOVE_LOG = 'REMOVE_LOG';
 export const CLEAR_LOGS = 'CLEAR_LOGS';
 
-interface Pid {
-  email: string;
+export interface Pid {
   pid: number;
+  email: string;
 }
 
-interface Log {
+export interface Log {
   encoded: string;
   date: string;
   email: string;
 }
 
-export const addPid = (pid: Pid) => action(ADD_PID, {
+export const addPid = ({ pid, email }: Pid) => action(ADD_PID, {
   pid,
+  email,
 });
 
-export const removePid = (pid: Pid) => action(REMOVE_PID, {
+export const removePid = ({ pid, email }: Pid) => action(REMOVE_PID, {
   pid,
+  email,
 });
 
 export const clearPids = () => action(CLEAR_PIDS);
