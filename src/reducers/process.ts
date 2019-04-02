@@ -37,7 +37,7 @@ export default function(state = initialState, action: any) {
 				...state,
 				pids: [
           ...state.pids,
-          payload.pid,
+          payload,
         ]
       };
     case REMOVE_PID:
