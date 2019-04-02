@@ -41,47 +41,37 @@ interface State {
 
 interface Props {
 	command: string;
-	commandList: string[];
-	locked: boolean;
 	outputBackground: string;
 	outputColor: string;
-	compileTransfers(): void;
-	lockTransfers(lock?: boolean): void;
-	clearPids(): void;
-	clearLogs(): void;
 }
 
-class Hero extends React.PureComponent<Props> {
-	render() {
-		const { command, outputBackground, outputColor } = this.props;
-
-		return (
-			<Jumbotron className="hero mt-4 mb-0 pb-3 overflow-hidden">
-				<Container>
-					<FormGroup>
-						<Input
-							type="text"
-							placeholder="./imapsync_bin --host1 '127.0.0.1' --user1 'user@domain.com' --host2 '127.0.0.1' --user2 'user@domain.com';"
-							value={command}
-							style={{
-								backgroundColor: outputBackground,
-								color: outputColor,
-							}}
-							readOnly
-						/>
-					</FormGroup>
-					<OutputWindow />
-					<FormGroup className="my-3">
-						<Pids />
-						<Controller />
-					</FormGroup>
-					<div className="bg-white p-4 border-radius-sm" style={{ margin: '0 -1.5rem' }}>
-						<Logs />
-					</div>
-				</Container>
-			</Jumbotron>
-		);
-	}
+function Hero({ command, outputBackground, outputColor }: Props) {
+	return (
+		<Jumbotron className="hero mt-4 mb-0 pb-3 overflow-hidden">
+			<Container>
+				<FormGroup>
+					<Input
+						type="text"
+						placeholder="./imapsync_bin --host1 '127.0.0.1' --user1 'user@domain.com' --host2 '127.0.0.1' --user2 'user@domain.com';"
+						value={command}
+						style={{
+							backgroundColor: outputBackground,
+							color: outputColor,
+						}}
+						readOnly
+					/>
+				</FormGroup>
+				<OutputWindow />
+				<FormGroup className="my-3">
+					<Pids />
+					<Controller />
+				</FormGroup>
+				<div className="bg-white p-4 border-radius-sm mx-n4">
+					<Logs />
+				</div>
+			</Container>
+		</Jumbotron>
+	);
 }
 
 const mapStateToProps = (state: State) => ({
