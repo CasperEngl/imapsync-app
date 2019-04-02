@@ -27,7 +27,11 @@ function Transfers({ transfers }: Props) {
       leave={slideUp.leave}
     >
       {(item: Transfer) => (styles: any) => (
-        <animated.div style={styles} className="w-100 my-3">
+        <animated.div 
+          style={styles} 
+          className="w-100" 
+          key={item.id}
+        >
           <Transfer number={item.id} />
         </animated.div>
       )}
