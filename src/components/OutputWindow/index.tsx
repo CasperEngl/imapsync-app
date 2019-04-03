@@ -79,7 +79,7 @@ class OutputWindow extends React.Component<Props, State> {
 		this.setState(prevState => {
 			const shortened = prevState.output
 				.split(/\r\n|\r|\n/)
-				.splice(prevState.output.split(/\r\n|\r|\n/).length - 200)
+				.splice(prevState.output.split(/\r\n|\r|\n/).length - 40)
 				.join('\n');
 
 			return {
