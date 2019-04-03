@@ -38,8 +38,8 @@ $box-shadow-lg: 0 0.5rem 3rem rgba(black, 0.175);
 .btn:not(.btn-link) {
 	@extend .shadow;
 	border: none;
-	transition: $transition-base;
-
+	transition: box-shadow 200ms ease-in-out;
+	
 	&:disabled, &.disabled {
 		box-shadow: none !important;
 	}
