@@ -105,6 +105,7 @@ function ActionBar({
 						<ButtonGroup>
 							<Button
 								color="primary"
+								disabled={transfer.locked}
 								tag="a"
 								href={`data:application/octet-stream;charset=utf-16le;base64,${base64.encode(
 									JSON.stringify({
@@ -119,7 +120,7 @@ function ActionBar({
 							</Button>
 							<Button 
 								color="warning" 
-								disabled={transfer.locked} 
+								disabled={transfer.locked}
 								onClick={() => triggerImport()}
 							>
 								Import
