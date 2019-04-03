@@ -30,6 +30,16 @@ function Transfer({
   duplicateTransfer,
   compileTransfers,
 }: Props) {
+  function remove() {
+    removeTransfer(number);
+    compileTransfers();
+  }
+
+  function duplicate() {
+    duplicateTransfer(number);
+    compileTransfers();
+  }
+
   return (
     <React.Fragment>
       <h2>Transfer {number}</h2>
@@ -41,24 +51,18 @@ function Transfer({
           <UserInputs number={number} user={2} />
         </Col>
       </Row>
-      <ButtonToolbar>
+      <ButtonToolbar className="mb-3">
         <Button
           color="danger"
           disabled={locked}
-          onClick={async () => {
-            await removeTransfer(number);
-            compileTransfers();
-          }}
+          onClick={remove}
         >
           Remove
         </Button>
         <Button
           color="link"
           disabled={locked}
-          onClick={async () => {
-            await duplicateTransfer(number);
-            compileTransfers();
-          }}
+          onClick={duplicate}
         >
           Duplicate
         </Button>
