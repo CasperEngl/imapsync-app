@@ -38,6 +38,11 @@ $box-shadow-lg: 0 0.5rem 3rem rgba(black, 0.175);
 .btn:not(.btn-link) {
 	@extend .shadow;
 	border: none;
+	transition: $transition-base;
+
+	&:disabled, &.disabled {
+		box-shadow: none !important;
+	}
 }
 
 .dropdown-menu {
