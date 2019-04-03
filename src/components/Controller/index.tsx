@@ -92,7 +92,7 @@ function Controller({
     return () => {
       ipcRenderer.removeListener('command-exit', exitListener);
     }
-  });
+  }, []);
   
   return (
     <ButtonGroup>

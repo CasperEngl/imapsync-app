@@ -54,7 +54,7 @@ function Logs({ logs, lockTransfers, addLog, removeLog }: Props) {
 		return () => {
 			ipcRenderer.removeListener('command-log', listener);
 		}
-	})
+	}, [])
 
 	if (!logs) {
 		return null;
