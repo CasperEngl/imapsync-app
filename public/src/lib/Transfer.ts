@@ -48,13 +48,13 @@ export class Transfer {
 		this.writeLogToDisk = this.writeLogToDisk.bind(this);
 	}
 
-	public start(): any {
+	public start(): NodeJS.Process | void {
 		try {
 			if (!this.command) {
 				return;
 			}
 
-			this.process = spawn(`${path.join(execPath, 'sync_bin')}`, [...this.command, '--nolog'], {
+			this.process = spawn(`${path.join(execPath, 'sync_bin')}`, [...this.command, '--nolog', '--noreleasecheck'], {
 				detached: true,
 			});
 
@@ -72,7 +72,7 @@ export class Transfer {
 		}
 	}
 
-	public stop(): any {
+	public stop(): void {
 		try {
 			this.command = [''];
 		} catch (err) {
