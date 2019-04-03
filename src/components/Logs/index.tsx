@@ -80,7 +80,7 @@ function Logs({ logs, lockTransfers, addLog, removeLog }: Props) {
 							className="col-12"
 							key={item.date}
 						>
-							<Row className="my-n2">
+							<Row className="my-1">
 								<Col>
 									<Button
 										color="primary"

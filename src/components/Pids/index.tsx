@@ -109,7 +109,7 @@ function Pids({
               className="col-12"
               key={item.pid}
             >
-              <Row>
+              <Row className="my-2">
                 <Col>
                   <Button
                     color="warning"
