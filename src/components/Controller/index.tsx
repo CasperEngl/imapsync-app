@@ -69,11 +69,6 @@ function Controller({
       });
 		}
   }
-
-  function clear() {
-		clearPids();
-		clearLogs();
-  }
   
   function exitListener(event: any, pid: Pid) {
     if (commandList.length >= pid.index + 1 && !cancelled) {
@@ -84,6 +79,11 @@ function Controller({
     } else {
       setCancelled(!cancelled);
     }
+  }
+
+  function clear() {
+		clearPids();
+		clearLogs();
   }
 
   React.useEffect(() => {
