@@ -1,4 +1,4 @@
-import { platform } from 'os';
+import { platform, } from 'os'
 
 export type Platform =
   | 'linux'
@@ -13,14 +13,14 @@ export function getPlatform(): Platform {
     case 'linux':
     case 'openbsd':
     case 'android':
-      return 'linux';
+      return 'linux'
     case 'darwin':
     case 'sunos':
-      return 'mac';
+      return 'mac'
     case 'win32':
-      return 'win';
+      return 'win'
 
     default:
-      return 'Unknown OS';
+      return 'Unknown OS'
   }
 }

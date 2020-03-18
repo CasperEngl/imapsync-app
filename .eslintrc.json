@@ -6,7 +6,13 @@
 	},
 	"settings": {
 		"ecmascript": 6,
-		"jsx": true
+		"jsx": true,
+		"import/parsers": {
+			"@typescript-eslint/parser": [
+				".ts",
+				".tsx"
+			]
+		}
 	},
 	"parserOptions": {
 		"ecmaVersion": 2017,
@@ -20,12 +26,42 @@
 	"plugins": ["react"],
 	"extends": "airbnb",
 	"rules": {
-		"react/jsx-filename-extension": 0,
+		"react/jsx-filename-extension": [
+			1,
+			{
+				"extensions": [
+					".ts",
+					".tsx"
+				]
+			}
+		],
 		"function-paren-newline": 0,
 		"jsx-a11y/anchor-is-valid": 0,
 		"func-names": 0,
 		"import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
 		"no-shadow": 0,
-		"class-methods-use-this": 0
-	}
+		"class-methods-use-this": 0,
+		"semi": [2, "never"],
+		"comma-dangle": ["error", "always-multiline"],
+		"import/prefer-default-export": 0,
+		"no-console": 0
+	},
+	"overrides": [
+		{
+			"files": [
+				"**/*.ts",
+				"**/*.tsx"
+			],
+			"rules": {
+				"no-unused-vars": [
+					"off"
+				],
+				"no-undef": [
+					"off"
+				],
+				"import/no-unresolved": 0,
+				"import/extensions": 0
+			}
+		}
+	]
 }
