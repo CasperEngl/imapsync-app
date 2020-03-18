@@ -2,6 +2,9 @@
 
 Used to easily make the command to sync imap email accounts.
 
+## Source
+[https://github.com/imapsync/imapsync](https://github.com/imapsync/imapsync)
+
 ## Downloads
 [Link](https://github.com/CasperEngl/imapsync-app/releases/)
 
