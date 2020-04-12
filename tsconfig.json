@@ -8,10 +8,7 @@
     ],
     "outDir": "./public",
     "strict": true,
-    "typeRoots": [
-      "./node_modules/@types",
-      "./public/src/types"
-    ],
+    "typeRoots": [],
     "types": [
       "node"
     ],
@@ -29,7 +26,8 @@
   },
   "include": [
     "./public/src/electron.ts",
-    "./public/src/types/**/*"
+    "./public/src/types/**/*",
+    "src/index.d.ts"
   ],
   "exclude": [
     "./node_modules"

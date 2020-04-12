@@ -5,8 +5,14 @@ import isDev from 'electron-is-dev'
 import serve from 'electron-serve'
 import findProcess from 'find-process'
 
-import { Command, Transfer } from './Transfer'
+import { Transfer } from './Transfer'
 import { menu } from './menu'
+
+type NewCommand = {
+  index: number;
+  command: string[];
+  commands: string[][];
+}
 
 const loadURL = serve({
   directory: 'build',
@@ -52,12 +58,16 @@ export class Main {
 
     this.ipcMain.on(
       'command',
-      async (event: Electron.Event, commands: Command[]) => {
+      async (event, {
+        index,
+        commands,
+        command,
+      }: NewCommand) => {
         const transfer = new Transfer({
           event,
           commands,
-          command: commands[0],
-          index: 0,
+          command,
+          index,
         })
 
         transfer.start()

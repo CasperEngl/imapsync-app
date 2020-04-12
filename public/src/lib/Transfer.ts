@@ -1,26 +1,24 @@
 import * as path from 'path'
-import { promises as fs, } from 'fs'
-import { homedir, } from 'os'
-import { spawn, } from 'child_process'
-import { app, } from 'electron'
-import { notify, } from 'node-notifier'
-import { isEmail, } from 'validator'
+import { promises as fs } from 'fs'
+import { homedir } from 'os'
+import { spawn, ChildProcessWithoutNullStreams, ChildProcess } from 'child_process'
+import { app } from 'electron'
+import { notify } from 'node-notifier'
 import isDev from 'electron-is-dev'
 import * as base64 from 'base-64'
 import mkdirp from 'mkdirp'
+import iconv from 'iconv-lite'
 
-import { getPlatform, } from './platform'
+import { getPlatform } from './platform'
 
 const execPath = isDev
   ? path.join(app.getAppPath(), 'resources', getPlatform())
   : path.join(app.getAppPath(), '../bin')
 
-export type Command = string[];
-
 export interface ITransfer {
-  event: Electron.Event;
-  command: Command;
-  commands: Command[];
+  event: Electron.IpcMainEvent;
+  command: string[];
+  commands: string[][];
   index: number;
 }
 
@@ -33,21 +31,24 @@ export interface ILog {
 export class Transfer {
   public outputLog: string;
 
-  public event: Electron.Event;
+  public event: Electron.IpcMainEvent;
 
-  public command: Command;
+  public command: string[];
 
-  public commands: Command[];
+  public commands: string[][];
 
   public index: number;
 
   public process: any;
 
   constructor({
-    event, command, commands, index,
+    event,
+    command,
+    commands,
+    index,
   }: ITransfer) {
     this.event = event
-    this.command = command
+    this.command = this.filterBin(command ?? commands[index])
     this.commands = commands
     this.index = index
 
@@ -58,24 +59,24 @@ export class Transfer {
     this.writeLogToDisk = this.writeLogToDisk.bind(this)
   }
 
-  public start(): any {
+  public start(): void {
     if (!this.command) {
       return
     }
 
-    this.process = spawn(`${path.join(execPath, 'sync_bin')}`, [...this.command, '--nolog',], {
-      detached: true,
-    })
-
-    this.event.sender.send('command-pid', {
-      email: this.command.reverse().find(arg => isEmail(arg)),
-      pid: this.process.pid,
-    })
+    this.process = spawn(
+      `${path.join(execPath, 'sync_bin')}`,
+      [...this.command, '--nolog'],
+      { detached: true },
+    )
 
     this.process.stdout.on('data', this.onStdout)
     this.process.on('exit', this.onExit)
 
-    return process
+    this.event.sender.send('command-pid', {
+      email: this.getUser1Argument(this.command),
+      pid: this.process.pid,
+    })
   }
 
   private onStdout(data: Buffer): void {
@@ -84,7 +85,7 @@ export class Transfer {
     this.event.sender.send('command-stdout', data.toString())
   }
 
-  private async onExit(): Promise<any> {
+  private async onExit(): Promise<void> {
     try {
       const log = await this.writeLogToDisk()
       await this.notification(log)
@@ -94,7 +95,7 @@ export class Transfer {
 
       this.restart()
     } catch (err) {
-      throw new Error(err)
+      console.error(err)
     }
   }
 
@@ -113,27 +114,37 @@ export class Transfer {
     }
   }
 
+  private filterBin(command: string[]) {
+    return command.filter((arg) => !arg.includes('imapsync_bin'))
+  }
+
+  private getUser1Argument(command: string[]) {
+    // Get user1 argument by adding 1 to the index of user1
+    const user1Index = command.indexOf('--user1')
+
+    // Find the argument for user1 in command
+    return command[user1Index + 1]
+  }
+
   private async writeLogToDisk(): Promise<ILog | undefined> {
+    const output = iconv.decode(Buffer.from(this.outputLog, 'utf8'), 'ISO-8859-1')
+
     const log: ILog = {
-      encoded: base64.encode(this.outputLog),
+      encoded: base64.encode(output),
       date: new Date().toISOString(),
-      email: this.command.reverse().find(arg => isEmail(arg)),
+      email: this.getUser1Argument(this.command),
     }
 
     const directory = `${homedir()}/Documents/IMAPSYNC_LOG`
 
-    mkdirp(directory, async (err: any) => {
-      if (err) {
-        throw new Error(err)
-      }
+    await mkdirp(directory)
 
-      await fs.writeFile(`${directory}/imapsync_log-${log.email}-${log.date}.txt`, this.outputLog, 'utf8')
-    })
+    await fs.writeFile(`${directory}/imapsync_log-${log.email}-${log.date}.txt`, this.outputLog, 'utf8')
 
     return log
   }
 
-  private async restart(): Promise<any> {
+  private async restart(): Promise<void> {
     if (this.commands.length > 1 && this.commands.length > this.index + 1) {
       const transfer = new Transfer({
         event: this.event,

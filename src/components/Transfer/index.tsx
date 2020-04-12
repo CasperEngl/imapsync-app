@@ -1,12 +1,14 @@
-import * as React from 'react';
-import { bindActionCreators, Dispatch } from 'redux';
-import { connect } from 'react-redux';
-import { Row, Col, ButtonToolbar, Button } from 'reactstrap';
+import * as React from 'react'
+import { bindActionCreators, Dispatch } from 'redux'
+import { connect } from 'react-redux'
+import {
+  Row, Col, ButtonToolbar, Button,
+} from 'reactstrap'
 
-import UserInputs from '../UserInputs';
+import UserInputs from '../UserInputs'
 
-import { removeTransfer, duplicateTransfer } from '../../actions/transfer';
-import { compileTransfers } from '../../actions/compiler';
+import { removeTransfer, duplicateTransfer } from '../../actions/transfer'
+import { compileTransfers } from '../../actions/compiler'
 
 interface Transfer {
   locked: boolean;
@@ -31,18 +33,21 @@ function Transfer({
   compileTransfers,
 }: Props) {
   function remove() {
-    removeTransfer(number);
-    compileTransfers();
+    removeTransfer(number)
+    compileTransfers()
   }
 
   function duplicate() {
-    duplicateTransfer(number);
-    compileTransfers();
+    duplicateTransfer(number)
+    compileTransfers()
   }
 
   return (
-    <React.Fragment>
-      <h2>Transfer {number}</h2>
+    <>
+      <h2>
+        Transfer
+        {number}
+      </h2>
       <Row>
         <Col xs="12" md="6">
           <UserInputs number={number} user={1} />
@@ -67,25 +72,24 @@ function Transfer({
           Duplicate
         </Button>
       </ButtonToolbar>
-    </React.Fragment>
-  );
+    </>
+  )
 }
 
 const mapStateToProps = (state: State) => ({
   locked: state.transfer.locked,
 })
 
-const mapDispatchToProps = (dispatch: Dispatch) =>
-  bindActionCreators(
-    {
-      removeTransfer,
-      duplicateTransfer,
-      compileTransfers,
-    },
-    dispatch,
-  );
+const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators(
+  {
+    removeTransfer,
+    duplicateTransfer,
+    compileTransfers,
+  },
+  dispatch,
+)
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(Transfer);
+)(Transfer)

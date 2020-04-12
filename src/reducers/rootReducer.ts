@@ -1,15 +1,15 @@
-import { combineReducers } from 'redux';
+import { combineReducers } from 'redux'
 
-import transfer from './transfer';
-import compiler from './compiler';
-import settings from './settings';
-import process from './process';
+import transfer from './transfer'
+import compiler from './compiler'
+import settings from './settings'
+import process from './process'
 
 const rootReducer = combineReducers<any>({
-	transfer,
-	compiler,
-	settings,
-	process,
-});
+  transfer,
+  compiler,
+  settings,
+  process,
+})
 
-export default rootReducer;
+export default rootReducer

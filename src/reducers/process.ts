@@ -5,7 +5,7 @@ import {
   ADD_LOG,
   REMOVE_LOG,
   CLEAR_LOGS,
-} from "../actions/process";
+} from '../actions/process'
 
 interface Pid {
   email: string;
@@ -26,50 +26,50 @@ interface State {
 const initialState: State = {
   pids: [],
   logs: [],
-};
+}
 
-export default function(state = initialState, action: any) {
-	const { type, payload } = action;
+export default function (state = initialState, action: any) {
+  const { type, payload } = action
 
-	switch (type) {
-		case ADD_PID:
-			return {
-				...state,
-				pids: [
+  switch (type) {
+    case ADD_PID:
+      return {
+        ...state,
+        pids: [
           ...state.pids,
           payload,
-        ]
-      };
+        ],
+      }
     case REMOVE_PID:
       return {
         ...state,
         pids: state.pids.filter((item: Pid) => item.pid !== payload.pid),
-      };
+      }
     case CLEAR_PIDS:
       return {
         ...state,
         pids: initialState.pids,
-      };
-		case ADD_LOG:
-			return {
-				...state,
-				logs: [
+      }
+    case ADD_LOG:
+      return {
+        ...state,
+        logs: [
           ...state.logs,
           payload.log,
-        ]
-      };
+        ],
+      }
     case REMOVE_LOG:
       return {
         ...state,
         logs: state.logs.filter((item: Log) => item.date !== payload.log.date),
-      };
+      }
     case CLEAR_LOGS:
       return {
         ...state,
         logs: initialState.logs,
-      };
+      }
 
-		default:
-			return state;
-	}
+    default:
+      return state
+  }
 }

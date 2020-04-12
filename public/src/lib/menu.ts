@@ -85,13 +85,13 @@ export const menu = Menu.buildFromTemplate([
         role: 'paste',
       },
       {
-        role: 'pasteandmatchstyle',
+        role: 'pasteAndMatchStyle',
       },
       {
         role: 'delete',
       },
       {
-        role: 'selectall',
+        role: 'selectAll',
       },
     ],
   },
@@ -102,22 +102,22 @@ export const menu = Menu.buildFromTemplate([
         role: 'reload',
       },
       {
-        role: 'forcereload',
+        role: 'forceReload',
       },
       {
-        role: 'toggledevtools',
+        role: 'toggleDevTools',
       },
       {
         type: 'separator',
       },
       {
-        role: 'resetzoom',
+        role: 'resetZoom',
       },
       {
-        role: 'zoomin',
+        role: 'zoomIn',
       },
       {
-        role: 'zoomout',
+        role: 'zoomOut',
       },
       {
         type: 'separator',

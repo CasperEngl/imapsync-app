@@ -1,18 +1,14 @@
-import * as React from 'react';
-import { bindActionCreators, Dispatch } from 'redux';
-import { connect } from 'react-redux';
+import * as React from 'react'
+import { bindActionCreators, Dispatch } from 'redux'
+import { connect } from 'react-redux'
 import {
   FormGroup,
   Input as BInput,
-  Dropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-} from 'reactstrap';
-import { isURL, isIP, isEmail, isEmpty } from 'validator';
+} from 'reactstrap'
+import validator from 'validator'
 
-import { updateTransferData, TransferData } from '../../actions/transfer';
-import { compileTransfers } from '../../actions/compiler';
+import { updateTransferData, TransferData } from '../../actions/transfer'
+import { compileTransfers } from '../../actions/compiler'
 
 interface Server {
   name: string;
@@ -59,88 +55,88 @@ interface Props {
 }
 
 class UserInputs extends React.PureComponent<Props, State> {
-  state: State = {
-    hostValidated: false,
-    userValidated: false,
-    passwordValidated: false,
-    dropdownOpen: false,
-    servers: [
-      {
-        host: 'he1.danaweb.org',
-        name: 'he1.danaweb.org',
-      },
-      {
-        host: 'mail.danaweb.org',
-        name: 'mail.danaweb.org',
-      },
-      {
-        host: 'imap.gigahost.dk',
-        name: 'imap.gigahost.dk',
-      },
-      {
-        host: 'mail.office365.com',
-        name: 'mail.office365.com',
-      },
-      {
-        host: 'mail.surftown.com',
-        name: 'mail.surftown.com',
-      },
-      {
-        host: 'mail.onlinemail.io',
-        name: 'mail.onlinemail.io (Curanet)',
-      },
-      {
-        host: 'imap.one.com',
-        name: 'imap.one.com',
-      },
-      {
-        host: 'mail.atriumweb.dk',
-        name: 'mail.atriumweb.dk',
-      },
-      {
-        host: 'mail.unoeuro.com',
-        name: 'mail.unoeuro.com',
-      },
-      {
-        host: 'mail.mail-1.dk',
-        name: 'mail.mail-1.dk (Søgemedier)',
-      },
-    ]
-  };
-
   constructor(props: Props) {
-    super(props);
+    super(props)
 
-    this.validateInputs = this.validateInputs.bind(this);
-    this.toggleDropdown = this.toggleDropdown.bind(this);
+    this.validateInputs = this.validateInputs.bind(this)
+    this.toggleDropdown = this.toggleDropdown.bind(this)
+
+    this.state = {
+      hostValidated: false,
+      userValidated: false,
+      passwordValidated: false,
+      dropdownOpen: false,
+      servers: [
+        /* {
+          host: 'he1.danaweb.org',
+          name: 'he1.danaweb.org',
+        },
+        {
+          host: 'mail.danaweb.org',
+          name: 'mail.danaweb.org',
+        },
+        {
+          host: 'imap.gigahost.dk',
+          name: 'imap.gigahost.dk',
+        },
+        {
+          host: 'mail.office365.com',
+          name: 'mail.office365.com',
+        },
+        {
+          host: 'mail.surftown.com',
+          name: 'mail.surftown.com',
+        },
+        {
+          host: 'mail.onlinemail.io',
+          name: 'mail.onlinemail.io (Curanet)',
+        },
+        {
+          host: 'imap.one.com',
+          name: 'imap.one.com',
+        },
+        {
+          host: 'mail.atriumweb.dk',
+          name: 'mail.atriumweb.dk',
+        },
+        {
+          host: 'mail.unoeuro.com',
+          name: 'mail.unoeuro.com',
+        },
+        {
+          host: 'mail.mail-1.dk',
+          name: 'mail.mail-1.dk (Søgemedier)',
+        }, */
+      ],
+    }
   }
 
   componentDidMount() {
-    this.validateInputs();
+    this.validateInputs()
   }
 
   validateInputs() {
-    const { number, user, inputs } = this.props;
+    const { number, user, inputs } = this.props
 
     if (
-      !inputs[number] ||
-      (!inputs[number][`host_${user}`] &&
-        inputs[number][`user_${user}`] &&
-        inputs[number][`password_${user}`])
+      !inputs[number]
+      || (!inputs[number][`host_${user}`]
+        && inputs[number][`user_${user}`]
+        && inputs[number][`password_${user}`])
     ) {
-      return;
+      return
     }
 
     this.setState({
       hostValidated:
-        isEmpty(inputs[number][`host_${user}`]) ||
-        isURL(inputs[number][`host_${user}`]) ||
-        isIP(inputs[number][`host_${user}`]),
+        validator.isEmpty(inputs[number][`host_${user}`])
+        || validator.isURL(inputs[number][`host_${user}`])
+        || validator.isIP(inputs[number][`host_${user}`]),
       userValidated:
-        isEmpty(inputs[number][`user_${user}`]) ||
-        isEmail(inputs[number][`user_${user}`]),
-      passwordValidated: !isEmpty(inputs[number][`password_${user}`]),
-    });
+        validator.isEmpty(inputs[number][`user_${user}`])
+        || !validator.isEmpty(inputs[number][`user_${user}`]),
+      passwordValidated: !validator.isEmpty(inputs[number][`password_${user}`]),
+    })
   }
 
   handleInput({
@@ -152,89 +148,92 @@ class UserInputs extends React.PureComponent<Props, State> {
     target?: string;
     event: { target: HTMLInputElement };
   }) {
-    const { updateTransferData, compileTransfers } = this.props;
-    const { name, value: content } = event.target;
+    const { updateTransferData, compileTransfers } = this.props
+    const { name, value: content } = event.target
 
     if (target) {
       updateTransferData({
         number,
         name: target,
         content,
-      });
+      })
     }
 
     updateTransferData({
       number,
       name,
       content,
-    });
-    compileTransfers();
+    })
+    compileTransfers()
 
-    setTimeout(() => this.validateInputs(), 250);
+    setTimeout(() => this.validateInputs(), 250)
   }
 
   handleServerClick(content: string) {
-    const { number, user } = this.props;
-    const { updateTransferData, compileTransfers } = this.props;
+    const { number, user } = this.props
+    const { updateTransferData, compileTransfers } = this.props
 
     updateTransferData({
       number,
       name: `host_${user}`,
       content,
-    });
-    compileTransfers();
+    })
+    compileTransfers()
   }
 
   toggleDropdown() {
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       dropdownOpen: !prevState.dropdownOpen,
-    }));
+    }))
   }
 
   render() {
-    const { number, user, inputs, locked } = this.props;
+    const {
+      number,
+      user,
+      inputs,
+      locked,
+    } = this.props
     const {
       hostValidated,
       userValidated,
       passwordValidated,
-      dropdownOpen,
-      servers,
-    } = this.state;
+    } = this.state
 
     if (!inputs[number]) {
-      return null;
+      return null
     }
 
     return (
-      <React.Fragment>
-        <Dropdown isOpen={dropdownOpen} toggle={this.toggleDropdown}>
-          <DropdownToggle color="primary" caret className="mb-4" disabled={locked}>
-            Server
-          </DropdownToggle>
-          <DropdownMenu>
-            {
-              servers.map((server) => (
-                <DropdownItem
-                  key={server.host}
-                  onClick={() => this.handleServerClick(server.host)}
-                >
-                  {server.name}
-                </DropdownItem>
-              ))
-            }
-          </DropdownMenu>
-        </Dropdown>
+      <>
+        {/* {servers.length && (
+          <Dropdown isOpen={dropdownOpen} toggle={this.toggleDropdown}>
+            <DropdownToggle color="primary" caret className="mb-4" disabled={locked}>
+              Server
+            </DropdownToggle>
+            <DropdownMenu>
+              {
+                servers.map((server) => (
+                  <DropdownItem
+                    key={server.host}
+                    onClick={() => this.handleServerClick(server.host)}
+                  >
+                    {server.name}
+                  </DropdownItem>
+                ))
+              }
+            </DropdownMenu>
+          </Dropdown>
+        )} */}
         <FormGroup>
           <BInput
             type="url"
             placeholder="192.168.1.1 / mail.example.com"
             name={`host_${user}`}
-            onChange={event =>
-              this.handleInput({
-                number,
-                event,
-              })
-            }
+            onChange={(event) => this.handleInput({
+              number,
+              event,
+            })}
             value={inputs[number][`host_${user}`]}
             invalid={!hostValidated}
             disabled={locked}
@@ -245,13 +244,11 @@ class UserInputs extends React.PureComponent<Props, State> {
             type="email"
             placeholder="example@example.com"
             name={`user_${user}`}
-            onChange={event =>
-              this.handleInput({
-                number,
-                target: 'user_2',
-                event,
-              })
-            }
+            onChange={(event) => this.handleInput({
+              number,
+              target: 'user_2',
+              event,
+            })}
             value={inputs[number][`user_${user}`]}
             invalid={!userValidated}
             disabled={locked}
@@ -262,12 +259,10 @@ class UserInputs extends React.PureComponent<Props, State> {
             type="text"
             placeholder="example123"
             name={`password_${user}`}
-            onChange={event =>
-              this.handleInput({
-                number,
-                event,
-              })
-            }
+            onChange={(event) => this.handleInput({
+              number,
+              event,
+            })}
             value={inputs[number][`password_${user}`]}
             invalid={!passwordValidated}
             disabled={locked}
@@ -278,36 +273,33 @@ class UserInputs extends React.PureComponent<Props, State> {
             type="text"
             placeholder={`--gmail${user} --office${user} --exchange${user}`}
             name={`args_${user}`}
-            onChange={event =>
-              this.handleInput({
-                number,
-                event,
-              })
-            }
+            onChange={(event) => this.handleInput({
+              number,
+              event,
+            })}
             value={inputs[number][`args_${user}`]}
             disabled={locked}
           />
         </FormGroup>
-      </React.Fragment>
-    );
+      </>
+    )
   }
 }
 
 const mapStateToProps = (state: RState) => ({
   inputs: state.transfer.inputs,
   locked: state.transfer.locked,
-});
+})
 
-const mapDispatchToProps = (dispatch: Dispatch) =>
-  bindActionCreators(
-    {
-      updateTransferData,
-      compileTransfers,
-    },
-    dispatch,
-  );
+const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators(
+  {
+    updateTransferData,
+    compileTransfers,
+  },
+  dispatch,
+)
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(UserInputs);
+)(UserInputs)

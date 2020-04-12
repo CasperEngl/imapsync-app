@@ -1,37 +1,42 @@
-import * as React from 'react';
-import { ButtonGroup, Button } from 'reactstrap';
-import { connect } from 'react-redux';
-import { Dispatch, bindActionCreators } from 'redux';
+import * as React from 'react'
+import { ButtonGroup, Button } from 'reactstrap'
+import { connect } from 'react-redux'
+import { Dispatch, bindActionCreators } from 'redux'
 
-import { setCancelled } from '../../actions/transfer';
-import { clearPids, clearLogs } from '../../actions/process';
-import { compileTransfers } from '../../actions/compiler';
+import { setCancelled } from '../../actions/transfer'
+import { clearPids, clearLogs } from '../../actions/process'
+import { compileTransfers } from '../../actions/compiler'
 
-const { ipcRenderer } = window.require('electron');
+const { ipcRenderer } = window.require('electron')
 
-interface Command {
-	command: Command;
-	text: string;
-	json: string[];
+type NewCommand = {
+  index: number;
+  command: string[];
+  commands: string[][];
 }
 
-interface Transfer {
+type Pid = {
+  index: number;
+  pid: number;
+}
+
+interface ICommand {
+  text: string;
+  json: string[][];
+}
+
+interface ITransfer {
   locked: boolean;
   cancelled: boolean;
 }
 
-interface Compiler {
-  command: Command;
+interface ICompiler {
+  command: ICommand;
 }
 
 interface State {
-  transfer: Transfer;
-  compiler: Compiler;
-}
-
-interface Pid {
-  index: number;
-  pid: number;
+  transfer: ITransfer;
+  compiler: ICompiler;
 }
 
 interface Props {
@@ -41,69 +46,68 @@ interface Props {
   setCancelled(cancelled: boolean): void;
   locked: boolean;
   cancelled: boolean;
-  commandList: string[];
+  commandList: string[][];
 }
 
-export type NewCommand = {
-  index: number;
-  command: Command;
-}
-
-function Controller({ 
-  compileTransfers, 
-  clearPids, 
-  clearLogs, 
+function Controller({
+  compileTransfers,
+  clearPids,
+  clearLogs,
   setCancelled,
-  commandList, 
-  locked, 
-  cancelled, 
+  commandList,
+  locked,
+  cancelled,
 }: Props) {
   async function execute() {
-    setCancelled(false);
-		await compileTransfers();
+    setCancelled(false)
+    await compileTransfers()
 
-		if (commandList.length) {
-			ipcRenderer.send('command', {
+    if (commandList.length) {
+      const newCommand: NewCommand = {
+        commands: commandList,
         command: commandList[0],
         index: 0,
-      });
-		}
+      }
+
+      ipcRenderer.send('command', newCommand)
+    }
   }
-  
-  function exitListener(event: any, pid: Pid) {
+
+  function exitListener(_, pid: Pid) {
     if (commandList.length >= pid.index + 1 && !cancelled) {
       ipcRenderer.send('command', {
+        commands: commandList,
         command: commandList[pid.index + 1],
         index: pid.index + 1,
       })
     } else {
-      setCancelled(!cancelled);
+      setCancelled(!cancelled)
     }
   }
 
   function clear() {
-		clearPids();
-		clearLogs();
+    clearPids()
+    clearLogs()
   }
 
   React.useEffect(() => {
-    ipcRenderer.on('command-exit', exitListener);
-    
+    ipcRenderer.on('command-exit', exitListener)
+
     return () => {
-      ipcRenderer.removeListener('command-exit', exitListener);
+      ipcRenderer.removeListener('command-exit', exitListener)
     }
-  }, []);
-  
+  })
+
   return (
     <ButtonGroup>
-      <Button 
+      <Button
         color="primary"
         onClick={execute}
         disabled={locked}
       >
         Execute
       </Button>
-      <Button 
+      <Button
         color="warning"
         onClick={clear}
         disabled={locked}
@@ -118,13 +122,13 @@ const mapStateToProps = (state: State) => ({
   locked: state.transfer.locked,
   commandList: state.compiler.command.json,
   cancelled: state.transfer.cancelled,
-});
+})
 
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
   compileTransfers,
   clearPids,
   clearLogs,
   setCancelled,
-}, dispatch);
+}, dispatch)
 
-export default connect(mapStateToProps, mapDispatchToProps)(Controller);
+export default connect(mapStateToProps, mapDispatchToProps)(Controller)

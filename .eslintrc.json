@@ -44,7 +44,11 @@
 		"semi": [2, "never"],
 		"comma-dangle": ["error", "always-multiline"],
 		"import/prefer-default-export": 0,
-		"no-console": 0
+		"no-console": 0,
+		"camelcase": 0,
+		"no-case-declarations": 0,
+		"no-restricted-syntax": 0,
+		"react-hooks/exhaustive-deps": 0
 	},
 	"overrides": [
 		{
