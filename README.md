@@ -2,6 +2,10 @@
 
 Used to easily make the command to sync imap email accounts.
 
+## Source
+This is an Electron app that builds on top of Gilles Lamiral's work called imapsync. The binaries for each operating system is included in the program, so you can use it in macOS, Linux and Windows without worry.
+[https://github.com/imapsync/imapsync](https://github.com/imapsync/imapsync)
+
 ## Downloads
 [Link](https://github.com/CasperEngl/imapsync-app/releases/)
 
