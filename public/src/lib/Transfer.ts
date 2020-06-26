@@ -25,7 +25,7 @@ export interface ITransfer {
 export interface ILog {
   encoded: string;
   date: string;
-  email: string | undefined;
+  email?: string[];
 }
 
 export class Transfer {
@@ -74,7 +74,7 @@ export class Transfer {
     this.process.on('exit', this.onExit)
 
     this.event.sender.send('command-pid', {
-      email: this.getUser1Argument(this.command),
+      email: this.getUsersArguments(this.command),
       pid: this.process.pid,
     })
   }
@@ -100,15 +100,15 @@ export class Transfer {
   }
 
   private async notification(log: ILog | undefined): Promise<void> {
-    if (log && log.email) {
+    if (log && log.email && log.email.length) {
       notify({
-        title: 'Imapsync',
-        message: `Finished ${log.email}`,
+        title: 'Transfer complete',
+        message: `Finished ${log.email.join(' -> ')}`,
         icon: path.join(__dirname, '../assets/icon.png'),
       })
     } else {
       notify({
-        title: 'Imapsync',
+        title: 'Transfer complete',
         icon: path.join(__dirname, '../assets/icon.png'),
       })
     }
@@ -118,12 +118,16 @@ export class Transfer {
     return command.filter((arg) => !arg.includes('imapsync_bin'))
   }
 
-  private getUser1Argument(command: string[]) {
+  private getUsersArguments(command: string[]) {
     // Get user1 argument by adding 1 to the index of user1
     const user1Index = command.indexOf('--user1')
+    const user2Index = command.indexOf('--user2')
 
     // Find the argument for user1 in command
-    return command[user1Index + 1]
+    return [
+      command[user1Index + 1],
+      command[user2Index + 1],
+    ]
   }
 
   private async writeLogToDisk(): Promise<ILog | undefined> {
@@ -132,7 +136,7 @@ export class Transfer {
     const log: ILog = {
       encoded: base64.encode(output),
       date: new Date().toISOString(),
-      email: this.getUser1Argument(this.command),
+      email: this.getUsersArguments(this.command),
     }
 
     const directory = `${homedir()}/Documents/IMAPSYNC_LOG`

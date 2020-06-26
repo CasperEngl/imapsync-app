@@ -20,7 +20,7 @@ const { ipcRenderer } = window.require('electron')
 interface Log {
   encoded?: string;
   date?: string;
-  email?: string;
+  email?: string[];
 }
 
 interface Process {
@@ -83,7 +83,7 @@ function Logs({
                 download={`imapsync_log-${item.email}-${item.date}.txt`}
                 className="w-100"
               >
-                {`Download ${item.email} log`}
+                {`Download ${item.email.join(' -> ')} log`}
               </Button>
             </Col>
             <Col xs="auto" className="pl-0">
