@@ -7,7 +7,7 @@ import { Button, Row, Col } from 'reactstrap'
 
 import { lockTransfers } from '../../actions/transfer'
 import { addLog, removeLog } from '../../actions/process'
-import { slideUp } from '../../transition'
+import { fadeIn } from '../../transition'
 
 declare global {
   interface Window {
@@ -42,7 +42,7 @@ function Logs({
   logs, lockTransfers, addLog, removeLog,
 }: Props) {
   const transitions = useTransition(logs, (log) => log.date, {
-    ...slideUp,
+    ...fadeIn,
   })
 
   function listener(event: any, log: Log) {
@@ -68,7 +68,7 @@ function Logs({
 
   return (
     <Row>
-      {transitions.map(({ item, props }) => (
+      {transitions.reverse().map(({ item, props }) => (
         <animated.div
           style={props}
           className="col-12"
