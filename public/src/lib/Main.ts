@@ -42,6 +42,7 @@ export class Main {
   ) {
     this.BrowserWindow = browserWindow
     this.Application = app
+    this.Application.allowRendererProcessReuse = true
     this.ipcMain = ipcMain
     this.powerSaveBlock = powerSaveBlocker.start('prevent-display-sleep')
 
@@ -108,8 +109,8 @@ export class Main {
   private onReady() {
     this.MainWindow = new BrowserWindow({
       titleBarStyle: 'hiddenInset',
-      width: 600,
-      height: 645,
+      width: 1400,
+      height: 900,
       minWidth: 320,
       minHeight: 645,
       backgroundColor: '#007bff',
