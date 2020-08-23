@@ -85,7 +85,7 @@ export class Transfer {
     this.event.sender.send('command-stdout', data.toString())
   }
 
-  private async onExit(): Promise<void> {
+  private async onExit(code: number, signal: string): Promise<void> {
     try {
       const log = await this.writeLogToDisk()
       await this.notification(log)
