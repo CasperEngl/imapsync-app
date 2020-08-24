@@ -49,10 +49,12 @@ function ActionBar({
   ssl,
   transfer,
 }: Props) {
-  const importFileInput = React.useRef(null)
+  const importFileInput = React.useRef<HTMLInputElement>(null)
 
   function triggerImport() {
-    (importFileInput!.current! as any).click()
+    if (importFileInput.current) {
+      importFileInput.current.click()
+    }
   }
 
   function handleImport(files: FileList) {
@@ -68,9 +70,11 @@ function ActionBar({
       }
       reader.onerror = (evt: any) => {
         console.error('error loading file', evt)
-      };
+      }
 
-      (importFileInput!.current! as any).value = ''
+      if (importFileInput.current) {
+        importFileInput.current.value = ''
+      }
     }
   }
 

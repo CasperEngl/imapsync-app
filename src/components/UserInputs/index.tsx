@@ -10,11 +10,6 @@ import validator from 'validator'
 import { updateTransferData, TransferData } from '../../actions/transfer'
 import { compileTransfers } from '../../actions/compiler'
 
-interface Server {
-  name: string;
-  host: string;
-}
-
 interface Input {
   [key: string]: any;
   id: number;
@@ -33,7 +28,6 @@ interface State {
   userValidated: boolean;
   passwordValidated: boolean;
   dropdownOpen: boolean;
-  servers: Server[];
 }
 
 interface Transfer {
@@ -66,48 +60,6 @@ class UserInputs extends React.PureComponent<Props, State> {
       userValidated: false,
       passwordValidated: false,
       dropdownOpen: false,
-      servers: [
-        /* {
-          host: 'he1.danaweb.org',
-          name: 'he1.danaweb.org',
-        },
-        {
-          host: 'mail.danaweb.org',
-          name: 'mail.danaweb.org',
-        },
-        {
-          host: 'imap.gigahost.dk',
-          name: 'imap.gigahost.dk',
-        },
-        {
-          host: 'mail.office365.com',
-          name: 'mail.office365.com',
-        },
-        {
-          host: 'mail.surftown.com',
-          name: 'mail.surftown.com',
-        },
-        {
-          host: 'mail.onlinemail.io',
-          name: 'mail.onlinemail.io (Curanet)',
-        },
-        {
-          host: 'imap.one.com',
-          name: 'imap.one.com',
-        },
-        {
-          host: 'mail.atriumweb.dk',
-          name: 'mail.atriumweb.dk',
-        },
-        {
-          host: 'mail.unoeuro.com',
-          name: 'mail.unoeuro.com',
-        },
-        {
-          host: 'mail.mail-1.dk',
-          name: 'mail.mail-1.dk (Søgemedier)',
-        }, */
-      ],
     }
   }
 
